@@ -71,7 +71,7 @@
 - Next.js (App Router) + TypeScript, статичный экспорт (`output: 'export'`, `images.unoptimized`, `basePath` под GitHub Pages).
 - Стили: CSS Modules или Tailwind на дизайн-токенах.
 - Zustand для состояния.
-- Hero: фоновое видео (Pexels, бесплатная лицензия), 1440p/H.264 + WebM, 10–15 с в цикле, ≤ 4 МБ; сначала постер (он же LCP), видео грузится после; на телефоне 720p или только постер; при `prefers-reduced-motion` — постер.
+- Hero: фоновое видео (Pexels, резка балки), готово в `public/video/`: 1440p и 720p H.264, бесшовный цикл 8 с, 1,4 / 0,6 МБ; сначала постер (он же LCP), видео грузится после; на телефоне 720p или только постер; при `prefers-reduced-motion` — постер.
 - 3D: только глобус на главной (не в hero), геометрия кодом без файла модели, загружается лениво (`dynamic`, `ssr: false`) при подходе к блоку; на слабых телефонах и при `prefers-reduced-motion` — статичная картинка.
 - Шрифты: Sofia Sans / Sofia Sans Condensed / Sofia Sans Extra Condensed через `next/font/google`, подмножества `latin` + `cyrillic`.
 - Иконки: одна библиотека (Lucide или Phosphor), без эмодзи.
