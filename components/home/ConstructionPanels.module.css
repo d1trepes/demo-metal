@@ -14,6 +14,7 @@
   display: flex;
   gap: var(--border-1);
   height: var(--panels-h);
+  container-type: inline-size;
   background: var(--color-line);
   border: var(--border-1) solid var(--color-line);
 }
@@ -90,10 +91,11 @@
 .render {
   opacity: 0;
 }
+/* Активная: рендер по центру панели, над текстом с отступом */
 .active .art img {
-  left: 64%;
-  top: 28%;
-  height: calc(var(--panels-h) * 0.46);
+  left: 50%;
+  top: 29%;
+  height: calc(var(--panels-h) * 0.38);
 }
 .active .xray {
   opacity: 0;
@@ -152,8 +154,13 @@
 .active .details {
   grid-template-rows: 1fr;
 }
+/*
+ * Ширина текста = ширина активной панели минус её поля (flex-basis 0 + padding). Считается от ширины ряда (cqw),
+ * а не от текущей ширины панели — поэтому текст не переливается во время раскрытия.
+ */
 .detailsInner {
-  width: 22rem;
+  /* свободное место ряда = ширина − 4 зазора − поля пяти панелей; активной достаётся grow/(grow+4) */
+  width: calc((100cqw - 4 * var(--border-1) - 10 * var(--space-5)) * var(--panel-grow) / (var(--panel-grow) + 4));
   min-height: 0;
   overflow: hidden;
   opacity: 0;
@@ -208,6 +215,13 @@
 @media (hover: hover) {
   .panel:not(.active):hover {
     background: var(--color-surface);
+  }
+}
+
+/* Узкий десктоп: активная панель шире, чтобы текст оставался в 2 строки и не упирался в рендер */
+@media (max-width: 1280px) {
+  .panels {
+    --panel-grow: 3;
   }
 }
 
@@ -268,7 +282,8 @@
     position: relative;
     inset: auto;
     display: none;
-    aspect-ratio: 16 / 9;
+    width: 100%;
+    height: min(56vw, 320px);
   }
   .active .art {
     display: block;
