@@ -10,4 +10,14 @@
 Категории каталога в порядке показа. Используется: главная (плитка), подвал.
 Поля `Category`: `slug`, `name`, `caption`, `gost`, `sizes` (текстом), `priceFrom` (₽ с НДС за `unit`), `unit` (`"т"` | `"м²"`), `profile` (форма сечения для иллюстрации).
 
-_Остальные функции (`getProducts`, `sendKpRequest`, `login`, `getOrders`, `uploadDrawing` …) появятся в чате 3._
+### `sendQuoteRequest(request: QuoteRequest): Promise<QuoteRequestResult>`
+Заявка на расчёт с главной (форма «Посчитаем вашу заявку», якорь `#calc`). Вызывается в браузере.
+Вход `QuoteRequest`: `name`, `phone` (как ввёл человек, ≥ 10 цифр), `email?`, `company?` (компания или ИНН строкой), `message` (позиции свободным текстом; может быть пустым, если приложен файл), `file?` (`File`: PDF, Excel, Word, DWG/DXF, JPG/PNG, до 20 МБ — проверяется в форме).
+Выход `QuoteRequestResult`: `id` — номер заявки для клиента (`Р-ДДММ-NNNN`), `callbackBy` — ISO-время, до которого перезвонит менеджер (заглушка: +2 ч в рабочее время Пн–Пт 8–18, иначе 10:00 ближайшего рабочего дня).
+Бэкенд: отправить менеджеру (Telegram/почта) с файлом, записать заявку в админку. Отправлять `multipart/form-data`. При ошибке — бросить исключение (форма сейчас ошибку не показывает — добавить сообщение «Не отправилось, позвоните …» при подключении).
+
+_Остальные функции (`getProducts`, `sendKpRequest`, `login`, `getOrders`, `uploadDrawing` …) появятся в чате 6._
+
+## Статичные данные главной (не через API)
+- Глобус: `public/globe/land.bin` (точки суши, ~42 КБ) и `public/globe/globe-static.webp` (заглушка) — генерируются скриптами `scripts/build-globe.mjs` и `scripts/render-globe-static.py`. Города и регионы — `components/home/globeData.ts`.
+- Объекты и отзывы — `components/home/projectsData.ts`. Если появится админка объектов — вынести в `getProjects()`.

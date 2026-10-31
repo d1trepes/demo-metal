@@ -1,0 +1,181 @@
+/*
+ * Объекты и отзывы (чат 5). ≥ 1025 px: список в колонках 1–6, карточка выбранного объекта в 8–12, липкая.
+ * Выбранная строка и карточка — белые на сером фоне секции. ≤ 1024 px: карточка раскрывается под строкой.
+ */
+.layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  align-items: start;
+}
+
+.list {
+  grid-column: 1 / span 6;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+.item {
+  border-top: var(--border-1) solid var(--color-line);
+  transition: background-color var(--dur-base) var(--ease-out);
+}
+.item.active {
+  background: var(--color-bg);
+  border-top-color: var(--color-line-strong);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--space-5);
+  row-gap: var(--space-1);
+  width: 100%;
+  padding: var(--space-5);
+  border: 0;
+  background: none;
+  text-align: left;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.row:hover,
+.active .row {
+  color: var(--color-text);
+}
+.row:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: -2px;
+}
+.year {
+  grid-column: 1;
+}
+.name {
+  grid-column: 1;
+  font-family: var(--font-cond);
+  font-weight: var(--fw-heading);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-tight);
+  text-transform: uppercase;
+}
+.scope {
+  grid-column: 1;
+  font-size: var(--fs-small);
+}
+.tons {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: center;
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
+  font-size: var(--fs-h3);
+  white-space: nowrap;
+}
+
+/* ---------- Карточка объекта ---------- */
+.panel {
+  grid-column: 8 / span 5;
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-5));
+  background: var(--color-bg);
+}
+.inline {
+  display: none;
+}
+
+.details {
+  display: grid;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  animation: details-in var(--dur-base) var(--ease-out);
+}
+@keyframes details-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+}
+.bigTons {
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
+  font-size: var(--fs-stat);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+.bigTons span {
+  margin-left: 0.12em;
+  font-size: 0.5em;
+}
+
+.facts {
+  display: grid;
+  margin: 0;
+}
+.fact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-top: var(--border-1) solid var(--color-line);
+  font-size: var(--fs-small);
+}
+.fact dd {
+  margin: 0;
+}
+.factLabel {
+  color: var(--color-text-muted);
+  padding-top: 0.15em;
+}
+
+.review {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding-top: var(--space-5);
+  border-top: var(--border-1) solid var(--color-line-strong);
+}
+.quote {
+  margin: 0;
+  font-size: var(--fs-lead);
+  line-height: var(--lh-tight);
+}
+.author {
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--fs-small);
+}
+
+@media (max-width: 1024px) {
+  .list {
+    grid-column: 1 / -1;
+  }
+  .panel {
+    display: none;
+  }
+  .inline:not([hidden]) {
+    display: block;
+  }
+  .details {
+    padding: 0 var(--space-5) var(--space-6);
+  }
+}
+
+@media (max-width: 640px) {
+  .row {
+    padding: var(--space-4);
+    column-gap: var(--space-3);
+  }
+  .details {
+    padding: 0 var(--space-4) var(--space-5);
+  }
+  .fact {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .details {
+    animation: none;
+  }
+}

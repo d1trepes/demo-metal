@@ -27,3 +27,23 @@ export type Category = {
   unit: "т" | "м²";
   profile: ProfileShape;
 };
+
+/** Заявка на расчёт с главной (форма «Расчёт заявки»). */
+export type QuoteRequest = {
+  name: string;
+  phone: string;
+  email?: string;
+  /** Компания или ИНН — как ввёл человек. */
+  company?: string;
+  /** Что нужно: позиции, объёмы, сроки — свободным текстом. */
+  message: string;
+  /** Спецификация или чертёж (PDF, XLSX, DWG, JPG), до 20 МБ. */
+  file?: File;
+};
+
+export type QuoteRequestResult = {
+  /** Номер заявки для клиента, например «Р-2611-0147». */
+  id: string;
+  /** До какого времени перезвонит менеджер, ISO-строка. */
+  callbackBy: string;
+};

@@ -184,3 +184,13 @@ button {
 .section + .section {
   padding-top: 0;
 }
+
+/* Секция со своим фоном (серая полоса после белой и наоборот): верхний отступ не схлопывается */
+.section.band {
+  padding-top: var(--section-gap);
+}
+
+/* Серая полоса во всю ширину (сетка B) */
+.surface {
+  background: var(--color-surface);
+}

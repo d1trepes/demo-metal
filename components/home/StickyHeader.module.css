@@ -1,0 +1,22 @@
+/* Срабатывает, когда низ hero поднимается выше шапки */
+.sentinel {
+  height: 1px;
+  margin-top: calc(-1 * var(--header-height) - 1px);
+  margin-bottom: var(--header-height);
+  pointer-events: none;
+}
+.wrap {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: var(--z-header);
+  transform: translateY(-100%);
+  visibility: hidden;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    visibility 0s linear var(--dur-base);
+}
+.wrap[data-shown] {
+  transform: none;
+  visibility: visible;
+  transition: transform var(--dur-base) var(--ease-out);
+}
