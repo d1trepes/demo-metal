@@ -54,3 +54,24 @@ No text, no labels, no logos, no people, no tools.
 | `setka.png` | one square sheet of welded steel wire mesh, 100×100 mm cells, lying flat, slightly tilted |
 
 Прислать: PNG от 2000 px по длинной стороне, все 10 сразу. Если на какой-то картинке профиль читается плохо (не видно сечения) — лучше перегенерировать: в плитке это главный смысл.
+
+---
+
+# Бриф: чат 4 — плитка «Нет позиции», фура, металлоконструкции (01.11.2026)
+
+Тот же стиль, что у рендеров металла: шаблон промпта из §2, менять только [OBJECT]. Белый фон — вырежем сами. Прислать PNG от 2000 px, все сразу, в `docs/assets-src/<папка>/`.
+
+| № | Файл → папка | Где стоит | [OBJECT] |
+| --- | --- | --- | --- |
+| 1 | `spec.png` → `cta/` | Тёмная плитка «Нет нужной позиции?», справа вместо сечения | a neat stack of 3 printed A4 technical specification sheets with tables and a small steel profile drawing, top sheet slightly rotated, a steel tape measure lying on top, paper white, no readable text |
+| 2 | `truck.png` → `truck/` | Фура-разделитель между каталогом и металлоконструкциями (реф. 04) | a white European semi-truck with a flatbed trailer loaded with bundles of steel rebar, stacked steel plates and steel pipes secured with straps, side 3/4 view from front-left, whole truck in frame, plain white cab without logos |
+| 3 | `fermy.png` → `constructions/` | Панель 01 «Фермы» | a 6-meter welded steel roof truss made of square hollow sections, lying on two wooden blocks, primed grey |
+| 4 | `karkas.png` → `constructions/` | Панель 02 «Каркасы зданий» | a steel frame of a small single-storey warehouse: I-beam columns, roof beams and bracing, no cladding, on a concrete slab |
+| 5 | `lestnica.png` → `constructions/` | Панель 03 «Лестницы и площадки» | a straight steel stair with checker-plate treads and a landing platform with handrails, primed grey |
+| 6 | `ograzhdenie.png` → `constructions/` | Панель 04 «Ограждения» | a 3-meter section of steel handrail fence with posts, top rail and vertical balusters, standing on a small base |
+| 7 | `zakladnye.png` → `constructions/` | Панель 05 «Закладные» | 4 steel embedded plates with welded anchor rebar legs, laid out in a neat row |
+
+Фура: если в одной генерации не выходит целиком — можно только прицеп с грузом и кабину отдельно, склеим.
+Каркасный «рентген» для неактивных панелей (реф. 05) не генерируем: делаем кодом (рендер в светлой тонировке + линии) — экономим 5 картинок.
+
+Позже (не сейчас): объекты — 3–4 фото готовых зданий/каркасов (чат 5), цех и оборудование — 3–4 фото для «О производстве» (чат 9).
