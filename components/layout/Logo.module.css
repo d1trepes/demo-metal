@@ -1,20 +1,28 @@
 .logo {
   display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
+  align-items: flex-end;
+  gap: var(--space-3);
   text-decoration: none;
   color: inherit;
+  flex: none;
 }
+/* Низ надписи = низ знака; знак по высоте = прописная + точки Ё */
 .mark {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   flex: none;
 }
 .word {
-  font-family: var(--font-display);
-  font-weight: var(--fw-display);
-  font-size: var(--fs-h3);
-  line-height: 1;
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
+  height: 30px;
+  width: auto;
+}
+
+@media (max-width: 640px) {
+  .mark {
+    width: 28px;
+    height: 28px;
+  }
+  .word {
+    height: 26px;
+  }
 }

@@ -1,13 +1,18 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { Col, Container, Grid } from "@/components/layout/Grid";
 import { Button } from "@/components/ui/Button";
 import { getCategories } from "@/lib/api";
 import { formatPrice } from "@/lib/format";
-import { company } from "@/lib/nav";
 import type { Category } from "@/lib/types";
 import { ProfileDrawing } from "./ProfileDrawing";
 import s from "./CatalogTiles.module.css";
+
+/** Условия плитки «Нет нужной позиции?»: срок, форматы, что делаем. */
+const ctaFacts: [string, string][] = [
+  ["КП", "за 2 часа в рабочее время"],
+  ["Принимаем", "Excel, PDF, фото накладной"],
+  ["Аналоги", "по ГОСТ и ТУ с пересчётом массы"],
+];
 
 /** Главная: сетка категорий проката (реф. 02) + плитка «нет позиции — пришлите спецификацию». */
 export async function CatalogTiles() {
@@ -29,7 +34,6 @@ export async function CatalogTiles() {
             </p>
             <Link href="/catalog/" className={s.allLink}>
               Весь каталог
-              <ArrowRight aria-hidden="true" />
             </Link>
           </Col>
         </Grid>
@@ -42,18 +46,27 @@ export async function CatalogTiles() {
           ))}
           <li className={s.ctaCell}>
             <div className={s.cta}>
-              <h3 className="t-h3">Нет нужной позиции?</h3>
-              <p className={s.ctaText}>
-                Пришлите спецификацию в Excel или фото накладной. Подберём аналоги по ГОСТ и пришлём КП за 2 часа в
-                рабочее время.
-              </p>
+              <div className={s.ctaMain}>
+                <h3 className="t-h3">Нет нужной позиции?</h3>
+                <p className={s.ctaText}>
+                  Пришлите спецификацию или фото накладной — подберём аналоги по ГОСТ и пришлём КП.
+                </p>
+              </div>
+              <dl className={s.ctaFacts}>
+                {ctaFacts.map(([term, value]) => (
+                  <div key={term}>
+                    <dt>{term}</dt>
+                    <dd>{value}</dd>
+                  </div>
+                ))}
+              </dl>
               <div className={s.ctaActions}>
                 <Button href="/kp/" variant="onInk">
                   Отправить спецификацию
                 </Button>
-                <a href={company.phoneHref} className={s.ctaPhone}>
-                  {company.phone}
-                </a>
+                <Button href="/contacts/#callback" variant="onInkOutline">
+                  Заказать звонок
+                </Button>
               </div>
             </div>
           </li>

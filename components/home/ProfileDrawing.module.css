@@ -36,10 +36,3 @@
 .node {
   fill: var(--color-text);
 }
-.label {
-  font-family: var(--font-cond);
-  font-weight: var(--fw-label);
-  font-size: 13px;
-  letter-spacing: var(--ls-label);
-  fill: var(--color-text-muted);
-}

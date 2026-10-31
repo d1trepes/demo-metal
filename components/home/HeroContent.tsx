@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { HeroSearch } from "./HeroSearch";
+import { cx } from "@/lib/cx";
 import { heroSlides } from "./heroSlides";
 import s from "./Hero.module.css";
 
@@ -11,31 +10,25 @@ import s from "./Hero.module.css";
 export function HeroContent() {
   const [index, setIndex] = useState(0);
   const slide = heroSlides[index];
-  const next = heroSlides[(index + 1) % heroSlides.length];
-  const go = (step: number) => setIndex((i) => (i + step + heroSlides.length) % heroSlides.length);
 
   return (
     <>
       <div key={slide.id} className={s.content}>
-        <h1 className={`t-display ${s.title}`}>
+        <h1 className={cx("t-display", s.title)}>
           {slide.title[0]}
           <br />
           {slide.title[1]}
         </h1>
-        <p className={`t-lead ${s.lead}`}>{slide.lead}</p>
-
-        {slide.id === "stock" ? (
-          <HeroSearch />
-        ) : (
+        <div className={s.intro}>
+          <p className={cx("t-lead", s.lead)}>{slide.lead}</p>
           <div className={s.ctas}>
-            <Button href="/constructions/#calc" variant="onInk">
-              Расчёт по чертежу
-            </Button>
-            <Button href="/constructions/" variant="onInkOutline">
-              Что делаем в цехе
-            </Button>
+            {slide.ctas.map((cta) => (
+              <Button key={cta.href} href={cta.href} variant={cta.variant}>
+                {cta.label}
+              </Button>
+            ))}
           </div>
-        )}
+        </div>
       </div>
 
       <div className={s.bottom}>
@@ -48,19 +41,18 @@ export function HeroContent() {
           </ul>
         </div>
 
-        <div className={s.switcher} role="group" aria-label="Направления">
-          <button type="button" className={s.arrow} onClick={() => go(-1)} aria-label="Предыдущее направление">
-            <ArrowDownLeft aria-hidden="true" />
-          </button>
-          <button type="button" className={s.switchLabel} onClick={() => go(1)}>
-            <span className="t-nums">
-              0{index + 1}/0{heroSlides.length}
-            </span>
-            {next.name}
-          </button>
-          <button type="button" className={s.arrow} onClick={() => go(1)} aria-label="Следующее направление">
-            <ArrowUpRight aria-hidden="true" />
-          </button>
+        <div className={s.switcher} role="group" aria-label="Направление">
+          {heroSlides.map((item, i) => (
+            <button
+              key={item.id}
+              type="button"
+              className={s.tab}
+              aria-pressed={i === index}
+              onClick={() => setIndex(i)}
+            >
+              <span className="caps-center">{item.name}</span>
+            </button>
+          ))}
         </div>
       </div>
     </>

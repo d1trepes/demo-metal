@@ -1,6 +1,14 @@
+/* Переменные шапки: рамки «таблеток» и поле поиска (HeaderSearch) берут цвета отсюда. */
 .header {
   --pill-border: var(--color-line);
   --pill-hover: var(--color-surface);
+  --field-bg: var(--color-surface);
+  --field-border: var(--color-line);
+  --field-focus: var(--color-text);
+  --field-muted: var(--color-text-muted);
+  --btn-bg: var(--color-accent);
+  --btn-text: var(--color-on-accent);
+  --btn-hover: var(--color-accent-hover);
 }
 .solid {
   position: sticky;
@@ -12,27 +20,46 @@
 .glass {
   --pill-border: var(--glass-border);
   --pill-hover: var(--glass-field-hover);
+  --field-bg: var(--glass-field);
+  --field-border: var(--glass-border);
+  --field-focus: var(--color-accent-on-ink);
+  --field-muted: var(--color-on-ink-muted);
+  --btn-bg: var(--color-accent-on-ink);
+  --btn-text: var(--color-text);
+  --btn-hover: var(--color-surface-2);
   color: var(--color-accent-on-ink);
 }
 
 .bar {
   display: flex;
   align-items: center;
-  gap: var(--space-5);
+  gap: var(--space-2);
   min-height: var(--header-height);
+}
+.logo {
+  margin-right: var(--space-6);
 }
 
 .nav {
   display: flex;
   gap: var(--space-2);
-  margin-left: auto;
+}
+
+/* Поиск занимает свободное место между меню и кнопками */
+.search {
+  flex: 1 1 var(--space-10);
+  max-width: 480px;
+  margin-inline: auto;
+}
+.glass .search {
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
 }
 
 .actions {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  margin-left: auto;
 }
 
 /* Кнопки-«таблетки» в тонкой рамке (реф. 01) */
@@ -40,7 +67,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  min-height: var(--control-h-sm);
+  min-height: var(--control-h-md);
   padding: 0 var(--space-3);
   border: var(--border-1) solid var(--pill-border);
   border-radius: var(--radius-1);
@@ -55,28 +82,28 @@
   background: var(--pill-hover);
 }
 .pill svg {
-  width: 16px;
-  height: 16px;
+  width: var(--icon-size);
+  height: var(--icon-size);
 }
 .iconPill {
+  justify-content: center;
+  min-width: var(--control-h-md);
   padding-inline: var(--space-2);
 }
 .iconPill:has(span:not(.visually-hidden)) {
   padding-inline: var(--space-3);
 }
 
-.phone {
-  margin-right: var(--space-3);
-  font-size: var(--fs-small);
-  font-weight: var(--fw-text-strong);
-  text-decoration: none;
-  white-space: nowrap;
+/* Акцентная кнопка: сплошная (белая на видео, чёрная на белом) */
+.call {
+  min-height: var(--control-h-md);
+  padding-inline: var(--space-4);
 }
-.phone:hover {
-  text-decoration: underline;
+.callIcon {
+  display: none;
 }
 
-@media (max-width: 1240px) {
+@media (max-width: 1360px) {
   .hideMd {
     display: none;
   }
@@ -85,18 +112,45 @@
   }
 }
 
-@media (max-width: 1024px) {
+/* Меню уходит в бургер раньше, чем схлопнется поиск */
+@media (max-width: 1200px) {
   .nav {
     display: none;
   }
 }
 
+/* Телефон: поиск — второй строкой во всю ширину, у звонка только иконка */
 @media (max-width: 640px) {
-  .phone {
-    display: none;
-  }
   .bar {
-    gap: var(--space-3);
-    min-height: var(--space-8);
+    flex-wrap: wrap;
+    row-gap: var(--space-3);
+    min-height: 0;
+    padding-block: var(--space-3);
+  }
+  .logo {
+    margin-right: auto;
+  }
+  .search {
+    order: 1;
+    flex-basis: 100%;
+    max-width: none;
+  }
+  .account {
+    display: none; /* кабинет — в меню */
+  }
+  .call {
+    width: var(--control-h-md);
+    padding: 0;
+  }
+  .callIcon {
+    display: block;
+  }
+  .callText {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 }

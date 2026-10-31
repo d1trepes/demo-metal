@@ -20,11 +20,13 @@ type AsLink = CommonProps & { href: string; "aria-label"?: string };
 export function Button(props: AsButton | AsLink) {
   const { variant = "primary", size = "md", block, className, children } = props;
   const classes = cx(s.btn, s[variant], size === "sm" && s.sm, block && s.block, className);
+  // Строковый текст — в span, чтобы заглавные стояли ровно по центру (.caps-center).
+  const content = wrapText(children);
 
   if (props.href !== undefined) {
     return (
       <Link href={props.href} className={classes} aria-label={props["aria-label"]}>
-        {children}
+        {content}
       </Link>
     );
   }
@@ -32,7 +34,20 @@ export function Button(props: AsButton | AsLink) {
   const { variant: _v, size: _s, block: _b, className: _c, children: _ch, type = "button", ...rest } = props;
   return (
     <button type={type} className={classes} {...rest}>
-      {children}
+      {content}
     </button>
+  );
+}
+
+function wrapText(children: ReactNode): ReactNode {
+  const items = Array.isArray(children) ? children : [children];
+  return items.map((child, i) =>
+    typeof child === "string" || typeof child === "number" ? (
+      <span key={i} className="caps-center">
+        {child}
+      </span>
+    ) : (
+      child
+    ),
   );
 }

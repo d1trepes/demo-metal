@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowRight, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { Col, Container, Grid } from "@/components/layout/Grid";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -68,7 +68,7 @@ export default function UiKitPage() {
         <h2 className="t-h3">Кнопки</h2>
         <div className={s.row}>
           <Button>
-            В список КП <ArrowRight aria-hidden="true" />
+            В список КП
           </Button>
           <Button variant="secondary">Рассчитать вес</Button>
           <Button variant="ghost">

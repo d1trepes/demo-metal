@@ -140,6 +140,20 @@ button {
   text-decoration: none;
 }
 
+/*
+ * Заглавные в кнопках по центру: обрезаем строку до высоты прописных,
+ * иначе запас под нижние выносные поднимает текст выше середины.
+ * Ставится на элемент с текстом внутри flex-кнопки (Button, «Найти»).
+ */
+.caps-center {
+  text-box: trim-both cap alphabetic;
+}
+@supports not (text-box: trim-both cap alphabetic) {
+  .caps-center {
+    padding-top: 0.06em; /* (900 − 2·655/2 − 300)/1000 em ×2 — метрики Sofia Sans Condensed */
+  }
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

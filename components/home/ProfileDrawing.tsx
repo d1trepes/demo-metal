@@ -27,9 +27,6 @@ export function ProfileDrawing({ shape }: { shape: ProfileShape }) {
       {g.kind === "poly" && <Poly g={g} hatch={hatchId} />}
       {g.kind === "circle" && <Round g={g} hatch={hatchId} />}
       {g.kind === "mesh" && <Mesh />}
-      <text className={s.label} x="-120" y="80">
-        {g.label}
-      </text>
     </svg>
   );
 }

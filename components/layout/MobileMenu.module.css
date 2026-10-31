@@ -1,8 +1,8 @@
 .toggle {
   display: none;
   place-items: center;
-  width: var(--control-h-sm);
-  height: var(--control-h-sm);
+  width: var(--control-h-md);
+  height: var(--control-h-md);
   padding: 0;
   border: var(--border-1) solid var(--pill-border, var(--color-line));
   border-radius: var(--radius-1);
@@ -13,7 +13,7 @@
   height: var(--icon-size);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .toggle {
     display: grid;
   }
