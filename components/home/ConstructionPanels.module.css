@@ -23,9 +23,9 @@
   background: var(--color-bg);
   color: var(--color-text);
   cursor: pointer;
-  /* Анимируем только flex-grow и цвет: 280 мс, коротко и плотно */
+  /* Анимируем только flex-grow и цвет: 400 мс (--dur-hover), плавно, но без затяжки */
   transition:
-    flex-grow var(--dur-base) var(--ease-out),
+    flex-grow var(--dur-hover) var(--ease-out),
     background-color var(--dur-fast) var(--ease-out),
     color var(--dur-fast) var(--ease-out);
 }
@@ -79,8 +79,8 @@
   transform: translate(-50%, -50%);
   will-change: transform, opacity;
   transition:
-    opacity var(--dur-base) var(--ease-out),
-    transform var(--dur-base) var(--ease-out);
+    opacity var(--dur-hover) var(--ease-out),
+    transform var(--dur-hover) var(--ease-out);
 }
 .render {
   opacity: 0;

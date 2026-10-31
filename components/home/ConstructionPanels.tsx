@@ -10,7 +10,7 @@ import s from "./ConstructionPanels.module.css";
 
 const DESKTOP = "(min-width: 1025px)";
 const CAN_HOVER = "(min-width: 1025px) and (hover: hover)";
-const HOVER_DELAY = 40; // мс: короткий порог, чтобы панели не дёргались при быстром проходе курсора
+const HOVER_DELAY = 80; // мс: короткий порог, чтобы панели не дёргались при быстром проходе курсора
 
 /**
  * Раскрывающиеся панели 01–05 (реф. docs/refs/05-accordion-panels.png).
