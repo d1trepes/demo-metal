@@ -8,6 +8,13 @@ import type { Category } from "@/lib/types";
 import { RevealList } from "./RevealList";
 import s from "./CatalogTiles.module.css";
 
+/** Условия в тёмной плитке «Нет нужной позиции?»: метка — значение. */
+const ctaFacts = [
+  { label: "Ответ", value: "КП с ценами за 2 часа" },
+  { label: "Формат", value: "XLS, PDF, фото от руки" },
+  { label: "Замена", value: "аналог по ГОСТ и марке стали" },
+];
+
 /** Главная: сетка категорий проката (реф. 02) + плитка «нет позиции — пришлите спецификацию». */
 export async function CatalogTiles() {
   const categories = await getCategories();
@@ -41,9 +48,19 @@ export async function CatalogTiles() {
           <li className={s.ctaCell}>
             <div className={s.cta}>
               <div className={s.ctaMain}>
-                <h3 className="t-h3">Нет нужной позиции?</h3>
-                <p className={s.ctaText}>Пришлите спецификацию — подберём аналог по ГОСТ за 2 часа.</p>
-                <Button href="/kp/" variant="onInkOutline" className={s.ctaButton}>
+                <div>
+                  <h3 className="t-h3">Нет нужной позиции?</h3>
+                  <p className={s.ctaText}>Пришлите спецификацию — подберём замену по ГОСТ и марке стали.</p>
+                </div>
+                <dl className={s.ctaFacts}>
+                  {ctaFacts.map((fact) => (
+                    <div key={fact.label} className={s.ctaFact}>
+                      <dt>{fact.label}</dt>
+                      <dd>{fact.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <Button href="/kp/" variant="onInkOutline">
                   Отправить спецификацию
                 </Button>
               </div>

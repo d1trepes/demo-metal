@@ -129,10 +129,10 @@
 }
 
 /*
- * Тёмная плитка на 2 ячейки (чат 4, правка): две колонки и две строки.
- * Рендер стопки спецификаций — сверху справа (своя ячейка, чуть уходит за правый край),
- * группа «заголовок → строка → кнопка» — снизу слева, на линии с подписями соседних плиток.
- * Ячейки не пересекаются, поэтому рендер никогда не перекрывает текст.
+ * Тёмная плитка на 2 ячейки (чат 4, правка 2).
+ * Слева на всю высоту: заголовок + строка → три условия (метка — значение) → кнопка.
+ * Справа: крупный рендер стопки спецификаций, уходит за правый край — видна часть рулетки.
+ * Рендер в своей колонке и никогда не заходит на текст.
  */
 .ctaCell {
   grid-column: span 2;
@@ -140,7 +140,6 @@
 .cta {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) auto;
   column-gap: var(--space-5);
   height: 100%;
   overflow: hidden;
@@ -148,33 +147,53 @@
   color: var(--color-on-ink);
 }
 .ctaMain {
-  grid-column: 1;
-  grid-row: 2;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: flex-start;
-  padding: 0 0 var(--space-6) var(--space-6);
+  gap: var(--space-5);
+  padding: var(--space-6) 0 var(--space-6) var(--space-6);
 }
 .ctaText {
   margin-top: var(--space-2);
   color: var(--color-on-ink-muted);
 }
-.ctaButton {
-  margin-top: var(--space-5);
+.ctaFacts {
+  display: grid;
+  width: 100%;
+}
+.ctaFact {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-3);
+  padding-block: var(--space-2);
+  border-top: var(--border-1) solid var(--color-ink-700);
+}
+.ctaFact dt {
+  font-family: var(--font-cond);
+  font-weight: var(--fw-label);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-on-ink-muted);
+}
+.ctaFact dd {
+  margin: 0;
+  font-size: var(--fs-small);
+  font-weight: var(--fw-text-strong);
 }
 .ctaArt {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  align-self: start;
-  width: 110%;
+  align-self: center;
+  width: 150%;
+  max-width: none;
   height: auto;
-  margin-top: var(--space-5);
   pointer-events: none;
-  transition: transform var(--dur-slow) var(--ease-out);
+  transition: transform var(--dur-base) var(--ease-out);
 }
 @media (hover: hover) {
   .cta:hover .ctaArt {
-    transform: translateY(calc(-1 * var(--space-2)));
+    transform: translateX(calc(-1 * var(--space-2)));
   }
 }
 
@@ -206,21 +225,14 @@
   }
   .cta {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto;
   }
   .ctaArt {
-    grid-column: 1;
     grid-row: 1;
     justify-self: end;
-    width: 88%;
-    margin: var(--space-4) calc(-1 * var(--space-5)) 0 0;
+    width: 120%;
+    margin: var(--space-4) -40% 0 0;
   }
   .ctaMain {
-    grid-column: 1;
-    grid-row: 2;
     padding: var(--space-4) var(--space-5) var(--space-5);
-  }
-  .ctaButton {
-    margin-top: var(--space-4);
   }
 }
