@@ -1,0 +1,15 @@
+/* Подъём 16 px или въезд справа 64 px + проявление, --dur-slow, один раз */
+.reveal[data-reveal="waiting"] {
+  opacity: 0;
+}
+.reveal[data-reveal="waiting"][data-from="up"] {
+  transform: translateY(var(--space-4));
+}
+.reveal[data-reveal="waiting"][data-from="right"] {
+  transform: translateX(var(--space-8));
+}
+.reveal[data-reveal="in"] {
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform calc(var(--dur-slow) * 2) var(--ease-out);
+}

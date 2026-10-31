@@ -6,7 +6,6 @@ import { asset } from "@/lib/asset";
 import { formatPrice } from "@/lib/format";
 import type { Category } from "@/lib/types";
 import { RevealList } from "./RevealList";
-import { SectionHatch } from "./SectionHatch";
 import s from "./CatalogTiles.module.css";
 
 /** Главная: сетка категорий проката (реф. 02) + плитка «нет позиции — пришлите спецификацию». */
@@ -48,7 +47,15 @@ export async function CatalogTiles() {
                   Отправить спецификацию
                 </Button>
               </div>
-              <SectionHatch className={s.ctaArt} />
+              <img
+                className={s.ctaArt}
+                src={asset("/cta/spec.webp")}
+                alt=""
+                width={1000}
+                height={779}
+                loading="lazy"
+                decoding="async"
+              />
             </div>
           </li>
         </RevealList>

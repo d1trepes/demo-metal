@@ -1,0 +1,306 @@
+/*
+ * Раскрывающиеся панели 01–05 (DESIGN.md → Раскрывающиеся панели).
+ * Десктоп (≥ 1025 px): 5 вертикальных панелей в ряд, активная шире в --panel-grow раз и тёмная.
+ * ≤ 1024 px: вертикальный список, раскрытие по нажатию.
+ */
+.filterDefs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.panels {
+  display: flex;
+  gap: var(--border-1);
+  height: var(--panels-h);
+  background: var(--color-line);
+  border: var(--border-1) solid var(--color-line);
+}
+
+.panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: var(--space-5);
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    flex-grow var(--dur-slow) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+.panel.active {
+  flex-grow: var(--panel-grow);
+  background: var(--color-ink-900);
+  color: var(--color-on-ink);
+  cursor: default;
+}
+
+/* Номер: короткая линия слева + цифры Display (как в референсе) */
+.number,
+.mobileNumber {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
+  font-size: var(--fs-h3);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.number::before {
+  content: "";
+  width: var(--space-6);
+  height: var(--border-1);
+  background: currentColor;
+}
+.number {
+  position: relative;
+  z-index: 1;
+}
+
+/* Рендер: один и тот же файл в двух слоях — «рентген» (неактивная) и обычный (активная) */
+.art {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.art img {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: auto;
+  max-width: none;
+  height: calc(var(--panels-h) * 0.62);
+  transform: translate(-50%, -50%);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    left var(--dur-slow) var(--ease-out),
+    top var(--dur-slow) var(--ease-out),
+    height var(--dur-slow) var(--ease-out);
+}
+.xray {
+  filter: url(#xray);
+}
+.render {
+  opacity: 0;
+}
+.active .art img {
+  left: 64%;
+  top: 28%;
+  height: calc(var(--panels-h) * 0.46);
+}
+.active .xray {
+  opacity: 0;
+}
+.active .render {
+  opacity: 1;
+}
+
+/* Заголовок-кнопка внизу панели */
+.heading {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+}
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.trigger:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+.title {
+  font-family: var(--font-cond);
+  font-weight: var(--fw-heading);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-tight);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.active .title {
+  font-size: var(--fs-h3);
+}
+.mobileNumber,
+.chevron {
+  display: none;
+}
+
+/* Подробности: раскрываются по высоте, текст фиксированной ширины — не переливается во время анимации */
+.details {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-slow) var(--ease-out);
+}
+.active .details {
+  grid-template-rows: 1fr;
+}
+.detailsInner {
+  width: 22rem;
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.active .detailsInner {
+  opacity: 1;
+  transition-delay: calc(var(--dur-slow) / 2);
+}
+/* Отступы — во внутреннем блоке: у свёрнутой строки (0fr) высота ровно 0 */
+.detailsBody {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-5);
+  padding-top: var(--space-3);
+}
+.text {
+  font-size: var(--fs-small);
+  line-height: var(--lh-body);
+  color: var(--color-on-ink-muted);
+}
+
+/* Три факта в строку: метка над значением, линия сверху */
+.specs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  width: 100%;
+}
+.spec {
+  display: grid;
+  gap: var(--space-1);
+  padding-top: var(--space-2);
+  border-top: var(--border-1) solid var(--color-ink-700);
+}
+.spec dt {
+  font-family: var(--font-cond);
+  font-weight: var(--fw-label);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-on-ink-muted);
+}
+.spec dd {
+  margin: 0;
+  text-wrap: balance;
+  font-size: var(--fs-small);
+  line-height: var(--lh-tight);
+  font-weight: var(--fw-text-strong);
+}
+
+@media (hover: hover) {
+  .panel:not(.active):hover {
+    background: var(--color-surface);
+  }
+}
+
+/* ---------- ≤ 1024 px: список с раскрытием по нажатию ---------- */
+@media (max-width: 1024px) {
+  .panels {
+    display: grid;
+    height: auto;
+    gap: 0;
+    background: none;
+    border: 0;
+    border-top: var(--border-1) solid var(--color-line-strong);
+  }
+  .panel {
+    display: grid;
+    padding: 0;
+    background: transparent;
+    border-bottom: var(--border-1) solid var(--color-line);
+    cursor: default;
+  }
+  .panel.active {
+    background: var(--color-ink-900);
+  }
+  .number {
+    display: none;
+  }
+  .heading {
+    order: -1;
+    margin: 0;
+  }
+  .trigger {
+    min-height: calc(var(--control-h) + var(--space-4));
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-4);
+  }
+  .mobileNumber {
+    display: inline-flex;
+    flex: none;
+    width: 2ch;
+  }
+  .title,
+  .active .title {
+    flex: 1;
+    font-size: var(--fs-lead);
+  }
+  .chevron {
+    display: block;
+    flex: none;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .active .chevron {
+    transform: rotate(180deg);
+  }
+
+  .art {
+    position: relative;
+    inset: auto;
+    display: none;
+    aspect-ratio: 16 / 9;
+  }
+  .active .art {
+    display: block;
+  }
+  .xray {
+    display: none;
+  }
+  .art img,
+  .active .art img {
+    left: 50%;
+    top: 50%;
+    width: auto;
+    height: 100%;
+    max-width: 92%;
+    object-fit: contain;
+  }
+
+  .detailsInner {
+    width: auto;
+  }
+  .detailsBody {
+    padding: 0 var(--space-4) var(--space-5);
+  }
+}
+
+@media (max-width: 640px) {
+  .specs {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+  .spec {
+    grid-template-columns: 5.5rem 1fr;
+    align-items: baseline;
+  }
+}

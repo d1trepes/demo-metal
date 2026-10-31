@@ -1,0 +1,40 @@
+/*
+ * Фура на границе секций (DESIGN.md → Фура-разделитель).
+ * Высота фуры H = --truck-w × --truck-ratio. Над границей — (1 − overlap)·H,
+ * под границей — overlap·H (колёса на сером фоне следующей секции).
+ */
+.divider {
+  --truck-h: calc(var(--truck-w) * var(--truck-ratio));
+  position: relative;
+  z-index: 1;
+  /* верх фуры заходит в нижний отступ каталога */
+  margin-top: calc(-0.5 * var(--section-gap));
+  height: calc(var(--truck-h) * (1 - var(--truck-overlap)));
+  pointer-events: none;
+}
+.inner {
+  display: flex;
+  justify-content: flex-end;
+}
+.truck {
+  width: var(--truck-w);
+  flex: none;
+}
+.truck img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.afterTruck {
+  padding-top: calc(var(--truck-w) * var(--truck-ratio) * var(--truck-overlap) + var(--space-7));
+}
+
+@media (max-width: 640px) {
+  .divider {
+    margin-top: calc(-0.25 * var(--section-gap));
+  }
+  .inner {
+    justify-content: center;
+  }
+}

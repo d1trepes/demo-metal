@@ -1,0 +1,4 @@
+/* Серый фон во всю ширину (сетка B), контент — по сетке A */
+.section {
+  background: var(--color-surface);
+}
