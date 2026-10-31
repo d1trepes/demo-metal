@@ -1,0 +1,33 @@
+.page {
+  padding-block: var(--space-8);
+}
+.block {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+  padding-top: var(--space-5);
+  border-top: var(--border-1) solid var(--color-line);
+}
+.gridDemo {
+  row-gap: var(--grid-gap);
+}
+.gridCell {
+  padding: var(--space-3) 0;
+  background: var(--color-surface);
+  text-align: center;
+  font-size: var(--fs-small);
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+.ink {
+  padding: var(--space-5);
+  background: var(--color-ink-900);
+}
+.form {
+  display: grid;
+  gap: var(--space-5);
+}

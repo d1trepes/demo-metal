@@ -1,0 +1,20 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  color: inherit;
+}
+.mark {
+  width: 28px;
+  height: 28px;
+  flex: none;
+}
+.word {
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
+  font-size: var(--fs-h3);
+  line-height: 1;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}

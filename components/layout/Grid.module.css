@@ -1,0 +1,60 @@
+/* Одна сетка на весь сайт: docs/DESIGN.md → «Сетка». */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+}
+
+/* Типовые раскладки (DESIGN.md). Других не изобретаем. */
+.full {
+  grid-column: 1 / -1;
+}
+.head {
+  grid-column: 1 / span 8;
+}
+.aside {
+  grid-column: 9 / span 4;
+}
+.text {
+  grid-column: 1 / span 7;
+}
+.form {
+  grid-column: 1 / span 6;
+}
+.formAside {
+  grid-column: 8 / span 5;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+  .head,
+  .text {
+    grid-column: 1 / span 6;
+  }
+  .aside {
+    grid-column: 1 / -1;
+  }
+  .form,
+  .formAside {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .head,
+  .text {
+    grid-column: 1 / -1;
+  }
+}

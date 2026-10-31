@@ -45,6 +45,7 @@
 | `/account/company` | ЛК: реквизиты | ИНН, КПП, адреса доставки |
 | `/privacy` | Политика ПДн | 152-ФЗ |
 | `/404` | Не найдено | |
+| `/ui` | UI-кит (служебная) | Сетка, типографика, кнопки, поля, бейджи, таблица. В навигации нет, `noindex` |
 
 Во всех формах: чекбокс согласия на обработку ПДн со ссылкой на `/privacy`.
 
@@ -73,7 +74,7 @@
 - Zustand для состояния.
 - Hero: фоновое видео (Pexels, резка балки), готово в `public/video/`: 1440p и 720p H.264, бесшовный цикл 8 с, 1,4 / 0,6 МБ; сначала постер (он же LCP), видео грузится после; на телефоне 720p или только постер; при `prefers-reduced-motion` — постер.
 - 3D: только глобус на главной (не в hero), геометрия кодом без файла модели, загружается лениво (`dynamic`, `ssr: false`) при подходе к блоку; на слабых телефонах и при `prefers-reduced-motion` — статичная картинка.
-- Шрифты: Sofia Sans / Sofia Sans Condensed / Sofia Sans Extra Condensed через `next/font/google`, подмножества `latin` + `cyrillic`.
+- Шрифты: Sofia Sans / Sofia Sans Condensed / Sofia Sans Extra Condensed, variable, через npm-пакеты `@fontsource-variable/*` (раздаются со своего домена, браузер грузит только latin + cyrillic по unicode-range). Решено в чате 2 вместо `next/font/google`: сборка не зависит от доступа к Google Fonts.
 - Иконки: одна библиотека (Lucide или Phosphor), без эмодзи.
 - Деплой: GitHub Actions → GitHub Pages.
 

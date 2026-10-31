@@ -1,0 +1,188 @@
+/* Заголовок секции: колонки 1–8 + справа 9–12 (DESIGN.md → типовые раскладки) */
+.head {
+  row-gap: var(--space-5);
+  align-items: end;
+  margin-bottom: var(--space-7);
+}
+.aside {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+}
+.allLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-bottom: var(--space-1);
+  border-bottom: var(--border-1) solid var(--color-text);
+  font-family: var(--font-cond);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.allLink svg {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.allLink:hover svg {
+  transform: translateX(var(--space-1));
+}
+
+/* Плитка: 4 в ряд (по 3 колонки), планшет 3, телефон 2 */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--grid-gap);
+}
+
+.tile {
+  --tile-bg: var(--color-surface);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: var(--tile-bg);
+  text-decoration: none;
+  transition: background-color var(--dur-base) var(--ease-out);
+}
+.art {
+  aspect-ratio: 4 / 3;
+  padding: var(--space-5) var(--space-5) 0;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.body {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-5) var(--space-5);
+}
+.name {
+  font-family: var(--font-cond);
+  font-weight: var(--fw-heading);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-tight);
+  text-transform: uppercase;
+}
+.caption {
+  font-size: var(--fs-small);
+  line-height: var(--lh-tight);
+  color: var(--color-text-muted);
+}
+
+/* Строка ГОСТ · размеры · цена выезжает снизу при наведении */
+.spec {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-ink-900);
+  color: var(--color-on-ink);
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+  transform: translateY(101%);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.price {
+  font-weight: var(--fw-text-strong);
+}
+
+@media (hover: hover) {
+  .tile:hover {
+    --tile-bg: var(--color-surface-2);
+  }
+  .tile:hover .art {
+    transform: translateY(calc(-1 * var(--space-2)));
+  }
+  .tile:hover .spec,
+  .tile:focus-visible .spec {
+    transform: none;
+  }
+}
+
+/* Касание: строка цены видна всегда, в потоке */
+@media (hover: none) {
+  .spec {
+    position: static;
+    margin-top: auto;
+    padding: 0 var(--space-5) var(--space-5);
+    background: none;
+    color: var(--color-text);
+    transform: none;
+  }
+  .spec span:not(.price) {
+    display: none;
+  }
+}
+
+/* Тёмная плитка-призыв: 2 ячейки */
+.ctaCell {
+  grid-column: span 2;
+}
+.cta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100%;
+  padding: var(--space-6);
+  background: var(--color-ink-900);
+  color: var(--color-on-ink);
+}
+.ctaText {
+  max-width: 44ch;
+  color: var(--color-on-ink-muted);
+}
+.ctaActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-5);
+  margin-top: auto;
+}
+.ctaPhone {
+  font-weight: var(--fw-text-strong);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.ctaPhone:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1024px) {
+  .tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .ctaCell {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .art {
+    padding: var(--space-3) var(--space-3) 0;
+  }
+  .body {
+    padding: var(--space-3);
+  }
+  .name {
+    font-size: var(--fs-body);
+  }
+  .caption {
+    display: none;
+  }
+  .spec {
+    padding: 0 var(--space-3) var(--space-3);
+  }
+  .cta {
+    padding: var(--space-5);
+  }
+  .ctaActions > a:first-child {
+    width: 100%;
+  }
+}

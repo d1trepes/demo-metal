@@ -1,0 +1,256 @@
+/*
+ * Hero: видео во всю ширину, стеклянная панель внутри Container.
+ * Панель выходит за край контента на --hero-bleed, поэтому текст внутри
+ * стоит ровно по краю сетки A (как заголовки секций ниже).
+ */
+.hero {
+  --hero-bleed: min(var(--space-5), var(--gutter));
+  --hero-inset: var(--space-5); /* отступ панели от верха и низа экрана */
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  background: var(--color-ink-900);
+  color: var(--color-accent-on-ink);
+}
+
+/* ---------- Видео / постер ---------- */
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+.mediaItem {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 60% 50%;
+}
+.video {
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+.videoOn {
+  opacity: 1;
+}
+
+/* ---------- Стеклянная панель ---------- */
+.frame {
+  padding-block: var(--hero-inset);
+}
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100svh - 2 * var(--hero-inset));
+  margin-inline: calc(-1 * var(--hero-bleed));
+  padding: 0 var(--hero-bleed) var(--hero-bleed);
+  border: var(--border-1) solid var(--glass-border);
+  border-radius: var(--radius-2);
+  background: var(--glass-bg);
+}
+
+/* ---------- Текст ---------- */
+.content {
+  padding-top: clamp(var(--space-6), 7vh, var(--space-9));
+  animation: slideIn var(--dur-slow) var(--ease-out);
+}
+.title {
+  max-width: 14ch;
+}
+.lead {
+  max-width: 52ch;
+  margin-top: var(--space-5);
+  color: var(--color-on-ink);
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+/* ---------- Поиск ---------- */
+.search {
+  position: relative;
+  display: flex;
+  max-width: 640px;
+  margin-top: var(--space-6);
+  border: var(--border-1) solid var(--glass-border);
+  border-radius: var(--radius-1);
+  background: var(--glass-field);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.search:focus-within {
+  border-color: var(--color-accent-on-ink);
+}
+.searchIcon {
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  transform: translateY(-50%);
+  color: var(--color-on-ink-muted);
+  pointer-events: none;
+}
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--control-h);
+  padding: 0 var(--space-3) 0 calc(var(--space-4) + var(--icon-size) + var(--space-3));
+  border: 0;
+  background: transparent;
+  font-size: var(--fs-body);
+}
+.searchInput::placeholder {
+  color: var(--color-on-ink-muted);
+}
+.searchInput:focus-visible {
+  outline: none;
+}
+.searchInput::-webkit-search-cancel-button {
+  filter: invert(1);
+}
+.searchSubmit {
+  margin: var(--space-1);
+  padding: 0 var(--space-5);
+  border: 0;
+  border-radius: var(--radius-1);
+  background: var(--color-accent-on-ink);
+  color: var(--color-text);
+  font-family: var(--font-cond);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.searchSubmit:hover {
+  background: var(--color-surface-2);
+}
+
+/* ---------- Низ панели: факты слева, переключатель справа ---------- */
+.bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-top: auto;
+  padding-top: var(--space-8);
+}
+.facts {
+  width: min(100%, 360px);
+  animation: slideIn var(--dur-slow) var(--ease-out);
+}
+.facts .t-label,
+.facts > p {
+  padding-bottom: var(--space-2);
+  color: var(--color-on-ink-muted);
+}
+.facts li {
+  padding-block: var(--space-2);
+  border-top: var(--border-1) solid var(--glass-border);
+  font-size: var(--fs-small);
+}
+.facts li:last-child {
+  border-bottom: var(--border-1) solid var(--glass-border);
+}
+
+.switcher {
+  display: flex;
+  gap: var(--space-1);
+}
+.arrow,
+.switchLabel {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h-sm);
+  border: var(--border-1) solid var(--glass-border);
+  border-radius: var(--radius-1);
+  background: var(--glass-field);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.arrow {
+  justify-content: center;
+  width: var(--control-h-sm);
+  padding: 0;
+}
+.arrow svg {
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+.switchLabel {
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  font-size: var(--fs-small);
+}
+.switchLabel span {
+  color: var(--color-on-ink-muted);
+}
+.arrow:hover,
+.switchLabel:hover {
+  background: var(--glass-field-hover);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-4));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .content,
+  .facts {
+    animation: none;
+  }
+}
+
+/* ---------- Планшет и телефон ---------- */
+@media (max-width: 1024px) {
+  .hero {
+    --hero-inset: var(--space-4);
+  }
+  .panel {
+    border-radius: var(--radius-1);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    --hero-bleed: var(--gutter);
+    --hero-inset: 0px;
+  }
+  .panel {
+    min-height: 100svh;
+    border: 0;
+    border-radius: var(--radius-0);
+  }
+  .mediaItem {
+    object-position: 66% 50%;
+  }
+  .bottom {
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: var(--space-7);
+  }
+  .facts {
+    width: 100%;
+  }
+  .switcher {
+    width: 100%;
+  }
+  .switchLabel {
+    flex: 1;
+  }
+  .searchSubmit {
+    padding-inline: var(--space-4);
+  }
+  .ctas > * {
+    flex: 1 1 100%;
+  }
+}

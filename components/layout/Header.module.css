@@ -1,0 +1,102 @@
+.header {
+  --pill-border: var(--color-line);
+  --pill-hover: var(--color-surface);
+}
+.solid {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--color-bg);
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+.glass {
+  --pill-border: var(--glass-border);
+  --pill-hover: var(--glass-field-hover);
+  color: var(--color-accent-on-ink);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  min-height: var(--header-height);
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+/* Кнопки-«таблетки» в тонкой рамке (реф. 01) */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-h-sm);
+  padding: 0 var(--space-3);
+  border: var(--border-1) solid var(--pill-border);
+  border-radius: var(--radius-1);
+  font-size: var(--fs-small);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.pill:hover {
+  background: var(--pill-hover);
+}
+.pill svg {
+  width: 16px;
+  height: 16px;
+}
+.iconPill {
+  padding-inline: var(--space-2);
+}
+.iconPill:has(span:not(.visually-hidden)) {
+  padding-inline: var(--space-3);
+}
+
+.phone {
+  margin-right: var(--space-3);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-text-strong);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.phone:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1240px) {
+  .hideMd {
+    display: none;
+  }
+  .iconPill:has(span:not(.visually-hidden)) {
+    padding-inline: var(--space-2);
+  }
+}
+
+@media (max-width: 1024px) {
+  .nav {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .phone {
+    display: none;
+  }
+  .bar {
+    gap: var(--space-3);
+    min-height: var(--space-8);
+  }
+}

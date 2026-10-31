@@ -41,6 +41,8 @@
   --glass-bg: rgba(14, 16, 19, 0.42);
   --glass-border: rgba(255, 255, 255, 0.18);
   --glass-blur: 18px;
+  --glass-field: rgba(255, 255, 255, 0.08);    /* поле поиска и кнопки-рамки на стекле */
+  --glass-field-hover: rgba(255, 255, 255, 0.16);
 
   /* ---------- Шрифты (подключаются через next/font, переменные выставляет layout) ---------- */
   --font-display: var(--font-sofia-xcond), "Arial Narrow", "Roboto Condensed", sans-serif; /* H1–H2, крупные цифры */
@@ -91,6 +93,11 @@
   --grid-columns: 12;
   --grid-gap: clamp(12px, 1.5vw, 24px);
   --header-height: 72px;
+
+  /* ---------- Размеры элементов управления ---------- */
+  --control-h: 48px;     /* кнопки, поля (касание ≥ 44 px) */
+  --control-h-sm: 36px;  /* кнопки-«таблетки» в шапке, малые кнопки */
+  --icon-size: 18px;
 
   /* ---------- Форма ---------- */
   --radius-0: 0;        /* карточки каталога, таблицы, секции */
