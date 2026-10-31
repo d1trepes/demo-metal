@@ -1,0 +1,19 @@
+/* Каскад: подъём 16 px + проявление, задержка 50 мс между плитками (DESIGN.md → Движение) */
+.list[data-reveal="waiting"] > li {
+  opacity: 0;
+  transform: translateY(var(--space-4));
+}
+.list[data-reveal="in"] > li {
+  animation: reveal var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(var(--reveal-i, 0) * var(--reveal-step));
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-4));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

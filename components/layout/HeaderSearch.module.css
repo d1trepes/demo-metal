@@ -41,17 +41,17 @@
   display: none;
 }
 
-/* «Найти»: заглавные Condensed, центрируются по высоте прописных (.caps-center) */
+/* «Найти»: без заливки, тонкая линия слева (чат 2в). Заглавные центрируются по прописным (.caps-center) */
 .submit {
   display: inline-flex;
   align-items: center;
   align-self: stretch;
-  margin: var(--space-1);
   padding: 0 var(--space-4);
   border: 0;
-  border-radius: calc(var(--radius-1) - 1px);
-  background: var(--btn-bg);
-  color: var(--btn-text);
+  border-left: var(--border-1) solid var(--field-border);
+  border-radius: 0 calc(var(--radius-1) - 1px) calc(var(--radius-1) - 1px) 0;
+  background: transparent;
+  color: inherit;
   font-family: var(--font-cond);
   font-size: var(--fs-small);
   font-weight: var(--fw-label);
@@ -60,5 +60,5 @@
   transition: background-color var(--dur-fast) var(--ease-out);
 }
 .submit:hover {
-  background: var(--btn-hover);
+  background: var(--pill-hover);
 }

@@ -1,0 +1,19 @@
+.root {
+  display: block;
+}
+.outline {
+  stroke: var(--color-on-ink-muted);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.hatch {
+  stroke: var(--glass-border);
+  stroke-width: 1.5;
+}
+/* Осевые линии — штрихпунктир, как на чертеже */
+.axis {
+  stroke: var(--color-ink-700);
+  stroke-width: 1;
+  stroke-dasharray: 24 4 2 4;
+  vector-effect: non-scaling-stroke;
+}

@@ -34,24 +34,46 @@
 
 .tile {
   --tile-bg: var(--color-surface);
-  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
   background: var(--tile-bg);
   text-decoration: none;
-  transition: background-color var(--dur-base) var(--ease-out);
+  transition: background-color var(--dur-hover) var(--ease-out);
 }
+.tile:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+/* Рендер крупно и по центру; все 10 обрезаны одной рамкой — масштаб одинаковый */
 .art {
   aspect-ratio: 4 / 3;
-  padding: var(--space-5) var(--space-5) 0;
-  transition: transform var(--dur-base) var(--ease-out);
+  padding-top: var(--space-4);
 }
+.art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
 .body {
   display: grid;
   gap: var(--space-1);
   padding: var(--space-4) var(--space-5) var(--space-5);
+}
+/* Тонкая линия над названием — прорисовывается слева направо при наведении */
+.rule {
+  display: block;
+  height: var(--border-1);
+  margin-bottom: var(--space-2);
+  background: var(--color-text);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-slow) var(--ease-out);
 }
 .name {
   font-family: var(--font-cond);
@@ -65,107 +87,83 @@
   line-height: var(--lh-tight);
   color: var(--color-text-muted);
 }
-
-/* Строка ГОСТ · размеры · цена выезжает снизу при наведении */
-.spec {
-  position: absolute;
-  inset: auto 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--space-3);
-  padding: var(--space-3) var(--space-5);
-  background: var(--color-ink-900);
-  color: var(--color-on-ink);
-  font-size: var(--fs-small);
-  font-variant-numeric: tabular-nums;
-  transform: translateY(101%);
-  transition: transform var(--dur-base) var(--ease-out);
-}
+/* Цена: место зарезервировано (высота плиток не прыгает), проявляется при наведении */
 .price {
+  margin-top: var(--space-2);
   font-weight: var(--fw-text-strong);
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+  transform: translateY(var(--space-2));
+  transition:
+    opacity var(--dur-hover) var(--ease-out) 80ms,
+    transform var(--dur-hover) var(--ease-out) 80ms;
 }
 
+/* Hover — вариант A «Линия разметки» */
 @media (hover: hover) {
-  .tile:hover {
+  .tile:hover,
+  .tile:focus-visible {
     --tile-bg: var(--color-surface-2);
   }
-  .tile:hover .art {
-    transform: translateY(calc(-1 * var(--space-2)));
+  .tile:hover .art img,
+  .tile:focus-visible .art img {
+    transform: scale(1.06) translateY(calc(-1 * var(--space-1)));
   }
-  .tile:hover .spec,
-  .tile:focus-visible .spec {
+  .tile:hover .rule,
+  .tile:focus-visible .rule {
+    transform: scaleX(1);
+  }
+  .tile:hover .price,
+  .tile:focus-visible .price {
+    opacity: 1;
     transform: none;
   }
 }
 
-/* Касание: строка цены видна всегда, в потоке */
+/* Касание: цена видна всегда */
 @media (hover: none) {
-  .spec {
-    position: static;
-    margin-top: auto;
-    padding: 0 var(--space-5) var(--space-5);
-    background: none;
-    color: var(--color-text);
+  .price {
+    opacity: 1;
     transform: none;
-  }
-  .spec span:not(.price) {
-    display: none;
   }
 }
 
-/* Тёмная плитка-призыв на 2 ячейки: текст слева, условия справа, кнопки внизу */
+/* Тёмная плитка на 2 ячейки: заголовок, строка, одна кнопка + штриховка-сечение справа */
 .ctaCell {
   grid-column: span 2;
 }
 .cta {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: auto 1fr;
-  gap: var(--space-5) var(--grid-gap);
   height: 100%;
-  padding: var(--space-6);
+  overflow: hidden;
   background: var(--color-ink-900);
   color: var(--color-on-ink);
 }
 .ctaMain {
-  display: grid;
-  align-content: start;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--space-3);
+  padding: var(--space-6);
 }
 .ctaText {
   color: var(--color-on-ink-muted);
 }
-.ctaFacts {
-  align-self: start;
-  font-size: var(--fs-small);
+.ctaButton {
+  margin-top: auto;
 }
-.ctaFacts > div {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  gap: var(--space-3);
-  padding-block: var(--space-3);
-  border-top: var(--border-1) solid var(--color-ink-700);
-}
-.ctaFacts > div:last-child {
-  border-bottom: var(--border-1) solid var(--color-ink-700);
-}
-.ctaFacts dt {
-  color: var(--color-on-ink-muted);
-}
-.ctaActions {
-  grid-column: 1 / -1;
-  align-self: end;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+.ctaArt {
+  align-self: stretch;
+  width: 100%;
+  height: 100%;
 }
 
 @media (max-width: 1024px) {
   .tiles {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .ctaCell {
-    grid-column: span 2;
   }
 }
 
@@ -174,7 +172,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .art {
-    padding: var(--space-3) var(--space-3) 0;
+    padding-top: var(--space-2);
   }
   .body {
     padding: var(--space-3);
@@ -185,14 +183,14 @@
   .caption {
     display: none;
   }
-  .spec {
-    padding: 0 var(--space-3) var(--space-3);
+  .price {
+    margin-top: 0;
+    font-size: var(--fs-small);
   }
   .cta {
-    grid-template-columns: minmax(0, 1fr);
-    padding: var(--space-5);
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   }
-  .ctaActions > a {
-    flex: 1 1 100%;
+  .ctaMain {
+    padding: var(--space-5);
   }
 }

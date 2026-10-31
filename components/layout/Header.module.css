@@ -6,9 +6,6 @@
   --field-border: var(--color-line);
   --field-focus: var(--color-text);
   --field-muted: var(--color-text-muted);
-  --btn-bg: var(--color-accent);
-  --btn-text: var(--color-on-accent);
-  --btn-hover: var(--color-accent-hover);
 }
 .solid {
   position: sticky;
@@ -24,9 +21,6 @@
   --field-border: var(--glass-border);
   --field-focus: var(--color-accent-on-ink);
   --field-muted: var(--color-on-ink-muted);
-  --btn-bg: var(--color-accent-on-ink);
-  --btn-text: var(--color-text);
-  --btn-hover: var(--color-surface-2);
   color: var(--color-accent-on-ink);
 }
 
@@ -45,11 +39,10 @@
   gap: var(--space-2);
 }
 
-/* Поиск занимает свободное место между меню и кнопками */
+/* Поиск сразу за меню и до кнопок справа: без пустот, промежутки везде --space-2 (чат 2в) */
 .search {
   flex: 1 1 var(--space-10);
-  max-width: 480px;
-  margin-inline: auto;
+  min-width: 0;
 }
 .glass .search {
   backdrop-filter: blur(var(--glass-blur));

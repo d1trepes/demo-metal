@@ -1,15 +1,13 @@
 /*
- * Hero: видео на весь экран, стеклянная панель во всю ширину
- * с отступом --hero-inset от краёв экрана (видео видно по периметру).
- * Внутри панели — своя 12-колоночная раскладка с полями --hero-pad.
+ * Hero (чат 2в): видео на весь экран, поверх — ровная тонировка --glass-bg
+ * от края до края, без рамки, отступа и скругления.
+ * Внутри — своя 12-колоночная раскладка с полями --hero-pad.
  */
 .hero {
-  --hero-inset: var(--space-4);
   --hero-pad: clamp(var(--space-4), 2.2vw, var(--space-7));
   position: relative;
   isolation: isolate;
   min-height: 100svh;
-  padding: var(--hero-inset);
   display: flex;
   background: var(--color-ink-900);
   color: var(--color-accent-on-ink);
@@ -39,24 +37,22 @@
   opacity: 1;
 }
 
-/* ---------- Стеклянная панель ---------- */
+/* ---------- Тонировка на весь экран ---------- */
 .panel {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: calc(100svh - 2 * var(--hero-inset));
+  min-height: 100svh;
   padding: 0 var(--hero-pad) var(--hero-pad);
-  border: var(--border-1) solid var(--glass-border);
-  border-radius: var(--radius-2);
   background: var(--glass-bg);
 }
 
-/* ---------- Заголовок слева, лид и кнопки справа ---------- */
+/* ---------- Заголовок и подзаголовок под ним, слева ---------- */
 .content {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--grid-gap);
-  row-gap: var(--space-6);
+  row-gap: var(--space-5);
   align-items: end;
   margin-top: auto;
   padding-top: var(--space-9);
@@ -66,19 +62,9 @@
   grid-column: 1 / span 8;
   font-size: var(--fs-hero);
 }
-.intro {
-  grid-column: 9 / -1;
-  display: grid;
-  gap: var(--space-5);
-  padding-bottom: var(--space-2);
-}
 .lead {
+  grid-column: 1 / span 5;
   color: var(--color-on-ink);
-}
-.ctas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
 }
 
 /* ---------- Низ панели: факты в строку, вкладки направлений справа ---------- */
@@ -141,9 +127,11 @@
 .tab:hover {
   color: var(--color-accent-on-ink);
 }
+/* Активная — тише: стеклянный фон и тонкая рамка, без белой заливки (чат 2в) */
 .tab[aria-pressed="true"] {
-  background: var(--color-accent-on-ink);
-  color: var(--color-text);
+  background: var(--glass-field-hover);
+  box-shadow: inset 0 0 0 var(--border-1) var(--glass-border);
+  color: var(--color-accent-on-ink);
 }
 
 @keyframes slideIn {
@@ -164,8 +152,8 @@
   .title {
     grid-column: 1 / -1;
   }
-  .intro {
-    grid-column: 1 / span 7;
+  .lead {
+    grid-column: 1 / span 8;
   }
   .facts {
     grid-column: 1 / -1;
@@ -179,12 +167,7 @@
 /* ---------- Телефон: панель от края до края ---------- */
 @media (max-width: 640px) {
   .hero {
-    --hero-inset: 0px;
     --hero-pad: var(--gutter);
-  }
-  .panel {
-    border: 0;
-    border-radius: var(--radius-0);
   }
   .mediaItem {
     object-position: 66% 50%;
@@ -195,11 +178,8 @@
   .title {
     font-size: clamp(2.5rem, 13.4vw, var(--fs-display));
   }
-  .intro {
+  .lead {
     grid-column: 1 / -1;
-  }
-  .ctas > * {
-    flex: 1 1 100%;
   }
   .bottom {
     margin-top: var(--space-7);

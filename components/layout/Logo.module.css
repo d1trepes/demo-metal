@@ -8,7 +8,7 @@
 }
 /* Низ надписи = низ знака; знак по высоте = прописная + точки Ё */
 .mark {
-  width: 32px;
+  width: auto;
   height: 32px;
   flex: none;
 }
@@ -19,7 +19,6 @@
 
 @media (max-width: 640px) {
   .mark {
-    width: 28px;
     height: 28px;
   }
   .word {

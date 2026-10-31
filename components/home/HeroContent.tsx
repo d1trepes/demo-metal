@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/Button";
 import { cx } from "@/lib/cx";
 import { heroSlides } from "./heroSlides";
 import s from "./Hero.module.css";
@@ -19,16 +18,7 @@ export function HeroContent() {
           <br />
           {slide.title[1]}
         </h1>
-        <div className={s.intro}>
-          <p className={cx("t-lead", s.lead)}>{slide.lead}</p>
-          <div className={s.ctas}>
-            {slide.ctas.map((cta) => (
-              <Button key={cta.href} href={cta.href} variant={cta.variant}>
-                {cta.label}
-              </Button>
-            ))}
-          </div>
-        </div>
+        <p className={cx("t-lead", s.lead)}>{slide.lead}</p>
       </div>
 
       <div className={s.bottom}>

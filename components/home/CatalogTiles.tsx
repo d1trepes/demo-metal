@@ -2,17 +2,12 @@ import Link from "next/link";
 import { Col, Container, Grid } from "@/components/layout/Grid";
 import { Button } from "@/components/ui/Button";
 import { getCategories } from "@/lib/api";
+import { asset } from "@/lib/asset";
 import { formatPrice } from "@/lib/format";
 import type { Category } from "@/lib/types";
-import { ProfileDrawing } from "./ProfileDrawing";
+import { RevealList } from "./RevealList";
+import { SectionHatch } from "./SectionHatch";
 import s from "./CatalogTiles.module.css";
-
-/** Условия плитки «Нет нужной позиции?»: срок, форматы, что делаем. */
-const ctaFacts: [string, string][] = [
-  ["КП", "за 2 часа в рабочее время"],
-  ["Принимаем", "Excel, PDF, фото накладной"],
-  ["Аналоги", "по ГОСТ и ТУ с пересчётом массы"],
-];
 
 /** Главная: сетка категорий проката (реф. 02) + плитка «нет позиции — пришлите спецификацию». */
 export async function CatalogTiles() {
@@ -38,7 +33,7 @@ export async function CatalogTiles() {
           </Col>
         </Grid>
 
-        <ul className={s.tiles}>
+        <RevealList className={s.tiles}>
           {categories.map((category) => (
             <li key={category.slug}>
               <CategoryTile category={category} />
@@ -48,49 +43,40 @@ export async function CatalogTiles() {
             <div className={s.cta}>
               <div className={s.ctaMain}>
                 <h3 className="t-h3">Нет нужной позиции?</h3>
-                <p className={s.ctaText}>
-                  Пришлите спецификацию или фото накладной — подберём аналоги по ГОСТ и пришлём КП.
-                </p>
-              </div>
-              <dl className={s.ctaFacts}>
-                {ctaFacts.map(([term, value]) => (
-                  <div key={term}>
-                    <dt>{term}</dt>
-                    <dd>{value}</dd>
-                  </div>
-                ))}
-              </dl>
-              <div className={s.ctaActions}>
-                <Button href="/kp/" variant="onInk">
+                <p className={s.ctaText}>Пришлите спецификацию — подберём аналог по ГОСТ за 2 часа.</p>
+                <Button href="/kp/" variant="onInkOutline" className={s.ctaButton}>
                   Отправить спецификацию
                 </Button>
-                <Button href="/contacts/#callback" variant="onInkOutline">
-                  Заказать звонок
-                </Button>
               </div>
+              <SectionHatch className={s.ctaArt} />
             </div>
           </li>
-        </ul>
+        </RevealList>
       </Container>
     </section>
   );
 }
 
+/** Плитка категории. Hover — вариант A «Линия разметки» (DESIGN.md → Каталог-плитка). */
 function CategoryTile({ category }: { category: Category }) {
   return (
     <Link href={`/catalog/${category.slug}/`} className={s.tile}>
       <div className={s.art}>
-        <ProfileDrawing shape={category.profile} />
+        <img
+          src={asset(`/catalog/${category.slug}.webp`)}
+          alt=""
+          width={1012}
+          height={788}
+          loading="lazy"
+          decoding="async"
+        />
       </div>
       <div className={s.body}>
+        <span className={s.rule} aria-hidden="true" />
         <h3 className={s.name}>{category.name}</h3>
         <p className={s.caption}>{category.caption}</p>
+        <p className={s.price}>от {formatPrice(category.priceFrom, category.unit)}</p>
       </div>
-      <p className={s.spec}>
-        <span>{category.gost}</span>
-        <span>{category.sizes}</span>
-        <span className={s.price}>от {formatPrice(category.priceFrom, category.unit)}</span>
-      </p>
     </Link>
   );
 }
