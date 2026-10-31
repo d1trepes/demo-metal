@@ -77,3 +77,26 @@ No text, no labels, no logos, no people, no tools.
 Позже (не сейчас), тоже 3D-рендерами, не фото: объекты — 3–4 рендера готовых каркасов/зданий (чат 5), оборудование цеха — 3–4 рендера станков для «О производстве» (чат 9).
 
 Переделать: `balka.png` (сейчас похожа на швеллер) — `2 short pieces of steel I-beam lying parallel, I-shaped cross-section with a thin vertical web and two wide flanges clearly visible on the cut ends`.
+
+# Бриф: чат 5б — портфолио объектов и фото цеха (01.11.2026)
+
+Один стиль на все 6 картинок, одна сессия генерации. Фон не вырезаем — это полноразмерные фото. На сайте лёгкая обесцветка до монохрома.
+
+Общий шаблон:
+```
+Documentary architectural photograph of [OBJECT], [TIME]. Shot on a full-frame camera, 35 mm lens,
+eye level, natural overcast daylight, muted desaturated colors close to black and white, cool steel-grey
+tones, crisp detail, real construction site texture. No people facing the camera, no hard hats close-up,
+no text, no logos, no signs, no watermarks. Wide horizontal composition, 16:10.
+```
+
+| Файл | Где | [OBJECT] / [TIME] |
+| --- | --- | --- |
+| `public/objects/iset-park.webp` | Объект 1, Екатеринбург | a large logistics warehouse 24 × 144 m under construction: exposed steel frame of columns and roof trusses, mobile crane lifting a truss / late autumn afternoon |
+| `public/objects/beregovoy.webp` | Объект 2, Тюмень | a residential high-rise under construction, monolithic concrete floors with bundles of rebar on the deck, tower crane / cold morning |
+| `public/objects/surgut-gsm.webp` | Объект 3, Сургут | an oil storage depot: large steel vertical tanks connected by steel walkways, service platforms, stairs and handrails / winter, light snow on the ground |
+| `public/objects/magistral.webp` | Объект 4, Челябинск | a shopping center steel frame: rows of steel columns and I-beams before cladding, view from the ground between columns / clear day |
+| `public/objects/perm-plant.webp` | Объект 5, Пермь | an industrial production hall: steel portal frames and crane runway beams installed, roof partly clad with sandwich panels / overcast |
+| `public/workshop/hall.webp` | Полноширинная полоса между глобусом и объектами | inside a steel fabrication workshop: long hall, overhead gantry crane, welded steel beams and trusses on supports, a welder working in the far background with small sparks, light from high windows / daytime. Composition 21:9, extra wide |
+
+Прислать: PNG/JPG от 2400 px по длинной стороне, 2 варианта на каждый.
