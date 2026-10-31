@@ -1,0 +1,123 @@
+/*
+ * Дизайн-токены демо «Пролёт». Направление «Чистый склад» (docs/DESIGN.md).
+ * Только эти переменные. Новый цвет или размер — сначала сюда и в DESIGN.md.
+ * Сайт светлый; тёмные поверхности (hero-панель, подвал) — через --color-ink-*.
+ */
+:root {
+  /* ---------- Цвет: нейтральные (холодный сдвиг к синему) ---------- */
+  --color-white: #ffffff;
+  --color-bg: #ffffff;            /* фон страницы */
+  --color-surface: #f2f3f5;       /* фон карточек каталога, полос */
+  --color-surface-2: #e7e9ec;     /* hover карточки, зебра таблиц */
+  --color-line: #d5d8dc;          /* тонкие линии, рамки полей */
+  --color-line-strong: #0e1013;   /* линия-разделитель в списках, как в референсе */
+  --color-text: #0e1013;          /* основной текст и заголовки */
+  --color-text-muted: #5b6169;    /* подписи, вторичный текст (6:1 на белом) */
+  --color-text-faint: #8a9098;    /* плейсхолдеры, неактивное (только крупный текст) */
+
+  /* ---------- Цвет: тёмные поверхности ---------- */
+  --color-ink-900: #0e1013;       /* подвал, тёмные секции */
+  --color-ink-800: #171a1e;
+  --color-ink-700: #252a30;
+  --color-on-ink: #f2f3f5;        /* текст на тёмном */
+  --color-on-ink-muted: #a3a9b1;
+
+  /* ---------- Цвет: акцент «синий побежалости» ---------- */
+  --color-accent: #1f4e9c;        /* кнопки, ссылки, цифры, точки на карте (8:1 на белом) */
+  --color-accent-hover: #173d7a;
+  --color-accent-tint: #e7edf7;   /* фон выделения, выбранный фильтр */
+  --color-accent-on-ink: #8fb3ee; /* акцент на тёмном и на видео */
+  --color-on-accent: #ffffff;
+
+  /* ---------- Цвет: состояния (не акцент) ---------- */
+  --color-success: #1e7a46;       /* «в наличии», «отгружен» */
+  --color-success-tint: #e3f2e9;
+  --color-warning: #9a6a00;       /* «под заказ», «в производстве» */
+  --color-warning-tint: #fbf1d9;
+  --color-danger: #b42318;        /* ошибки форм */
+  --color-danger-tint: #fdeceb;
+
+  /* ---------- Стекло (только hero и плавающие панели над видео) ---------- */
+  --glass-bg: rgba(14, 16, 19, 0.42);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-blur: 18px;
+
+  /* ---------- Шрифты (подключаются через next/font, переменные выставляет layout) ---------- */
+  --font-display: var(--font-sofia-xcond), "Arial Narrow", "Roboto Condensed", sans-serif; /* H1–H2, крупные цифры */
+  --font-cond: var(--font-sofia-cond), "Arial Narrow", sans-serif;                          /* H3, категории, кнопки, подписи-метки */
+  --font-text: var(--font-sofia), system-ui, -apple-system, "Segoe UI", sans-serif;         /* текст, таблицы, формы */
+
+  /* ---------- Типографическая шкала (fluid, 360 → 1440 px) ---------- */
+  --fs-display: clamp(3.25rem, 2rem + 6vw, 8rem);      /* H1 hero, 52 → 128 px */
+  --fs-h1: clamp(2.75rem, 1.9rem + 4vw, 5.5rem);       /* H1 страниц, 44 → 88 */
+  --fs-h2: clamp(2.25rem, 1.7rem + 2.6vw, 4rem);       /* H2 секций, 36 → 64 */
+  --fs-h3: clamp(1.375rem, 1.2rem + 0.8vw, 1.875rem);  /* H3, категории, 22 → 30 */
+  --fs-stat: clamp(3rem, 2.2rem + 3.6vw, 5.5rem);      /* цифры «12 400 т» */
+  --fs-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);  /* лид, 17 → 20 */
+  --fs-body: 1rem;                                     /* 16 */
+  --fs-small: 0.875rem;                                /* 14: таблицы, подписи */
+  --fs-micro: 0.75rem;                                 /* 12: метки, юр. текст */
+
+  --lh-display: 0.92;
+  --lh-heading: 1.02;
+  --lh-body: 1.55;
+  --lh-tight: 1.3;
+
+  --fw-display: 600;   /* Extra Condensed */
+  --fw-heading: 600;
+  --fw-label: 600;
+  --fw-text: 400;
+  --fw-text-strong: 600;
+
+  --ls-display: -0.01em;
+  --ls-label: 0.06em;  /* для меток заглавными */
+
+  /* ---------- Отступы (шаг 4 px) ---------- */
+  --space-1: 0.25rem;  /* 4 */
+  --space-2: 0.5rem;   /* 8 */
+  --space-3: 0.75rem;  /* 12 */
+  --space-4: 1rem;     /* 16 */
+  --space-5: 1.5rem;   /* 24 */
+  --space-6: 2rem;     /* 32 */
+  --space-7: 3rem;     /* 48 */
+  --space-8: 4rem;     /* 64 */
+  --space-9: 6rem;     /* 96 */
+  --space-10: 8rem;    /* 128 */
+  --section-gap: clamp(4rem, 2.5rem + 6vw, 8rem); /* между секциями главной */
+
+  /* ---------- Сетка ---------- */
+  --container: 1440px;
+  --gutter: clamp(16px, 2.5vw, 40px);
+  --grid-columns: 12;
+  --grid-gap: clamp(12px, 1.5vw, 24px);
+  --header-height: 72px;
+
+  /* ---------- Форма ---------- */
+  --radius-0: 0;        /* карточки каталога, таблицы, секции */
+  --radius-1: 4px;      /* кнопки, поля, бейджи */
+  --radius-2: 8px;      /* стеклянная панель hero, модалки */
+  --border-1: 1px;
+
+  /* ---------- Тени (почти не используем) ---------- */
+  --shadow-pop: 0 12px 32px rgba(14, 16, 19, 0.12); /* выпадающие меню, тултипы */
+
+  /* ---------- Движение ---------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 150ms;    /* hover цвета */
+  --dur-base: 280ms;    /* карточки, выпадашки */
+  --dur-slow: 600ms;    /* раскрывающиеся панели, появление блоков */
+
+  /* ---------- Слои ---------- */
+  --z-header: 50;
+  --z-dropdown: 60;
+  --z-modal: 100;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+  }
+}
