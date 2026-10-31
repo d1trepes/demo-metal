@@ -65,8 +65,8 @@ function CategoryTile({ category }: { category: Category }) {
         <img
           src={asset(`/catalog/${category.slug}.webp`)}
           alt=""
-          width={1012}
-          height={788}
+          width={1049}
+          height={812}
           loading="lazy"
           decoding="async"
         />

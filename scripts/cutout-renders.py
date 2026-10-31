@@ -12,8 +12,9 @@
 """
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageFilter
-from rembg import new_session, remove
+from PIL import Image
+
+from cutout_lib import cutout
 
 SRC = Path("docs/assets-src/renders")
 OUT = Path("public/catalog")
@@ -21,28 +22,8 @@ OUT_WIDTH = 1200
 MARGIN = 0.05  # поле вокруг общей рамки, доля ширины
 # Сетка шире остальных — в общую рамку не входит, её края просто обрезаются плиткой.
 FRAME_EXCLUDE = {"setka"}
-SHADOW_GAIN = 2.2  # усиление тени (фон почти белый, затемнение слабое)
 
-session = new_session("isnet-general-use")
-layers = {}
-
-for path in sorted(SRC.glob("*.jpg")):
-    rgb = Image.open(path).convert("RGB")
-    mask = remove(rgb, session=session, only_mask=True).convert("L")
-    # чуть подрезаем ореол по краю маски
-    mask = mask.point(lambda v: 0 if v < 24 else min(255, int((v - 24) * 255 / 200)))
-
-    lum = rgb.convert("L")
-    shadow = lum.point(lambda v: max(0, min(255, int((250 - v) * SHADOW_GAIN))))
-    shadow = shadow.filter(ImageFilter.GaussianBlur(2))
-    shadow = ImageChops.multiply(shadow, ImageChops.invert(mask))
-
-    obj = rgb.copy()
-    obj.putalpha(mask)
-    black = Image.new("RGBA", rgb.size, (14, 16, 19, 0))
-    black.putalpha(shadow)
-    black.alpha_composite(obj)
-    layers[path.stem] = (black, mask.getbbox())
+layers = {path.stem: cutout(Image.open(path).convert("RGB")) for path in sorted(SRC.glob("*.jpg"))}
 
 boxes = [b for slug, (_, b) in layers.items() if slug not in FRAME_EXCLUDE]
 w, h = next(iter(layers.values()))[0].size
