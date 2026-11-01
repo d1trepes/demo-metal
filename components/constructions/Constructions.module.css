@@ -1,21 +1,19 @@
 /*
  * Металлоконструкции (чат 7). Шапка как у каталога + рендер каркаса во всю ширину сетки;
  * «Что делаем» — первый тип крупно (1–6), остальные 2 × 2 (по 3 колонки); этапы — строками по линиям;
- * форма «Расчёт по чертежу» — типовая раскладка 1–6 + 8–12 на серой полосе.
+ * форма «Расчёт по чертежу» — как на главной: белая полоса, раскладка 1–6 + 8–12.
  */
 .top {
   padding-top: var(--space-6);
 }
-.cover {
-  background: var(--color-surface);
-}
 .cover img {
+  /* рендер с прозрачным фоном — на белом, без плашки; ширина по высоте, ничего не обрезается */
   display: block;
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   max-height: 640px;
   height: auto;
-  object-fit: contain;
-  mix-blend-mode: multiply;
+  margin-inline: auto;
 }
 
 .sectionHead {
@@ -128,14 +126,12 @@
   grid-column: 10 / span 3;
   min-width: 0;
   aspect-ratio: 4 / 3;
-  padding: var(--space-3);
-  background: var(--color-surface);
 }
+/* этапы — вырезанные картинки прямо на белом, без плашки */
 .stageArt img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  mix-blend-mode: multiply;
 }
 
 /* ---------- Форма ---------- */
@@ -156,7 +152,6 @@
 .form input:not([type="checkbox"]):not([type="file"]) {
   min-height: var(--control-h-md);
   padding-block: var(--space-2);
-  background: var(--color-bg);
 }
 .form textarea {
   min-height: 88px;

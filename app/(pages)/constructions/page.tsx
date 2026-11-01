@@ -51,11 +51,11 @@ export default function ConstructionsPage() {
         <div className={s.cover}>
           <img
             src={asset("/pages/frame.webp")}
-            srcSet={srcSet("/pages/frame.webp", 1156, [800])}
+            srcSet={srcSet("/pages/frame.webp", 1325, [800])}
             sizes="(max-width: 1440px) 100vw, 1360px"
             alt="Каркас производственного здания в три пролёта: колонны, фермы и связи"
-            width={1156}
-            height={757}
+            width={1325}
+            height={780}
             fetchPriority="high"
           />
         </div>
@@ -148,7 +148,7 @@ export default function ConstructionsPage() {
         </Container>
       </section>
 
-      <section id="drawing" className="section band surface" aria-labelledby="drawing-title">
+      <section id="drawing" className="section band" aria-labelledby="drawing-title">
         <Container>
           <Grid className={s.sectionHead}>
             <Col area="head">
@@ -184,7 +184,7 @@ export default function ConstructionsPage() {
                 </div>
               </dl>
               <p className="t-muted">
-                {typo("Большой комплект — пришлите ссылкой на облако в поле «Что нужно» или на почту ")}
+                {typo("Большой комплект — пришлите ссылкой на облако в поле «Что нужно» или на почту")}{" "}
                 <a className="link" href={`mailto:${company.email}`}>
                   {company.email}
                 </a>

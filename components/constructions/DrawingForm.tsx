@@ -14,7 +14,7 @@ type Errors = Partial<Record<"name" | "phone" | "description" | "file", string>>
 const phoneOk = (v: string) => v.replace(/\D/g, "").length >= 10;
 
 /**
- * «Расчёт по чертежу» (паспорт §4): контакты, что за конструкция, файл обязателен.
+ * «Расчёт по чертежу» (паспорт §4): порядок как в форме главной — контакты → «Что нужно» → файл → согласие. Файл обязателен.
  * Отправка — через uploadDrawing в lib/api.ts.
  */
 export function DrawingForm() {
@@ -79,6 +79,19 @@ export function DrawingForm() {
 
   return (
     <form className={s.form} onSubmit={onSubmit} noValidate aria-busy={sending}>
+      <TextField label="Имя" name="name" autoComplete="name" error={errors.name} required />
+      <TextField label="Телефон" name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="+7" error={errors.phone} required />
+      <TextField label="Компания или ИНН" name="company" autoComplete="organization" />
+      <TextField label="Почта" name="email" type="email" autoComplete="email" placeholder={`Пришлём расчёт в${NB}PDF`} />
+      <TextArea
+        className={s.wide}
+        label="Что нужно"
+        name="description"
+        rows={3}
+        placeholder={"Фермы ФС‑18, 12 шт, грунт ГФ‑021\nКаркас склада 24×48 м, монтаж свой"}
+        error={errors.description}
+        required
+      />
       <FileDrop
         className={s.wide}
         file={file}
@@ -91,19 +104,6 @@ export function DrawingForm() {
         maxMb={50}
         error={errors.file}
       />
-      <TextArea
-        className={s.wide}
-        label="Что нужно"
-        name="description"
-        rows={3}
-        placeholder={"Фермы ФС‑18, 12 шт, грунт ГФ‑021\nКаркас склада 24×48 м, монтаж свой"}
-        error={errors.description}
-        required
-      />
-      <TextField label="Имя" name="name" autoComplete="name" error={errors.name} required />
-      <TextField label="Телефон" name="phone" type="tel" inputMode="tel" autoComplete="tel" placeholder="+7" error={errors.phone} required />
-      <TextField label="Компания или ИНН" name="company" autoComplete="organization" />
-      <TextField label="Почта" name="email" type="email" autoComplete="email" placeholder={`Пришлём расчёт в${NB}PDF`} />
       <ConsentCheckbox name="consent" className={s.wide} />
       <div className={s.submit}>
         <Button type="submit" disabled={sending}>

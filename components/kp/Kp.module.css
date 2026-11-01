@@ -105,7 +105,9 @@
 
 .params {
   grid-area: params;
-  display: flex;
+  display: grid;
+  /* Фиксированные колонки: «Длина/Поставка/Размер» и степпер стоят ровно друг под другом во всех строках */
+  grid-template-columns: 148px 136px;
   gap: var(--space-3);
 }
 .param {
@@ -150,6 +152,7 @@
   box-shadow: inset 0 0 0 1px var(--color-text);
 }
 .select {
+  width: 100%;
   padding: 0 var(--space-2);
   cursor: pointer;
 }
@@ -368,9 +371,7 @@
   grid-column: 1 / span 6;
   width: 100%;
   height: auto;
-  background: var(--color-surface);
-  mix-blend-mode: multiply;
-  filter: grayscale(0.6);
+  /* картинка с прозрачным фоном — прямо на белом, без плашки */
 }
 .emptyText,
 .sentHead {
@@ -429,9 +430,6 @@
       "sum sum sum"
       "comment comment comment";
     gap: var(--space-3);
-  }
-  .params {
-    flex-wrap: wrap;
   }
   .sum {
     grid-template-columns: auto auto;
