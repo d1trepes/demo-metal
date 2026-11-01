@@ -8,7 +8,7 @@ import s from "./QuoteSection.module.css";
 
 /**
  * Главная: форма заявки (чат 5г). Заголовок по типовой раскладке (1–8 + подзаголовок 9–12),
- * ниже слева крупные контакты — куда звонить и писать, справа форма. Без карточек, разделители линиями. Якорь #calc.
+ * ниже слева форма, справа крупные контакты — куда звонить и писать. Без карточек, разделители линиями. Якорь #calc.
  */
 export function QuoteSection() {
   return (
@@ -30,6 +30,10 @@ export function QuoteSection() {
         </Grid>
 
         <Grid className={s.grid}>
+          <div className={s.formCol}>
+            <QuoteForm />
+          </div>
+
           <dl className={s.contacts}>
             <div className={s.contact}>
               <dt className={cx("t-label", s.contactLabel)}>Отдел продаж</dt>
@@ -63,9 +67,6 @@ export function QuoteSection() {
             </div>
           </dl>
 
-          <div className={s.formCol}>
-            <QuoteForm />
-          </div>
         </Grid>
       </Container>
     </section>
