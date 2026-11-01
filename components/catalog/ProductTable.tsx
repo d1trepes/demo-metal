@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { HoverLink } from "@/components/ui/HoverLink";
 import { Badge } from "@/components/ui/Badge";
 import { Table, type Column } from "@/components/ui/Table";
 import { defaultLength, kpItemLabel } from "@/lib/calc";
@@ -15,9 +15,9 @@ export function ProductTable({ products }: { products: Product[] }) {
       key: "name",
       title: "Наименование",
       render: (p) => (
-        <Link href={`/product/${p.slug}/`} className={s.name}>
+        <HoverLink href={`/product/${p.slug}/`} className={s.name}>
           {p.name}
-        </Link>
+        </HoverLink>
       ),
     },
     { key: "grade", title: "Марка", render: (p) => p.steelGrade },

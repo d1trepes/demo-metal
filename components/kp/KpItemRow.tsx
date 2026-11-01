@@ -31,7 +31,7 @@ export function KpItemRow({ item, product }: { item: KpItem; product: Product })
   return (
     <li className={s.row}>
       <Link href={`/product/${product.slug}/`} className={s.thumb} tabIndex={-1} aria-hidden="true">
-        <img src={asset(product.image)} srcSet={srcSet(product.image, 1049, [400])} sizes="96px" alt="" width={1049} height={812} loading="lazy" decoding="async" />
+        <img src={asset(product.image)} srcSet={srcSet(product.image, 1049, [400])} sizes="96px" alt="" width={1049} height={812} decoding="async" />
       </Link>
 
       <div className={s.name}>

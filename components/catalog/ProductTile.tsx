@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { HoverLink } from "@/components/ui/HoverLink";
 import { Badge } from "@/components/ui/Badge";
 import { asset, srcSet } from "@/lib/asset";
 import { defaultLength, kpItemLabel, pricePerSquareMeter } from "@/lib/calc";
@@ -13,7 +13,7 @@ import s from "./ProductTile.module.css";
  * крупно размер, под ним марка и ГОСТ, цена за тонну, наличие и «В список КП».
  * Вся плитка — ссылка на карточку (растянутая ссылка на заголовке), кнопка и сердце лежат поверх.
  */
-export function ProductTile({ product, categoryName }: { product: Product; categoryName: string }) {
+export function ProductTile({ product, categoryName, eager = false }: { product: Product; categoryName: string; eager?: boolean }) {
   return (
     <article className={s.tile}>
       <div className={s.art}>
@@ -24,7 +24,7 @@ export function ProductTile({ product, categoryName }: { product: Product; categ
           alt=""
           width={1049}
           height={812}
-          loading="lazy"
+          loading={eager ? undefined : "lazy"}
           decoding="async"
         />
       </div>
@@ -32,9 +32,9 @@ export function ProductTile({ product, categoryName }: { product: Product; categ
       <div className={s.body}>
         <p className={s.category}>{categoryName}</p>
         <h3 className={s.size}>
-          <Link href={`/product/${product.slug}/`} className={s.link}>
+          <HoverLink href={`/product/${product.slug}/`} className={s.link}>
             {product.size.label}
-          </Link>
+          </HoverLink>
         </h3>
         <p className={s.meta}>
           {product.steelGrade} · {product.gost}

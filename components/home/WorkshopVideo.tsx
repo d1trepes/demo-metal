@@ -13,7 +13,7 @@ const MOBILE_QUERY = "(max-width: 640px)";
 /**
  * Полоса во всю ширину между глобусом и объектами (чат 5в): склад металла с кран-эстакадами сверху,
  * ч/б, 21:9, цикл 6 с (Pexels, без подписи). Сетка B — текста внутри нет.
- * Постер сразу; файл выбирается и грузится, когда блок подходит к экрану; вне экрана — пауза.
+ * Постер сразу; файл выбирается и грузится за полтора экрана до блока; вне этой зоны — пауза.
  */
 export function WorkshopVideo() {
   const ref = useRef<HTMLElement>(null);
@@ -34,7 +34,7 @@ export function WorkshopVideo() {
           video?.pause();
         }
       },
-      { rootMargin: "200px 0px" },
+      { rootMargin: "150% 0px" } // начинаем грузить за полтора экрана, к подходу видео уже играет,
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -50,7 +50,6 @@ export function WorkshopVideo() {
         alt=""
         width={1600}
         height={686}
-        loading="lazy"
         decoding="async"
       />
       {src && (
@@ -62,7 +61,7 @@ export function WorkshopVideo() {
           loop
           playsInline
           autoPlay
-          preload="none"
+          preload="auto"
           onPlaying={() => setPlaying(true)}
         />
       )}

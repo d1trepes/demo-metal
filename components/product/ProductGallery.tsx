@@ -16,22 +16,25 @@ export function ProductGallery({ image, imageEnd, name }: Props) {
     { src: imageEnd, full: 1200, h: 896, alt: `${name}: сечение крупным планом`, kind: "end" as const, label: "Сечение" },
   ];
   const [active, setActive] = useState(0);
-  const current = slides[active];
 
   return (
     <div className={s.gallery}>
-      <div className={cx(s.stage, current.kind === "end" && s.stageEnd)}>
-        <img
-          key={current.src}
-          src={asset(current.src)}
-          srcSet={srcSet(current.src, current.full, [640])}
-          sizes="(max-width: 1024px) 100vw, 56vw"
-          alt={current.alt}
-          width={current.full}
-          height={current.h}
-          fetchPriority={active === 0 ? "high" : undefined}
-          decoding="async"
-        />
+      {/* Оба кадра в DOM сразу: переключение мгновенное, без повторной загрузки (чат 10) */}
+      <div className={s.stage}>
+        {slides.map((slide, i) => (
+          <div key={slide.src} className={cx(s.layer, slide.kind === "end" && s.layerEnd)} data-active={i === active || undefined}>
+            <img
+              src={asset(slide.src)}
+              srcSet={srcSet(slide.src, slide.full, [640])}
+              sizes="(max-width: 1024px) 100vw, 56vw"
+              alt={i === active ? slide.alt : ""}
+              width={slide.full}
+              height={slide.h}
+              fetchPriority={i === 0 ? "high" : "low"}
+              decoding="async"
+            />
+          </div>
+        ))}
       </div>
       <div className={s.thumbs} role="group" aria-label="Изображения позиции">
         {slides.map((slide, i) => (

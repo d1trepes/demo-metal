@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { cx } from "@/lib/cx";
-import { imagesReady } from "@/lib/imagesReady";
+import { useReveal } from "./useReveal";
 import s from "./Reveal.module.css";
-
-type RevealState = "rest" | "waiting" | "in";
 
 /**
  * Появление блока при прокрутке, один раз (DESIGN.md → Движение).
@@ -22,25 +20,7 @@ export function Reveal({
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [state, setState] = useState<RevealState>("rest");
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (el.getBoundingClientRect().top < window.innerHeight) return;
-
-    setState("waiting");
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
-        imagesReady(el).then(() => setState("in"));
-      },
-      { rootMargin: "0px 0px -15% 0px" },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  const state = useReveal(ref);
 
   return (
     <div ref={ref} className={cx(s.reveal, className)} data-reveal={state} data-from={from}>

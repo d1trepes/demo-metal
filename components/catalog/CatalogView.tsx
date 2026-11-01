@@ -181,9 +181,9 @@ export function CatalogView({ products, categories, activeCategory }: Props) {
           </div>
         ) : view === "tiles" ? (
           <ul className={s.tiles}>
-            {result.map((p) => (
+            {result.map((p, i) => (
               <li key={p.id}>
-                <ProductTile product={p} categoryName={categoryNames.get(p.category) ?? ""} />
+                <ProductTile product={p} categoryName={categoryNames.get(p.category) ?? ""} eager={i < 8} />
               </li>
             ))}
           </ul>

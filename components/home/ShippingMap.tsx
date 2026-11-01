@@ -18,7 +18,7 @@ function targetX() {
 
 /**
  * Карта отгрузок «Горизонт» (чаты 5д, 5е): над картой строка «поиск + зоны», карта на всю ширину контейнера.
- * До загрузки geo.json (~80 КБ, за 400 px до блока) стоит заглушка globe-static.webp того же вида.
+ * До загрузки geo.json (~80 КБ, за два экрана до блока, сборка — в простое браузера) стоит заглушка globe-static.webp того же вида.
  */
 export function ShippingMap({ zones }: { zones: DeliveryZone[] }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -41,12 +41,18 @@ export function ShippingMap({ zones }: { zones: DeliveryZone[] }) {
           .then((r) => (r.ok ? r.json() : null))
           .then((json: GeoData | null) => {
             if (cancelled || !json) return;
-            setInitialView(viewFor(WAREHOUSE.lon, WAREHOUSE.lat, targetX()));
-            setData(json);
+            // Сборка шара (~80 регионов) — в простое браузера, не посреди прокрутки (чат 10)
+            const mount = () => {
+              if (cancelled) return;
+              setInitialView(viewFor(WAREHOUSE.lon, WAREHOUSE.lat, targetX()));
+              setData(json);
+            };
+            if ("requestIdleCallback" in window) window.requestIdleCallback(mount, { timeout: 1500 });
+            else mount();
           })
           .catch(() => {}); // нет данных — остаётся картинка того же вида
       },
-      { rootMargin: "400px 0px" },
+      { rootMargin: "200% 0px" },
     );
     io.observe(el);
     return () => {

@@ -3,21 +3,36 @@
   gap: var(--grid-gap);
 }
 .stage {
+  position: relative;
   aspect-ratio: 4 / 3;
-  padding: var(--space-6);
   background: var(--color-surface);
 }
-.stage img {
+.layer {
+  position: absolute;
+  inset: 0;
+  padding: var(--space-6);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    visibility 0s linear var(--dur-fast);
+}
+.layer[data-active] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+.layer img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 /* Торец на белом фоне: растворяем белый в подложке, кадр во всю площадь */
-.stageEnd {
+.layerEnd {
   padding: 0;
 }
-.stageEnd img,
+.layerEnd img,
 .thumbEnd img {
   object-fit: cover;
   mix-blend-mode: multiply;
@@ -61,10 +76,10 @@
   outline-offset: -2px;
 }
 @media (max-width: 640px) {
-  .stage {
+  .layer {
     padding: var(--space-4);
   }
-  .stageEnd {
+  .layerEnd {
     padding: 0;
   }
   .thumb {

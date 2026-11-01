@@ -7,29 +7,27 @@ import s from "./Hero.module.css";
 
 const POSTER = asset("/video/hero-poster.webp");
 const POSTER_MOBILE = asset("/video/hero-poster-mobile.webp");
-const VIDEO_DESKTOP = asset("/video/hero-1440.mp4");
+const VIDEO_DESKTOP = asset("/video/hero-1080.mp4");
 const VIDEO_MOBILE = asset("/video/hero-720.mp4");
 const MOBILE_QUERY = "(max-width: 768px)";
 
 /**
- * Фон hero. Сначала постер (он же LCP), видео подгружается после загрузки страницы
- * и проявляется, когда реально заиграло. Вне экрана — на паузе.
+ * Фон hero. Сначала постер (он же LCP), видео начинает грузиться сразу после первой отрисовки
+ * (не ждём загрузки всех картинок страницы — чат 10) и проявляется, когда реально заиграло.
+ * Вне экрана — на паузе.
  */
 export function HeroVideo() {
   const [src, setSrc] = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Выбираем файл и начинаем грузить только после события load.
+  // Выбираем файл после первого кадра с постером: постер остаётся LCP, видео не ждёт картинок ниже.
   useEffect(() => {
     if (!canPlayVideo()) return;
-    const start = () => setSrc(window.matchMedia(MOBILE_QUERY).matches ? VIDEO_MOBILE : VIDEO_DESKTOP);
-    if (document.readyState === "complete") {
-      const t = window.setTimeout(start, 200);
-      return () => window.clearTimeout(t);
-    }
-    window.addEventListener("load", start, { once: true });
-    return () => window.removeEventListener("load", start);
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => setSrc(window.matchMedia(MOBILE_QUERY).matches ? VIDEO_MOBILE : VIDEO_DESKTOP));
+    });
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   // Пауза, когда hero ушёл с экрана.

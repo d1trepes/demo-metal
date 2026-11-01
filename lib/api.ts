@@ -3,8 +3,9 @@
  * Сейчас — заглушки на JSON из data/. Программист заменяет только этот файл
  * (описание каждой функции — docs/HANDOFF.md). Сигнатуры и типы (lib/types.ts) не менять.
  *
- * Задержка 600 мс — только в браузере, чтобы интерфейс честно показывал загрузку.
- * При сборке (серверные компоненты, generateStaticParams) задержки нет.
+ * Чтение данных (каталог, кабинет, подсказки) — без искусственной задержки: данные локальные,
+ * интерфейс должен открываться мгновенно (чат 10). Действия (отправка, вход, загрузка) ждут
+ * ACTION_DELAY_MS — только в браузере, чтобы кнопка успела показать «Отправляем…».
  */
 import categoriesData from "@/data/categories.json";
 import productsData from "@/data/products.json";
@@ -32,9 +33,12 @@ import type {
   User,
 } from "./types";
 
-const FAKE_DELAY_MS = 600;
-const wait = (ms = FAKE_DELAY_MS) =>
-  typeof window === "undefined" ? Promise.resolve() : new Promise((r) => setTimeout(r, ms));
+const ACTION_DELAY_MS = 450;
+/** Пауза «сервера» для действий. ms = 0 — без таймера (чтение данных). */
+const wait = (ms = ACTION_DELAY_MS) =>
+  typeof window === "undefined" || ms === 0 ? Promise.resolve() : new Promise((r) => setTimeout(r, ms));
+/** Чтение локальных данных — без задержки. */
+const read = () => Promise.resolve();
 
 const products = productsData as unknown as Product[];
 
@@ -49,38 +53,38 @@ function docNumber(prefix: string, now = new Date()): string {
 
 /** Категории каталога в порядке показа. */
 export async function getCategories(): Promise<Category[]> {
-  await wait();
+  await read();
   return categoriesData as Category[];
 }
 
 /** Одна категория по slug или null. */
 export async function getCategory(slug: string): Promise<Category | null> {
-  await wait();
+  await read();
   return (categoriesData as Category[]).find((c) => c.slug === slug) ?? null;
 }
 
 /** Позиции каталога с фильтром и сортировкой. Без фильтра — все позиции. */
 export async function getProducts(filter: ProductFilter = {}): Promise<Product[]> {
-  await wait();
+  await read();
   return filterProducts(products, filter);
 }
 
 /** Карточка товара по slug или null. */
 export async function getProduct(slug: string): Promise<Product | null> {
-  await wait();
+  await read();
   return products.find((p) => p.slug === slug) ?? null;
 }
 
 /** Позиции по id (список КП, избранное, заказы). Порядок — как в ids; неизвестные id пропускаются. */
 export async function getProductsByIds(ids: string[]): Promise<Product[]> {
-  await wait();
+  await read();
   const byId = new Map(products.map((p) => [p.id, p]));
   return ids.map((id) => byId.get(id)).filter((p): p is Product => Boolean(p));
 }
 
 /** Похожие позиции для карточки: та же категория, близкие размеры. */
 export async function getSimilarProducts(product: Product, limit = 4): Promise<Product[]> {
-  await wait();
+  await read();
   return similarProducts(products, product, limit);
 }
 
@@ -89,7 +93,7 @@ export async function getSimilarProducts(product: Product, limit = 4): Promise<P
  * Вызывается на каждый ввод (с паузой 150 мс), поэтому задержка заглушки короче обычной.
  */
 export async function getSearchSuggestions(query: string, limit = 6): Promise<SearchSuggestions> {
-  await wait(150);
+  await read();
   return searchSuggestions(products, categoriesData as Category[], query, limit);
 }
 
@@ -100,7 +104,7 @@ export async function getSearchSuggestions(query: string, limit = 6): Promise<Se
  * даёт тестовую компанию. В бою — DaData «Организация по ИНН» или ФНС.
  */
 export async function lookupCompanyByInn(inn: string): Promise<CompanyLookup | null> {
-  await wait(400);
+  await wait(250);
   if (!/^\d{10}(\d{2})?$/.test(inn)) return null;
   if (inn === userData.company.inn) return userData.company;
   return { inn, name: "ООО «Тестовая компания»", kpp: inn.length === 10 ? `${inn.slice(0, 4)}01001` : "", address: "620000, Екатеринбург, ул. Примерная, 1" };
@@ -146,7 +150,7 @@ function rememberSentKp(result: KpRequestResult, request: KpRequest) {
 
 /**
  * Заявка на расчёт с главной: контакты + что нужно + файл спецификации.
- * Заглушка: ждёт 600 мс и возвращает номер. Бэкенд — отправить менеджеру (Telegram/почта), файл приложить.
+ * Заглушка: ждёт ACTION_DELAY_MS и возвращает номер. Бэкенд — отправить менеджеру (Telegram/почта), файл приложить.
  */
 export async function sendQuoteRequest(request: QuoteRequest): Promise<QuoteRequestResult> {
   await wait();
@@ -157,7 +161,7 @@ export async function sendQuoteRequest(request: QuoteRequest): Promise<QuoteRequ
 
 /** Чертёж на расчёт металлоконструкций (страница /constructions). */
 export async function uploadDrawing(request: DrawingRequest): Promise<QuoteRequestResult> {
-  await wait(1200);
+  await wait(900);
   void request;
   const now = new Date();
   return { id: docNumber("Ч", now), callbackBy: nextCallback(now).toISOString() };
@@ -208,25 +212,25 @@ export async function logout(): Promise<void> {
 
 /** Запросы КП текущего пользователя, новые сверху. */
 export async function getKpRequests(): Promise<KpRequestSummary[]> {
-  await wait();
+  await read();
   return [...readSentKp(), ...(kpRequestsData as KpRequestSummary[])];
 }
 
 /** Заказы текущего пользователя, новые сверху. */
 export async function getOrders(): Promise<Order[]> {
-  await wait();
+  await read();
   return [...(ordersData as Order[])].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
 /** Один заказ по номеру или null. */
 export async function getOrder(id: string): Promise<Order | null> {
-  await wait();
+  await read();
   return (ordersData as Order[]).find((o) => o.id === id) ?? null;
 }
 
 /** Документы (КП, счета, УПД). url — путь к PDF; в демо — образцы из public/docs/. */
 export async function getDocuments(): Promise<DocumentFile[]> {
-  await wait();
+  await read();
   return documentsData as DocumentFile[];
 }
 

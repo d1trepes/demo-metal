@@ -13,13 +13,18 @@ const SRC =
   `&pt=${POINT.lon}%2C${POINT.lat}%2Cpm2dbm&l=map`;
 
 /**
- * Карта проезда (чат 8б). Iframe грузится только при подходе к блоку (за 400 px),
- * до этого — серая заглушка того же размера. Ч/б делает CSS-фильтр. caption — уже после typo() на сервере
+ * Карта проезда (чат 8б). Iframe грузится только при подходе к блоку (за 800 px),
+ * до этого — серая заглушка того же размера; проявляется после загрузки.
+ * Чат 10: пока не кликнули, поверх лежит прозрачный слой — колесо мыши прокручивает страницу,
+ * а не зумит карту (иначе прокрутка «застревает»). Курсор ушёл — слой возвращается.
+ * caption — уже после typo() на сервере
  * (типограф не тащим в клиентский бандл).
  */
 export function YandexMap({ caption }: { caption: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [active, setActive] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -35,7 +40,7 @@ export function YandexMap({ caption }: { caption: string }) {
           io.disconnect();
         }
       },
-      { rootMargin: "400px 0px" },
+      { rootMargin: "800px 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -43,15 +48,21 @@ export function YandexMap({ caption }: { caption: string }) {
 
   return (
     <figure className={s.map}>
-      <div ref={ref} className={s.mapFrame}>
+      <div ref={ref} className={s.mapFrame} onMouseLeave={() => setActive(false)}>
         {visible && (
           <iframe
             className={s.mapIframe}
+            data-loaded={loaded || undefined}
             src={SRC}
             title="Склад «Пролёт» на Яндекс.Картах"
-            loading="lazy"
             allowFullScreen
+            onLoad={() => setLoaded(true)}
           />
+        )}
+        {!active && (
+          <button type="button" className={s.mapShield} onClick={() => setActive(true)}>
+            <span>Нажмите, чтобы двигать карту</span>
+          </button>
         )}
       </div>
       <figcaption className={s.mapCaption}>
