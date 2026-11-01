@@ -31,7 +31,7 @@
 - Каталог и карточки готовы: `/catalog/`, `/catalog/<slug>/`, 70 карточек `/product/<slug>/` с калькулятором. Все функции API — в `lib/api.ts` и `docs/HANDOFF.md`, сторы — `lib/stores/`.
 - Картинки брифа «чаты 6–9» обработаны: `public/ends/`, `public/equipment/`, `public/pages/` (исходники — `docs/assets-src/`).
 - `/kp/` и `/constructions/` готовы (чат 7, правки 7б). `/about/`, `/contacts/`, `/privacy/`, 404 готовы (чат 8).
-- Следующий чат — **9**: Вход + Личный кабинет (план в `docs/NEXT.md`), после него — общая проверка (Lighthouse, ссылки, 360 px) и `HANDOFF.md`.
+- Следующий чат — **8б**: правки по ревью /about, /contacts, 404, /kp (список в `docs/NEXT.md`); затем **9**: Вход + Личный кабинет (план в `docs/NEXT.md`), после него — общая проверка (Lighthouse, ссылки, 360 px) и `HANDOFF.md`.
 - Старый журнал — `docs/archive/PROGRESS-log.md` (не читать без нужды).
 
 ## Открытые проблемы
