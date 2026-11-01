@@ -13,6 +13,9 @@ JOBS = {
     "truck": (640,),
     "globe": (640,),
     "workshop": (800,),
+    "ends": (640,),
+    "equipment": (640,),
+    "pages": (800,),
 }
 for folder, widths in JOBS.items():
     for src in sorted((PUBLIC / folder).glob("*.webp")):
