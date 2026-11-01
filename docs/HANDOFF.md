@@ -51,6 +51,7 @@
 
 #### `sendKpRequest(request: KpRequest): Promise<KpRequestResult>`
 Запрос КП со страницы `/kp/`. Вход: `items[]` (`productId`, `quantity` — штук/листов/карт, `length` — длина штуки в м для длинномера, `comment?`), `company` (`inn`, `name`, `kpp?`, `address?`), `contact` (`name`, `phone`, `email`), `delivery?`, `comment?`. Выход: `id` («КП-ДДММ-NNNN»), `status: "sent"`, `createdAt`. Бэкенд: в админку + уведомление менеджеру.
+Демо: заглушка запоминает отправленный запрос в localStorage (`prolet-sent-kp`, до 10 шт.), `getKpRequests` показывает его первым — в бою эти две функции (`readSentKp`, `rememberSentKp`) удалить.
 Статусы КП: `sent` → `in-work` → `kp-ready` → `invoiced`.
 Сам список хранится в браузере: `lib/stores/kp.ts` (Zustand + localStorage, ключ `prolet-kp`). После входа можно синхронизировать с сервером — добавить функцию в api.
 
@@ -59,14 +60,14 @@
 #### `uploadDrawing(request: DrawingRequest): Promise<QuoteRequestResult>`
 «Расчёт по чертежу» на `/constructions/`: `name`, `phone`, `email?`, `company?`, `description`, `file` (обязателен). Номер «Ч-ДДММ-NNNN». Отправлять `multipart/form-data`, файл — менеджеру и в админку. На сайте лимит файла 50 МБ (форма проверяет до отправки) — сервер должен принимать столько же или больше.
 
-### Вход и кабинет (вёрстка — чат 8)
+### Вход и кабинет (вёрстка — чат 9)
 
 #### `login(email, password): Promise<User>` · `loginDemo(): Promise<User>` · `logout(): Promise<void>`
 Заглушка пускает с любым паролем; ошибка — исключение с текстом для формы. Пользователь кэшируется в `lib/stores/auth.ts` (ключ `prolet-auth`). В бою: сессия в httpOnly-cookie, `login` возвращает профиль, `logout` гасит сессию; `loginDemo` убрать.
 `User`: `id`, `name`, `email`, `phone`, `company` (`CompanyLookup`), `deliveryAddresses[]`.
 
 #### `getKpRequests(): Promise<KpRequestSummary[]>`
-Запросы КП пользователя: поля `KpRequestResult` + `itemsCount`, `totalWeightKg`, `totalRub?` (есть, когда КП готово). `data/kp-requests.json`.
+Запросы КП пользователя: поля `KpRequestResult` + `itemsCount`, `totalWeightKg`, `totalRub?` (есть, когда КП готово), `items?` (для «Повторить»). `data/kp-requests.json`. Кабинет: без входа `/account/*` редиректит на `/login/?next=…` (`components/account/AccountShell.tsx`).
 
 #### `getOrders(): Promise<Order[]>` · `getOrder(id): Promise<Order | null>`
 Заказы, новые сверху. `status`: `paid` → `production` → `ready` → `shipped`; `timeline` — даты пройденных этапов (ISO); `items` как в КП; `totalRub`, `totalWeightKg`, `delivery`. «Повторить заказ» = положить `items` в список КП. `data/orders.json`.

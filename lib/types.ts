@@ -133,11 +133,12 @@ export type KpRequestResult = { id: string; status: KpStatus; createdAt: string 
 /** Ответ проверки ИНН (заглушка; в бою — DaData или ФНС). */
 export type CompanyLookup = { inn: string; name: string; kpp: string; address: string };
 
-/* ---------- Кабинет (чат 10) ---------- */
+/* ---------- Кабинет (чат 9) ---------- */
 
 export type User = { id: string; name: string; email: string; phone: string; company: CompanyLookup; deliveryAddresses: string[] };
 
-export type KpRequestSummary = KpRequestResult & { itemsCount: number; totalWeightKg: number; totalRub?: number };
+/** Запрос КП в кабинете. totalRub — только когда КП готово (сумма из КП). items — позиции, для «Повторить запрос». */
+export type KpRequestSummary = KpRequestResult & { itemsCount: number; totalWeightKg: number; totalRub?: number; items?: KpItem[] };
 
 export type OrderStatus = "paid" | "production" | "ready" | "shipped";
 

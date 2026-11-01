@@ -12,6 +12,7 @@ import userData from "@/data/user.json";
 import ordersData from "@/data/orders.json";
 import kpRequestsData from "@/data/kp-requests.json";
 import documentsData from "@/data/documents.json";
+import { calcTotal } from "./calc";
 import { filterProducts, searchSuggestions, similarProducts } from "./catalog";
 import type {
   Category,
@@ -107,8 +108,37 @@ export async function lookupCompanyByInn(inn: string): Promise<CompanyLookup | n
 /** Отправка запроса КП. Заглушка возвращает номер «КП-ДДММ-NNNN» и статус «отправлен». */
 export async function sendKpRequest(request: KpRequest): Promise<KpRequestResult> {
   await wait();
-  void request;
-  return { id: docNumber("КП"), status: "sent", createdAt: new Date().toISOString() };
+  const result: KpRequestResult = { id: docNumber("КП"), status: "sent", createdAt: new Date().toISOString() };
+  rememberSentKp(result, request);
+  return result;
+}
+
+/* Демо: отправленные с /kp запросы видны в кабинете («Мои запросы»). В бою не нужно — список отдаёт сервер. */
+const SENT_KP_KEY = "prolet-sent-kp";
+
+function readSentKp(): KpRequestSummary[] {
+  if (typeof window === "undefined") return [];
+  try {
+    return JSON.parse(window.localStorage.getItem(SENT_KP_KEY) ?? "[]") as KpRequestSummary[];
+  } catch {
+    return [];
+  }
+}
+
+function rememberSentKp(result: KpRequestResult, request: KpRequest) {
+  const map = new Map(products.map((p) => [p.id, p]));
+  const { weightKg } = calcTotal(request.items, map);
+  const summary: KpRequestSummary = {
+    ...result,
+    items: request.items,
+    itemsCount: request.items.length,
+    totalWeightKg: Math.round(weightKg),
+  };
+  try {
+    window.localStorage.setItem(SENT_KP_KEY, JSON.stringify([summary, ...readSentKp()].slice(0, 10)));
+  } catch {
+    /* хранилище недоступно — в демо просто не покажем */
+  }
 }
 
 /* ---------- Заявки с форм ---------- */
@@ -166,7 +196,7 @@ export async function logout(): Promise<void> {
 /** Запросы КП текущего пользователя, новые сверху. */
 export async function getKpRequests(): Promise<KpRequestSummary[]> {
   await wait();
-  return kpRequestsData as KpRequestSummary[];
+  return [...readSentKp(), ...(kpRequestsData as KpRequestSummary[])];
 }
 
 /** Заказы текущего пользователя, новые сверху. */
