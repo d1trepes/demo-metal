@@ -15,7 +15,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from cutout_lib import cutout
+import sys
 
 PAD = 0.08  # белое поле вокруг исходника, доля ширины
 MARGIN = 0.04  # воздух вокруг объекта в готовом кадре
@@ -28,6 +28,10 @@ JOBS = {
     "docs/assets-src/equipment/plasma.jpg": "public/equipment/plasma.webp",
     "docs/assets-src/equipment/welding.jpg": "public/equipment/welding.webp",
     "docs/assets-src/equipment/paint.jpg": "public/equipment/paint.webp",
+    # чат 8: остальное оборудование для /about — тем же способом
+    "docs/assets-src/equipment/saw.jpg": "public/equipment/saw.webp",
+    "docs/assets-src/equipment/drill.jpg": "public/equipment/drill.webp",
+    "docs/assets-src/equipment/crane.jpg": "public/equipment/crane.webp",
 }
 
 
@@ -63,7 +67,12 @@ def unmultiply(path: str) -> Image.Image:
     return canvas
 
 
+# Аргументы — части имён: `python3 cutout-7b.py saw drill crane` перевырежет только их (без kmd и rembg).
+ONLY = sys.argv[1:]
+
 for src, dst in JOBS.items():
+    if ONLY and not any(o in src for o in ONLY):
+        continue
     img = unmultiply(src)
     # рамка по видимому (объект + тень), чтобы не срезать тень
     vx0, vy0, vx1, vy1 = img.getchannel("A").point(lambda v: 255 if v > 6 else 0).getbbox()
@@ -82,6 +91,7 @@ def kmd_paper() -> None:
     import numpy as np
     from PIL import ImageFilter
     from scipy import ndimage
+    from cutout_lib import cutout  # rembg — только здесь
 
     src = padded("docs/assets-src/pages/kmd.jpg")
     gray = np.array(src.convert("L"))
@@ -112,4 +122,5 @@ def kmd_paper() -> None:
     print("public/pages/kmd.webp", out.size)
 
 
-kmd_paper()
+if not ONLY or "kmd" in ONLY:
+    kmd_paper()

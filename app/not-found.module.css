@@ -1,0 +1,46 @@
+/* 404 (чат 8): как «Список пуст» на /kp — рендер 1–6 на белом, текст 8–12. */
+.wrap {
+  padding-block: var(--space-8) var(--section-gap);
+}
+.grid {
+  align-items: center;
+  row-gap: var(--space-6);
+}
+.art {
+  grid-column: 1 / span 6;
+  width: 100%;
+  height: auto;
+}
+.text {
+  grid-column: 8 / span 5;
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+}
+.text p {
+  max-width: 52ch;
+}
+.code {
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
+  font-size: var(--fs-stat);
+  line-height: var(--lh-display);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-faint);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+@media (max-width: 1024px) {
+  .art,
+  .text {
+    grid-column: 1 / -1;
+  }
+  .art {
+    max-width: 560px;
+  }
+}

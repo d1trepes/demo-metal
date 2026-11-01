@@ -1,0 +1,242 @@
+/*
+ * О производстве (чат 8). Шапка как у каталога + рендер площадки на белом + цифры полосой;
+ * «Что на площадке» — две половины (1–6, 7–12) с характеристиками по линиям;
+ * оборудование — 3 в ряд (по 4 колонки), рендер на белом без плашки;
+ * документы и «Кому звонить» — строками по линиям, как этапы на /constructions.
+ */
+.top {
+  padding-top: var(--space-6);
+}
+.cover img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 640px;
+  height: auto;
+  margin-inline: auto;
+}
+
+/* ---------- Цифры ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0 var(--grid-gap);
+  margin: var(--space-7) 0 0;
+}
+.stat {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  padding-block: var(--space-4) var(--space-5);
+  border-top: var(--border-1) solid var(--color-line-strong);
+}
+.statValue {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
+  font-size: var(--fs-stat);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  font-variant-numeric: tabular-nums;
+}
+.statUnit {
+  display: block;
+  margin-top: var(--space-2);
+  font-family: var(--font-text);
+  font-weight: var(--fw-text);
+  font-size: var(--fs-small);
+  line-height: var(--lh-tight);
+  letter-spacing: 0;
+  color: var(--color-text-muted);
+}
+
+.sectionHead {
+  row-gap: var(--space-4);
+  align-items: end;
+  margin-bottom: var(--space-7);
+}
+
+/* ---------- Площадка ---------- */
+.parts {
+  row-gap: var(--space-7);
+}
+.part {
+  grid-column: span 6;
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  max-width: 62ch;
+}
+
+/* общая таблица «подпись — значение» по линиям */
+.specs {
+  display: grid;
+  margin: 0;
+  border-top: var(--border-1) solid var(--color-line-strong);
+}
+.specs div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-2);
+  border-bottom: var(--border-1) solid var(--color-line);
+  font-size: var(--fs-small);
+}
+.specs dt {
+  color: var(--color-text-muted);
+}
+.specs dd {
+  margin: 0;
+  font-weight: var(--fw-text-strong);
+  text-align: right;
+}
+
+/* ---------- Оборудование ---------- */
+.machines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  row-gap: var(--space-8);
+}
+.machine {
+  grid-column: span 4;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: var(--space-4);
+}
+.machineArt {
+  aspect-ratio: 4 / 3;
+  min-width: 0;
+}
+.machineArt img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.machineHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-4);
+}
+.machineCount {
+  flex: none;
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Документы: название · область · номер · срок ---------- */
+.docs,
+.team {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--border-1) solid var(--color-line-strong);
+}
+.doc,
+.person {
+  align-items: baseline;
+  row-gap: var(--space-2);
+  padding-block: var(--space-4);
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+.docTitle {
+  grid-column: 1 / span 4;
+  font-size: var(--fs-lead);
+}
+.docScope {
+  grid-column: 5 / span 4;
+}
+.docNumber {
+  grid-column: 9 / span 2;
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+}
+.docUntil {
+  grid-column: 11 / span 2;
+  font-size: var(--fs-small);
+  font-weight: var(--fw-text-strong);
+  text-align: right;
+}
+
+/* ---------- Кому звонить: зона · имя и роль · добавочный · почта ---------- */
+.personArea {
+  grid-column: 1 / span 4;
+  font-family: var(--font-cond);
+  font-weight: var(--fw-heading);
+  font-size: var(--fs-lead);
+  text-transform: uppercase;
+  line-height: var(--lh-tight);
+}
+.personName {
+  grid-column: 5 / span 4;
+  display: grid;
+  gap: var(--space-1);
+}
+.personStrong {
+  font-weight: var(--fw-text-strong);
+}
+.personExt {
+  grid-column: 9 / span 1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.personMail {
+  grid-column: 10 / span 3;
+  justify-self: end;
+  font-size: var(--fs-small);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1024px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .part {
+    grid-column: 1 / -1;
+  }
+  .machine {
+    grid-column: span 4;
+  }
+  .docTitle,
+  .personArea {
+    grid-column: 1 / -1;
+  }
+  .docScope,
+  .personName {
+    grid-column: 1 / span 4;
+  }
+  .docNumber,
+  .personExt {
+    grid-column: 5 / span 2;
+  }
+  .docUntil,
+  .personMail {
+    grid-column: 7 / span 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .machine {
+    grid-column: 1 / -1;
+  }
+  .machines {
+    row-gap: var(--space-7);
+  }
+  .docScope,
+  .personName {
+    grid-column: 1 / -1;
+  }
+  .docNumber,
+  .personExt {
+    grid-column: 1 / span 2;
+  }
+  .docUntil,
+  .personMail {
+    grid-column: 3 / span 2;
+  }
+}

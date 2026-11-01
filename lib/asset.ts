@@ -3,7 +3,7 @@
  * после перевырезки браузер показывает старую картинку. Меняйте значение, когда
  * перезаписываете картинки в public/ под тем же именем.
  */
-const IMAGE_VERSION = "7b";
+const IMAGE_VERSION = "8";
 
 /** Путь к файлу из public/ с учётом basePath (GitHub Pages); у картинок — ?v=версия. */
 export function asset(path: string): string {

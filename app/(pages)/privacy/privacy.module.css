@@ -1,0 +1,22 @@
+/* Политика ПДн (чат 8): шапка как у каталога, текст в колонках 1–7 (≤ 65 знаков), разделы по линиям. */
+.top {
+  padding-top: var(--space-6);
+  padding-bottom: var(--section-gap);
+}
+.text {
+  display: grid;
+  border-top: var(--border-1) solid var(--color-line-strong);
+}
+.part {
+  display: grid;
+  gap: var(--space-3);
+  padding-block: var(--space-5);
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+.list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-5);
+  list-style: disc;
+}
