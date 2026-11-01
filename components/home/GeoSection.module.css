@@ -4,7 +4,7 @@
  */
 .grid {
   row-gap: var(--space-8);
-  align-items: center;
+  align-items: start;
 }
 .info {
   grid-column: 1 / span 6;
@@ -13,7 +13,6 @@
   grid-column: 7 / span 6;
   display: grid;
   justify-items: end;
-  gap: var(--space-3);
 }
 .lead {
   max-width: 32em;
@@ -21,25 +20,30 @@
   color: var(--color-text-muted);
 }
 
-/* ---------- Зоны доставки: образец цвета · срок · куда + способ ---------- */
+/* ---------- Зоны доставки: полоса цвета зоны слева · срок · куда + способ (чат 5в) ---------- */
 .zones {
   margin-top: var(--space-7);
   border-top: var(--border-1) solid var(--color-line-strong);
 }
 .zoneRow {
   display: grid;
-  grid-template-columns: var(--space-4) 6.5rem minmax(0, 1fr);
+  grid-template-columns: 6.5rem minmax(0, 1fr);
   gap: var(--space-4);
-  align-items: baseline;
-  padding-block: var(--space-3);
+  align-items: center;
+  padding: var(--space-3) 0 var(--space-3) var(--space-4);
+  box-shadow: inset 3px 0 0 var(--zone-bar);
   border-bottom: var(--border-1) solid var(--color-line);
   font-size: var(--fs-small);
   line-height: var(--lh-tight);
 }
-.swatch {
-  width: var(--space-4);
-  height: var(--space-4);
-  align-self: center;
+.zoneBar1 {
+  --zone-bar: var(--geo-zone-1);
+}
+.zoneBar2 {
+  --zone-bar: var(--geo-zone-2);
+}
+.zoneBar3 {
+  --zone-bar: var(--geo-zone-3);
 }
 .term {
   font-family: var(--font-cond);
@@ -97,6 +101,7 @@
   position: relative;
   width: min(var(--globe-d), 100%);
   aspect-ratio: 1;
+  overflow: hidden; /* кадр квадратный: метка у края не вылезает */
 }
 .still,
 .map {
@@ -137,19 +142,15 @@
 }
 .zone0 {
   fill: var(--geo-zone-0);
-  background: var(--geo-zone-0);
 }
 .zone1 {
   fill: var(--geo-zone-1);
-  background: var(--geo-zone-1);
 }
 .zone2 {
   fill: var(--geo-zone-2);
-  background: var(--geo-zone-2);
 }
 .zone3 {
   fill: var(--geo-zone-3);
-  background: var(--geo-zone-3);
 }
 .region[data-zone] {
   cursor: default;
@@ -205,10 +206,44 @@
   pointer-events: none;
 }
 
-/* Подсказка у курсора: без плашки-карточки — тонкая тёмная метка, как на чертеже */
+/*
+ * Метка региона (чат 5в): привязана к центру региона, всегда видна. Точка в центре, тонкая выноска вверх,
+ * над ней тёмная метка без тени. Переезжает плавно (--dur-base); правее 60 % кадра — метка уходит влево.
+ */
 .tip {
   position: absolute;
   z-index: 1;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  transition:
+    left var(--dur-base) var(--ease-out),
+    top var(--dur-base) var(--ease-out);
+}
+.tip::before {
+  content: "";
+  position: absolute;
+  left: -0.5px;
+  bottom: 0;
+  width: 1px;
+  height: var(--space-7);
+  background: var(--color-ink-900);
+}
+.tip::after {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-ink-900);
+  box-shadow: 0 0 0 1.5px var(--color-bg);
+}
+.tipLabel {
+  position: absolute;
+  left: 0;
+  bottom: var(--space-7);
   display: grid;
   gap: var(--space-1);
   padding: var(--space-2) var(--space-3);
@@ -218,18 +253,13 @@
   font-size: var(--fs-small);
   line-height: var(--lh-tight);
   white-space: nowrap;
-  pointer-events: none;
-  transform: translate(var(--space-4), calc(-100% - var(--space-2)));
 }
-.tipFlip {
-  transform: translate(calc(-100% - var(--space-4)), calc(-100% - var(--space-2)));
+.tipFlip .tipLabel {
+  left: auto;
+  right: 0;
 }
-.tip span {
+.tipLabel span {
   color: var(--color-on-ink-muted);
-}
-.hint {
-  font-size: var(--fs-small);
-  color: var(--color-text-muted);
 }
 
 /* ---------- ≤ 1024 px: глобус под текстом, по центру ---------- */
@@ -248,10 +278,8 @@
 
 @media (max-width: 640px) {
   .zoneRow {
-    grid-template-columns: var(--space-4) minmax(0, 1fr);
-  }
-  .zoneRow > span:last-child {
-    grid-column: 2;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
   }
   .stats {
     grid-template-columns: 1fr 1fr;

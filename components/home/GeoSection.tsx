@@ -7,7 +7,7 @@ import s from "./GeoSection.module.css";
 
 /**
  * Главная: география отгрузок (чат 5б). Слева — заголовок, зоны доставки и цифры прямо на фоне
- * (без карточек, разделители линиями), справа — глобус целиком, ничем не перекрыт.
+ * (без карточек, разделители линиями), справа — крупный фрагмент глобуса, верх — на уровне заголовка (чат 5в).
  */
 export function GeoSection() {
   const zones = typoAll(deliveryZones);
@@ -19,9 +19,9 @@ export function GeoSection() {
         <Grid className={s.grid}>
           <div className={s.info}>
             <h2 id="geo-title" className="t-h2">
-              Отгружаем по России
+              Отгружаем
               <br />
-              и&nbsp;СНГ
+              по&nbsp;России и&nbsp;СНГ
             </h2>
             <p className={cx("t-lead", s.lead)}>
               {typo(
@@ -31,8 +31,7 @@ export function GeoSection() {
 
             <ul className={s.zones} aria-label="Сроки доставки по зонам">
               {zones.map((z) => (
-                <li key={z.zone} className={s.zoneRow}>
-                  <span className={cx(s.swatch, s[`zone${z.zone}`])} aria-hidden="true" />
+                <li key={z.zone} className={cx(s.zoneRow, s[`zoneBar${z.zone}`])}>
                   <b className={s.term}>{z.term}</b>
                   <span>
                     {z.where}
@@ -57,7 +56,6 @@ export function GeoSection() {
 
           <div className={s.globeCol}>
             <GlobeMap zones={zones} />
-            <p className={s.hint}>{typo("Наведите или нажмите на регион — покажем срок и способ доставки.")}</p>
           </div>
         </Grid>
       </Container>

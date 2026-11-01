@@ -76,7 +76,7 @@
 .form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-4) var(--grid-gap);
+  gap: var(--space-4);
 }
 /* Компактные поля: 40 px вместо 48 (касание всё ещё ≥ 40 px) */
 .form input:not([type="checkbox"]):not([type="file"]) {
@@ -91,15 +91,15 @@
   grid-column: 1 / -1;
 }
 
-/* Зона «Перетащите спецификацию» — главное поле формы */
+/* Зона файла внизу формы: низкая, в одну строку — скрепка · подпись · справа форматы (чат 5в) */
 .fileDrop {
-  display: grid;
-  justify-items: center;
-  gap: var(--space-2);
-  padding: var(--space-6) var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--space-8);
+  padding: var(--space-2) var(--space-4);
   border: var(--border-1) dashed var(--color-text-muted);
   border-radius: var(--radius-1);
-  text-align: center;
   cursor: pointer;
   transition:
     background-color var(--dur-fast) var(--ease-out),
@@ -129,6 +129,8 @@
 }
 .fileHint,
 .fileError {
+  margin-left: auto;
+  text-align: right;
   font-size: var(--fs-small);
   color: var(--color-text-muted);
 }
@@ -140,8 +142,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  min-height: var(--control-h);
-  padding: var(--space-3) var(--space-4);
+  min-height: var(--space-8);
+  padding: var(--space-2) var(--space-4);
   border: var(--border-1) solid var(--color-text);
   border-radius: var(--radius-1);
   font-size: var(--fs-small);
@@ -166,28 +168,6 @@
 }
 
 /* «Добавить реквизиты» — ссылка-действие, не кнопка */
-.addDetails {
-  display: inline-flex;
-  align-items: center;
-  justify-self: start;
-  gap: var(--space-2);
-  padding: 0;
-  border: 0;
-  background: none;
-  font-size: var(--fs-small);
-  font-weight: var(--fw-text-strong);
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-  text-decoration-thickness: 1px;
-}
-.addDetails:hover {
-  text-decoration: none;
-}
-.addDetails svg {
-  width: var(--icon-size);
-  height: var(--icon-size);
-}
-
 .submit {
   grid-column: 1 / -1;
   display: flex;
@@ -216,6 +196,15 @@
 @media (max-width: 640px) {
   .form {
     grid-template-columns: 1fr;
+  }
+  .fileDrop {
+    flex-wrap: wrap;
+    row-gap: var(--space-1);
+  }
+  .fileHint,
+  .fileError {
+    margin-left: calc(var(--icon-size) + var(--space-3));
+    text-align: left;
   }
   .step {
     grid-template-columns: 1fr;

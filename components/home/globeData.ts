@@ -33,7 +33,13 @@ export type GlobeData = {
   graticule: string;
   land: string;
   /** zone 0 — регион РФ, куда регулярно не возим (без подсказки). */
-  regions: { id: string; name: string; zone: 0 | 1 | 2 | 3; d: string }[];
-  arcs: { name: string; x: number; y: number; d: string }[];
+  /** cx, cy — центр видимой части региона: туда привязана метка. Москва и СПб — одно имя с областью. */
+  regions: { id: string; name: string; zone: 0 | 1 | 2 | 3; d: string; cx: number; cy: number }[];
+  /** Дуги от склада — к опорным городам. */
+  arcs: { name: string; d: string }[];
+  /** Точки: областные центры зон 1–3 и столицы СНГ. */
+  cities: { name: string; x: number; y: number }[];
   warehouse: { name: string; x: number; y: number };
+  /** Регион, метка которого видна по умолчанию и куда она возвращается (склад). */
+  defaultRegion: string;
 };

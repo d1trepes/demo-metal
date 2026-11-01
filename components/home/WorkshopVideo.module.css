@@ -1,0 +1,28 @@
+/* Видео склада во всю ширину экрана (сетка B), 21:9; на телефоне 4:3, кадр обрезается по центру */
+.band {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 21 / 9;
+  overflow: hidden;
+  background: var(--color-surface-2);
+}
+.media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Видео проявляется поверх постера, когда реально заиграло — без чёрного кадра */
+.video {
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+.videoOn {
+  opacity: 1;
+}
+@media (max-width: 640px) {
+  .band {
+    aspect-ratio: 4 / 3;
+  }
+}

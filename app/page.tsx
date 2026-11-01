@@ -7,7 +7,7 @@ import { ProjectsSection } from "@/components/home/ProjectsSection";
 import { QuoteSection } from "@/components/home/QuoteSection";
 import { StickyHeader } from "@/components/home/StickyHeader";
 import { TruckDivider } from "@/components/home/TruckDivider";
-import { WorkshopPhoto } from "@/components/home/WorkshopPhoto";
+import { WorkshopVideo } from "@/components/home/WorkshopVideo";
 
 /** Главная (чаты 4–5б). Порядок блоков — docs/PASSPORT.md §4. */
 export default function HomePage() {
@@ -21,7 +21,7 @@ export default function HomePage() {
       <TruckDivider />
       <ConstructionsSection />
       <GeoSection />
-      <WorkshopPhoto />
+      <WorkshopVideo />
       <ProjectsSection />
       <QuoteSection />
     </main>

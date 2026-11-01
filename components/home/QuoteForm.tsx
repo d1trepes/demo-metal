@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type DragEvent, type FormEvent } from "react";
-import { Paperclip, Plus, X } from "lucide-react";
+import { Paperclip, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { ConsentCheckbox, TextArea, TextField } from "@/components/ui/Field";
 import { sendQuoteRequest } from "@/lib/api";
@@ -19,15 +19,14 @@ type Errors = Partial<Record<"name" | "phone" | "message" | "file", string>>;
 const phoneOk = (v: string) => v.replace(/\D/g, "").length >= 10;
 
 /**
- * Форма заявки на главной (чат 5б): обязательны только имя, телефон и согласие.
- * Главное — спецификация файлом (перетащить или выбрать) ИЛИ список позиций текстом.
- * Почта и компания/ИНН спрятаны под «Добавить реквизиты». Отправка — только через lib/api.ts.
+ * Форма заявки на главной (чат 5в): сначала все текстовые поля парами, ниже — «что нужно» и файл.
+ * Обязательны имя, телефон, согласие и «что нужно» ИЛИ файл. Ничего не спрятано.
+ * Отправка — только через lib/api.ts.
  */
 export function QuoteForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [showDetails, setShowDetails] = useState(false);
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState<QuoteRequestResult | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -77,6 +76,8 @@ export function QuoteForm() {
         phone: value("phone"),
         email: value("email") || undefined,
         company: value("company") || undefined,
+        city: value("city") || undefined,
+        deadline: value("deadline") || undefined,
         message: value("message"),
         file: file ?? undefined,
       });
@@ -114,6 +115,31 @@ export function QuoteForm() {
         required
       />
 
+      <TextField
+        label="Компания или ИНН"
+        name="company"
+        autoComplete="organization"
+        placeholder="Для счёта, можно только ИНН"
+      />
+      <TextField
+        label="Почта"
+        name="email"
+        type="email"
+        autoComplete="email"
+        placeholder={`Пришлём КП в${NB}PDF`}
+      />
+      <TextField label="Город доставки" name="city" autoComplete="address-level2" placeholder="Екатеринбург" />
+      <TextField label="Когда нужно" name="deadline" placeholder={`к${NB}15.11 или срочно`} />
+
+      <TextArea
+        className={s.wide}
+        label={file ? "Комментарий к файлу" : "Что нужно"}
+        name="message"
+        rows={3}
+        placeholder={"Арматура А500С Ø12, 11,7 м — 8 т\nБалка 20Б1, резка по 6 м — 14 шт"}
+        error={errors.message}
+      />
+
       <div className={s.wide}>
         <input
           ref={fileRef}
@@ -146,36 +172,13 @@ export function QuoteForm() {
             onDrop={onDrop}
           >
             <Paperclip aria-hidden="true" />
-            <span className={s.fileTitle}>
-              Перетащите спецификацию или <u>выберите файл</u>
-            </span>
+            <span className={s.fileTitle}>Приложить спецификацию или чертёж</span>
             <span id="quote-file-msg" className={errors.file ? s.fileError : s.fileHint}>
-              {errors.file ?? `PDF, Excel, Word, DWG, фото — до${NB}${MAX_FILE_MB}${NB}МБ`}
+              {errors.file ?? `PDF, Excel, DWG — до${NB}${MAX_FILE_MB}${NB}МБ`}
             </span>
           </label>
         )}
       </div>
-
-      <TextArea
-        className={s.wide}
-        label={file ? "Комментарий" : "Или перечислите позиции"}
-        name="message"
-        rows={3}
-        placeholder={"Арматура А500С Ø12, 11,7 м — 8 т\nБалка 20Б1, резка по 6 м — 14 шт"}
-        error={errors.message}
-      />
-
-      {showDetails ? (
-        <>
-          <TextField label="Компания или ИНН" name="company" autoComplete="organization" hint="Для счёта" />
-          <TextField label="Почта" name="email" type="email" autoComplete="email" hint={`Пришлём КП в${NB}PDF`} />
-        </>
-      ) : (
-        <button type="button" className={cx(s.wide, s.addDetails)} onClick={() => setShowDetails(true)}>
-          <Plus aria-hidden="true" />
-          Добавить реквизиты: компания, ИНН, почта
-        </button>
-      )}
 
       <ConsentCheckbox name="consent" className={s.wide} />
 

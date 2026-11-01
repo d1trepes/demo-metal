@@ -6,20 +6,21 @@ import { cx } from "@/lib/cx";
 import type { DeliveryZone, GlobeData } from "./globeData";
 import s from "./GeoSection.module.css";
 
-type Hover = { name: string; zone: DeliveryZone; x: number; y: number; flip: boolean } | null;
+type Region = GlobeData["regions"][number];
 
 /**
- * Глобус отгрузок (чат 5б). Ракурс фиксированный, без вращения: контуры посчитаны при сборке
- * (scripts/build-globe.mjs → public/globe/globe.json), браузер только рисует SVG — без canvas, WebGL и d3.
+ * Карта отгрузок (чат 5в). Фрагмент шара крупно: от Калининграда до Красноярска, края срезаны квадратом кадра.
+ * Контуры посчитаны при сборке (scripts/build-globe.mjs → public/globe/globe.json), браузер только рисует SVG.
  *
- * Сначала стоит заглушка globe-static.webp того же вида (она же — вид без JS). JSON (~90 КБ, gzip ~30)
- * грузится, когда блок подходит к экрану (за 400 px), интерактивный слой проявляется поверх.
- * Hover по региону — срок и способ доставки. Дуги прорисовываются один раз (выключено при reduced-motion).
+ * Сначала стоит заглушка globe-static.webp того же вида (она же — вид без JS). JSON (~40 КБ) грузится,
+ * когда блок подходит к экрану (за 400 px), интерактивный слой проявляется поверх.
+ * Метка всегда видна: по умолчанию — регион склада; при наведении плавно переезжает к центру региона,
+ * при уходе курсора с карты возвращается. Дуги прорисовываются один раз (выключено при reduced-motion).
  */
 export function GlobeMap({ zones }: { zones: DeliveryZone[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const [data, setData] = useState<GlobeData | null>(null);
-  const [hover, setHover] = useState<Hover>(null);
+  const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -45,25 +46,21 @@ export function GlobeMap({ zones }: { zones: DeliveryZone[] }) {
     };
   }, []);
 
+  /** Регион с зоной доставки под курсором; над морем и «пустыми» регионами метка остаётся, где была. */
   const onMove = (event: MouseEvent<SVGSVGElement>) => {
-    const target = event.target as SVGElement;
-    const zoneNum = Number(target.dataset.zone);
-    const zone = zones.find((z) => z.zone === zoneNum);
-    if (!zone || !ref.current) {
-      if (hover) setHover(null);
-      return;
-    }
-    const box = ref.current.getBoundingClientRect();
-    const x = event.clientX - box.left;
-    // в правой половине подсказка уходит влево от курсора, чтобы не вылезать за край экрана
-    setHover({ name: target.dataset.name ?? "", zone, x, y: event.clientY - box.top, flip: x > box.width / 2 });
+    const { zone, name } = (event.target as SVGElement).dataset;
+    if (zone && name && name !== active) setActive(name);
   };
+
+  const name = active ?? data?.defaultRegion;
+  const region: Region | undefined = data?.regions.find((r) => r.name === name);
+  const zone = zones.find((z) => z.zone === region?.zone);
 
   return (
     <div ref={ref} className={s.globe} data-ready={data ? "" : undefined}>
       <img
         src={asset("/globe/globe-static.webp")}
-        alt="Глобус: склад в Екатеринбурге и зоны доставки по России, Казахстану, Беларуси и Средней Азии"
+        alt="Карта: склад в Екатеринбурге и зоны доставки по России, Казахстану, Беларуси и Средней Азии"
         width={1200}
         height={1200}
         loading="lazy"
@@ -77,7 +74,8 @@ export function GlobeMap({ zones }: { zones: DeliveryZone[] }) {
           viewBox={`0 0 ${data.size} ${data.size}`}
           aria-hidden="true"
           onMouseMove={onMove}
-          onMouseLeave={() => setHover(null)}
+          onClick={onMove}
+          onMouseLeave={() => setActive(null)}
         >
           <path d={data.sphere} className={s.sphere} />
           <path d={data.graticule} className={s.graticule} />
@@ -86,7 +84,7 @@ export function GlobeMap({ zones }: { zones: DeliveryZone[] }) {
             <path
               key={r.id}
               d={r.d}
-              className={cx(s.region, s[`zone${r.zone}`], hover?.name === r.name && s.regionOn)}
+              className={cx(s.region, s[`zone${r.zone}`], r.name === name && s.regionOn)}
               data-zone={r.zone || undefined}
               data-name={r.name}
             />
@@ -99,18 +97,24 @@ export function GlobeMap({ zones }: { zones: DeliveryZone[] }) {
               </g>
             ))}
           </g>
-          {data.arcs.map((a) => (
-            <circle key={a.name} cx={a.x} cy={a.y} r={4} className={s.city} />
+          {data.cities.map((c) => (
+            <circle key={c.name} cx={c.x} cy={c.y} r={5.5} className={s.city} />
           ))}
-          <circle cx={data.warehouse.x} cy={data.warehouse.y} r={8} className={s.home} />
+          <circle cx={data.warehouse.x} cy={data.warehouse.y} r={10} className={s.home} />
         </svg>
       )}
 
-      {hover && (
-        <div className={cx(s.tip, hover.flip && s.tipFlip)} style={{ left: hover.x, top: hover.y }} role="status">
-          <b>{hover.name}</b>
-          <span>
-            {hover.zone.term} · {hover.zone.method}
+      {data && region && zone && (
+        <div
+          className={cx(s.tip, region.cx > data.size * 0.6 && s.tipFlip)}
+          style={{ left: `${(region.cx / data.size) * 100}%`, top: `${(region.cy / data.size) * 100}%` }}
+          role="status"
+        >
+          <span className={s.tipLabel}>
+            <b>{region.name}</b>
+            <span>
+              {zone.term} · {zone.method}
+            </span>
           </span>
         </div>
       )}

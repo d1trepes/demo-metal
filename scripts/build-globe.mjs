@@ -15,8 +15,8 @@ import { feature } from "topojson-client";
 import { geoArea, geoGraticule10, geoInterpolate, geoOrthographic, geoPath } from "d3-geo";
 
 const SIZE = 1000; // viewBox 0 0 1000 1000
-const R = 488;
-const VIEW = { lon: 68, lat: 56 }; // Евразия: от Минска до Красноярска, Ташкент внизу
+const R = 1180; // чат 5в: шар приближен ×2,4 (мелкие регионы Поволжья ≥ 20 px при 640 px), края срезаны рамкой
+const VIEW = { lon: 61, lat: 54 }; // от Калининграда до Красноярска, Казахстан и Средняя Азия внизу
 const WAREHOUSE = { name: "Екатеринбург", lon: 60.6, lat: 56.84 };
 
 /** Регионы РФ по зонам доставки (имена — как в источнике). 8 + 18 + 12 = 38 регионов. */
@@ -43,19 +43,42 @@ const CIS = {
   860: [3, "Узбекистан"],
   417: [3, "Киргизия"],
 };
-/** Короткие имена для подсказки. */
+/** Короткие имена для подсказки. Москва и СПб — одна цель с областью (город слишком мелкий для курсора). */
 const SHORT = {
   "Ханты-Мансийский автономный округ - Югра": "ХМАО — Югра",
   "Ямало-Ненецкий автономный округ": "ЯНАО",
   "Удмуртская республика": "Удмуртия",
+  "Москва": "Москва и область",
+  "Московская область": "Москва и область",
+  "Санкт-Петербург": "Санкт-Петербург и область",
+  "Ленинградская область": "Санкт-Петербург и область",
 };
+/** Регион, активный по умолчанию (склад). */
+const DEFAULT_REGION = "Свердловская область";
 
-/** Города с дугами от склада. */
+/** Точки: областные центры зон 1–3 в кадре + столицы СНГ. [имя, долгота, широта] */
 const CITIES = [
-  ["Уфа", 55.97, 54.74],
-  ["Сургут", 73.4, 61.25], ["Казань", 49.12, 55.79], ["Омск", 73.37, 54.99], ["Новосибирск", 82.92, 55.03],
-  ["Новый Уренгой", 76.68, 66.08], ["Астана", 71.43, 51.17], ["Москва", 37.62, 55.76],
-  ["Санкт-Петербург", 30.31, 59.94], ["Минск", 27.56, 53.9], ["Ташкент", 69.24, 41.3], ["Красноярск", 92.85, 56.01],
+  // зона 1
+  ["Челябинск", 61.4, 55.16], ["Тюмень", 65.53, 57.15], ["Курган", 65.34, 55.44], ["Пермь", 56.25, 58.01],
+  ["Уфа", 55.97, 54.74], ["Ханты-Мансийск", 69.02, 61.0], ["Ижевск", 53.2, 56.85],
+  // зона 2
+  ["Салехард", 66.6, 66.53], ["Оренбург", 55.1, 51.77], ["Казань", 49.12, 55.79], ["Омск", 73.37, 54.99],
+  ["Новосибирск", 82.92, 55.03], ["Томск", 84.95, 56.48], ["Кемерово", 86.09, 55.35], ["Барнаул", 83.78, 53.35],
+  ["Самара", 50.1, 53.2], ["Киров", 49.67, 58.6], ["Сыктывкар", 50.84, 61.67], ["Ульяновск", 48.4, 54.32],
+  ["Чебоксары", 47.25, 56.13], ["Йошкар-Ола", 47.89, 56.63], ["Нижний Новгород", 44.0, 56.33],
+  ["Пенза", 45.0, 53.2], ["Саратов", 46.03, 51.53], ["Саранск", 45.18, 54.19],
+  // зона 3
+  ["Москва", 37.62, 55.76], ["Санкт-Петербург", 30.31, 59.94], ["Красноярск", 92.85, 56.01],
+  ["Волгоград", 44.5, 48.71], ["Ростов-на-Дону", 39.7, 47.23], ["Воронеж", 39.2, 51.66],
+  ["Ярославль", 39.87, 57.63], ["Владимир", 40.4, 56.13], ["Тверь", 35.9, 56.86],
+  // СНГ
+  ["Астана", 71.43, 51.17], ["Алматы", 76.9, 43.24], ["Минск", 27.56, 53.9], ["Ташкент", 69.24, 41.3],
+  ["Бишкек", 74.6, 42.87],
+];
+/** Дуги от склада — только к опорным городам, иначе в Поволжье каша. */
+const ARC_TO = [
+  "Уфа", "Казань", "Омск", "Новосибирск", "Салехард", "Астана", "Москва", "Санкт-Петербург",
+  "Минск", "Ташкент", "Красноярск", "Алматы", "Ростов-на-Дону",
 ];
 
 const zoneOf = (name) => (ZONE_1.includes(name) ? 1 : ZONE_2.includes(name) ? 2 : ZONE_3.includes(name) ? 3 : 0);
@@ -65,6 +88,7 @@ const projection = geoOrthographic()
   .scale(R)
   .translate([SIZE / 2, SIZE / 2])
   .clipAngle(90)
+  .clipExtent([[0, 0], [SIZE, SIZE]]) // всё вне квадрата кадра отрезаем — файл меньше
   .precision(0.3);
 const path = geoPath(projection).digits(0);
 
@@ -78,6 +102,13 @@ function rewind(f) {
   return { ...f, geometry };
 }
 
+/** Центр региона для метки (по видимой в кадре части), площадь — для выбора среди одноимённых. */
+const clampIn = (v) => Math.min(SIZE - 20, Math.max(20, Math.round(v)));
+function center(f) {
+  const [x, y] = path.centroid(f);
+  return { cx: clampIn(x), cy: clampIn(y), area: path.area(f) };
+}
+
 // ---------- Фон суши одним контуром (110m, без границ) + страны СНГ ----------
 const read = (file) => JSON.parse(readFileSync(new URL(`../node_modules/world-atlas/${file}`, import.meta.url)));
 const landTopo = read("land-110m.json");
@@ -89,7 +120,7 @@ for (const c of feature(worldTopo, worldTopo.objects.countries).features) {
   const id = String(Number(c.id));
   if (!CIS[id]) continue;
   const d = path(c);
-  if (d) regions.push({ id: `c${id}`, name: CIS[id][1], zone: CIS[id][0], d });
+  if (d) regions.push({ id: `c${id}`, name: CIS[id][1], zone: CIS[id][0], d, ...center(c) });
 }
 
 // ---------- Регионы РФ ----------
@@ -99,8 +130,14 @@ ruRegions.forEach((f, i) => {
   const d = path(f);
   if (!d) return;
   const name = f.properties.name;
-  regions.push({ id: `r${i}`, name: SHORT[name] ?? name, zone: zoneOf(name), d });
+  regions.push({ id: `r${i}`, name: SHORT[name] ?? name, zone: zoneOf(name), d, ...center(f) });
 });
+// Регионы с общим именем (Москва и область) — одна метка: центр самого большого
+for (const r of regions) {
+  const big = regions.filter((o) => o.name === r.name).sort((a, b) => b.area - a.area)[0];
+  [r.cx, r.cy] = [big.cx, big.cy];
+}
+regions.forEach((r) => delete r.area);
 // Сначала незакрашенные, потом зоны 3 → 1: тёмные границы ближних зон поверх
 regions.sort((a, b) => (a.zone || 9) - (b.zone || 9)).reverse();
 
@@ -108,27 +145,35 @@ regions.sort((a, b) => (a.zone || 9) - (b.zone || 9)).reverse();
 const lift = (h, [x, y]) => [SIZE / 2 + (x - SIZE / 2) * h, SIZE / 2 + (y - SIZE / 2) * h];
 const home = [WAREHOUSE.lon, WAREHOUSE.lat];
 const round = (n) => Math.round(n * 10) / 10;
-const arcs = CITIES.map(([name, lon, lat]) => {
+const inFrame = ([x, y]) => x >= 0 && x <= SIZE && y >= 0 && y <= SIZE;
+const cities = CITIES.map(([name, lon, lat]) => ({ name, lon, lat, p: projection([lon, lat]) }))
+  .filter((c) => c.p && inFrame(c.p))
+  .map(({ name, lon, lat, p }) => ({ name, lon, lat, x: round(p[0]), y: round(p[1]) }));
+const arcs = cities.filter((c) => ARC_TO.includes(c.name)).map(({ name, lon, lat }) => {
   const to = [lon, lat];
   const interp = geoInterpolate(home, to);
   const steps = 32;
   const pts = [];
   const span = Math.hypot(lon - home[0], lat - home[1]);
-  const h0 = 0.02 + span * 0.0016; // чем дальше город, тем выше дуга
+  const h0 = 0.01 + span * 0.0008; // чем дальше город, тем выше дуга (масштаб ×2 — подъём вдвое ниже)
   for (let i = 0; i <= steps; i++) {
     const t = i / steps;
     const p = projection(interp(t));
     pts.push(lift(1 + h0 * Math.sin(Math.PI * t), p).map(round));
   }
-  const [x, y] = projection(to).map(round);
-  return { name, x, y, d: `M${pts.map((p) => p.join(",")).join("L")}` };
+  return { name, d: `M${pts.map((p) => p.join(",")).join("L")}` };
 });
 const [hx, hy] = projection(home).map(round);
 
 const sphere = path({ type: "Sphere" });
 const graticule = path(geoGraticule10());
 
-const data = { size: SIZE, sphere, graticule, land, regions, arcs, warehouse: { name: WAREHOUSE.name, x: hx, y: hy } };
+const data = {
+  size: SIZE, sphere, graticule, land, regions, arcs,
+  cities: cities.map(({ name, x, y }) => ({ name, x, y })),
+  warehouse: { name: WAREHOUSE.name, x: hx, y: hy },
+  defaultRegion: DEFAULT_REGION,
+};
 
 mkdirSync(new URL("../public/globe/", import.meta.url), { recursive: true });
 writeFileSync(new URL("../public/globe/globe.json", import.meta.url), JSON.stringify(data));
@@ -147,8 +192,8 @@ ${regions.map((r) => `<path d="${r.d}" fill="${fill(r.zone)}" stroke="${C.border
 <g fill="none" stroke-linecap="round">${arcs
   .map((a) => `<path d="${a.d}" stroke="${C.ocean}" stroke-width="3.5"/><path d="${a.d}" stroke="${C.arc}" stroke-width="1.3"/>`)
   .join("")}</g>
-${arcs.map((a) => `<circle cx="${a.x}" cy="${a.y}" r="4" fill="${C.arc}" stroke="${C.ocean}" stroke-width="1.5"/>`).join("")}
-<circle cx="${hx}" cy="${hy}" r="8" fill="${C.ocean}" stroke="${C.arc}" stroke-width="3.5"/>
+${cities.map((a) => `<circle cx="${a.x}" cy="${a.y}" r="5.5" fill="${C.arc}" stroke="${C.ocean}" stroke-width="1.5"/>`).join("")}
+<circle cx="${hx}" cy="${hy}" r="10" fill="${C.ocean}" stroke="${C.arc}" stroke-width="4"/>
 </svg>`;
 writeFileSync(new URL("../public/globe/globe.svg", import.meta.url), svg);
 
@@ -159,3 +204,12 @@ console.log(
 );
 const missing = [...ZONE_1, ...ZONE_2, ...ZONE_3].filter((n) => !ruRegions.some((f) => f.properties.name === n));
 if (missing.length) console.warn("Нет в источнике:", missing);
+console.log(`городов в кадре: ${cities.length} из ${CITIES.length}`, CITIES.filter(([n]) => !cities.some((c) => c.name === n)).map(([n]) => n));
+// Проверка: мелкие регионы должны быть ≥ 20 px при показе глобуса шириной 640 px
+const k = 640 / SIZE;
+for (const f of ruRegions) {
+  const n = f.properties.name;
+  if (!["Удмуртская республика", "Чувашия", "Марий Эл", "Московская область", "Республика Мордовия"].includes(n)) continue;
+  const [[x0, y0], [x1, y1]] = path.bounds(f);
+  console.log(`${n}: ${Math.round((x1 - x0) * k)} × ${Math.round((y1 - y0) * k)} px`);
+}
