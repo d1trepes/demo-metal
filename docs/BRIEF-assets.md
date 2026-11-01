@@ -100,3 +100,58 @@ no text, no logos, no signs, no watermarks. Wide horizontal composition, 16:10.
 | `public/workshop/hall.webp` | Полноширинная полоса между глобусом и объектами | inside a steel fabrication workshop: long hall, overhead gantry crane, welded steel beams and trusses on supports, a welder working in the far background with small sparks, light from high windows / daytime. Composition 21:9, extra wide |
 
 Прислать: PNG/JPG от 2400 px по длинной стороне, 2 варианта на каждый.
+
+# Бриф: чаты 6–9 — карточка товара, оборудование, страницы (01.11.2026)
+
+Стиль — **как у рендеров каталога и конструкций** (§2): студийный 3D-рендер, вид 3/4 сверху, чистый белый фон, мягкий свет слева сверху, холодный серый металл. Фон вырезаем сами. Одна сессия генерации на группу, менять только [OBJECT]. Людей нет нигде.
+
+Шаблон:
+```
+Photorealistic studio product render of [OBJECT]. Isometric 3/4 view from above, camera about 35°
+elevation. Matte cold-grey steel, primed grey paint where noted, clean sharp edges, no rust.
+Isolated on pure white seamless background, soft diffuse studio light from top-left, subtle soft
+contact shadow. Centered, generous empty margins, landscape 4:3.
+No text, no labels, no logos, no people, no readable markings.
+```
+
+Прислать: PNG от 2000 px по длинной стороне. Папки — `docs/assets-src/<папка>/`.
+
+## А. Карточка товара — торцы крупным планом (чат 6, нужны первыми) → `ends/`
+Вторая картинка в галерее карточки: сечение профиля крупно, чтобы снабженец видел форму и толщину стенки. В [OBJECT] добавить: `close-up macro view of the cut end, cross-section fills the center, shallow depth of field, landscape 4:3`.
+
+| Файл | [OBJECT] |
+| --- | --- |
+| `armatura.png` | cut ends of a bundle of ribbed steel rebar rods, ribs visible on the sides |
+| `truba-profilnaya.png` | cut end of a rectangular hollow steel tube, wall thickness and rounded corners clearly visible |
+| `truba-kruglaya.png` | cut end of a round welded steel pipe, wall thickness and weld seam visible |
+| `list.png` | edge of a stack of 3 hot-rolled steel plates, thickness of each plate clearly visible |
+| `ugolok.png` | cut end of an equal-leg steel angle, L-shaped section |
+| `shveller.png` | cut end of a steel channel, U-shaped section with tapered flanges |
+| `balka.png` | cut end of a steel I-beam: thin vertical web and two wide flanges, I-shape unmistakable |
+| `krug.png` | cut ends of a bundle of solid round steel bars, saw marks on the faces |
+| `polosa.png` | cut ends of a stack of flat steel bars, rectangular sections |
+| `setka.png` | corner of a welded wire mesh sheet, weld points at the crossings |
+
+Плюс переделать плитку каталога (известная проблема): `../catalog/balka.png` — `2 short pieces of steel I-beam lying parallel, I-shaped cross-section with a thin vertical web and two wide flanges clearly visible on the cut ends`.
+
+## Б. Оборудование цеха (чаты 7 и 9: «О производстве» и этапы на «Металлоконструкциях») → `equipment/`
+| Файл | [OBJECT] |
+| --- | --- |
+| `saw.png` | an industrial band saw machine cutting a steel I-beam, roller conveyor on both sides |
+| `plasma.png` | a CNC plasma cutting table with a steel plate, several cut-out flat steel parts lying on it |
+| `drill.png` | a CNC beam drilling line with a steel H-beam passing through it |
+| `welding.png` | a welding station: a steel truss node clamped in a jig on a steel welding table, welding torch resting on the table |
+| `paint.png` | primed grey steel beams resting on painting supports in a row, freshly painted, spray gun on a stand |
+| `crane.png` | an overhead bridge crane section with a hook lifting a bundle of steel pipes on slings |
+
+## В. Страницы (чаты 7–9) → `pages/`
+| Файл | Где | [OBJECT] |
+| --- | --- | --- |
+| `base.png` | «О производстве», первый экран; вход в кабинет | a miniature isometric diorama of a steel stockholding base: a long fabrication hall with grey sandwich-panel walls, an open-air steel yard with a gantry crane over stacks of beams and pipes, a flatbed truck at the gate. Clean architectural model look, landscape 16:9 |
+| `frame.png` | «Металлоконструкции», первый экран | a large primed grey steel frame of a production hall, three bays, columns, roof trusses and bracing, on a concrete slab, landscape 16:9 |
+| `kmd.png` | Этап «Чертёж и КМД» | a rolled-out large technical drawing sheet with steel structure drawings on a desk, a steel square and a pencil on top, lines only, no readable text |
+| `pack.png` | Этап «Отгрузка» | finished welded steel structures (trusses and columns) bundled and strapped on wooden skids, ready for loading |
+| `bent.png` | Страница 404 | a single steel I-beam bent and kinked in the middle |
+| `empty.png` | Пустые состояния (нет позиций в КП, нет заказов) | an empty wooden pallet with two loose steel straps lying on it |
+
+Итого 23 картинки. Порядок: сначала **А** (нужна в чате 6), **Б** и **В** — к чату 7.
