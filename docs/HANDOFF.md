@@ -66,6 +66,9 @@
 Заглушка пускает с любым паролем; ошибка — исключение с текстом для формы. Пользователь кэшируется в `lib/stores/auth.ts` (ключ `prolet-auth`). В бою: сессия в httpOnly-cookie, `login` возвращает профиль, `logout` гасит сессию; `loginDemo` убрать.
 `User`: `id`, `name`, `email`, `phone`, `company` (`CompanyLookup`), `deliveryAddresses[]`.
 
+#### `register(request: RegisterRequest): Promise<User>`
+Регистрация с `/login/?mode=register`: `inn`, `name`, `phone`, `email`, `password`. Заглушка находит компанию по ИНН (`lookupCompanyByInn`) и сразу пускает в кабинет. В бою: создать учётку, письмо подтверждения, менеджеру — «новый клиент, проверить ИНН, подключить цены по договору». Ошибка — исключение с текстом для формы.
+
 #### `getKpRequests(): Promise<KpRequestSummary[]>`
 Запросы КП пользователя: поля `KpRequestResult` + `itemsCount`, `totalWeightKg`, `totalRub?` (есть, когда КП готово), `items?` (для «Повторить»). `data/kp-requests.json`. Кабинет: без входа `/account/*` редиректит на `/login/?next=…` (`components/account/AccountShell.tsx`).
 

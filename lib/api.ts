@@ -27,6 +27,7 @@ import type {
   ProductFilter,
   QuoteRequest,
   QuoteRequestResult,
+  RegisterRequest,
   SearchSuggestions,
   User,
 } from "./types";
@@ -180,6 +181,18 @@ export async function login(email: string, password: string): Promise<User> {
   await wait();
   if (!email.includes("@") || !password) throw new Error("Неверная почта или пароль");
   return userData as User;
+}
+
+/**
+ * Регистрация закупщика: компания по ИНН + контакт + пароль. Заглушка сразу пускает в кабинет
+ * (заказы и документы в демо — общие). В бою: создать учётку, письмо с подтверждением почты, менеджеру — новый клиент.
+ */
+export async function register(request: RegisterRequest): Promise<User> {
+  await wait();
+  const company = await lookupCompanyByInn(request.inn);
+  if (!company) throw new Error("Проверьте ИНН: 10 цифр для организации, 12 для ИП");
+  if (!request.email.includes("@") || request.password.length < 6) throw new Error("Почта и пароль от 6 символов обязательны");
+  return { ...(userData as User), id: "U-NEW", name: request.name, email: request.email, phone: request.phone, company, deliveryAddresses: [] };
 }
 
 /** Кнопка «Войти в демо-кабинет» — без пароля. */

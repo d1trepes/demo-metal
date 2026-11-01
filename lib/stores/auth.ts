@@ -4,14 +4,15 @@
  */
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { login, loginDemo, logout } from "../api";
-import type { User } from "../types";
+import { login, loginDemo, logout, register } from "../api";
+import type { RegisterRequest, User } from "../types";
 import { safeJSONStorage } from "./safeStorage";
 
 type AuthState = {
   user: User | null;
   signIn: (email: string, password: string) => Promise<void>;
   signInDemo: () => Promise<void>;
+  signUp: (request: RegisterRequest) => Promise<void>;
   signOut: () => Promise<void>;
   /** Обновить профиль после сохранения реквизитов (updateCompany). */
   setUser: (user: User) => void;
@@ -26,6 +27,9 @@ export const useAuthStore = create<AuthState>()(
       },
       signInDemo: async () => {
         set({ user: await loginDemo() });
+      },
+      signUp: async (request) => {
+        set({ user: await register(request) });
       },
       signOut: async () => {
         await logout();

@@ -7,7 +7,7 @@ import { typo } from "@/lib/typo";
 import s from "@/components/account/Login.module.css";
 
 export const metadata: Metadata = {
-  title: "Вход в личный кабинет",
+  title: "Вход и регистрация",
   description: "Кабинет закупщика: статусы заказов, запросы КП, счета и УПД в PDF, повтор заказа одной кнопкой.",
   robots: { index: false },
 };
@@ -19,7 +19,7 @@ const features = [
   ["Реквизиты", "ИНН, КПП и адреса объектов подставляются в каждый запрос"],
 ];
 
-/** Вход (паспорт §4): форма 1–5, справа 7–12 — рендер площадки и что есть в кабинете. */
+/** Вход и регистрация (паспорт §4): форма 1–5, справа 7–12 — рендер площадки и что есть в кабинете. */
 export default function LoginPage() {
   return (
     <Container className={s.page}>
@@ -27,7 +27,7 @@ export default function LoginPage() {
         <div className={s.formCol}>
           <h1 className="t-h1">Вход для клиентов</h1>
           <p className={s.lead}>
-            {typo("Доступ выдаёт менеджер после первого счёта. Логин — рабочая почта, на которую приходят КП.")}
+            {typo("Заказы, счета и УПД — в одном месте. Регистрация по ИНН занимает минуту, цены по договору подключит менеджер.")}
           </p>
           {/* useSearchParams внутри формы — для статичного экспорта нужен Suspense */}
           <Suspense>

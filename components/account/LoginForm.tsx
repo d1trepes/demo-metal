@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { TextField } from "@/components/ui/Field";
 import { company } from "@/lib/nav";
 import { useAuthStore } from "@/lib/stores/auth";
+import { RegisterForm } from "./RegisterForm";
 import s from "./Login.module.css";
 
 /** Куда вернуть после входа: ?next=/account/orders/ (только разделы кабинета). */
@@ -17,8 +18,11 @@ function safeNext(next: string | null): string {
 export function LoginForm({ demoNote }: { demoNote: string }) {
   const router = useRouter();
   const next = safeNext(useSearchParams().get("next"));
+  const signUp = useAuthStore((st) => st.signUp);
   const signIn = useAuthStore((st) => st.signIn);
   const signInDemo = useAuthStore((st) => st.signInDemo);
+  const params = useSearchParams();
+  const [mode, setMode] = useState<"login" | "register">(params.get("mode") === "register" ? "register" : "login");
   const [busy, setBusy] = useState<"form" | "demo" | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -60,22 +64,59 @@ export function LoginForm({ demoNote }: { demoNote: string }) {
         </Button>
       </section>
 
-      <form className={s.form} onSubmit={onSubmit} noValidate aria-busy={busy === "form"} aria-labelledby="login-title">
-        <h2 id="login-title" className="t-label">
-          Вход по паролю
-        </h2>
-        <TextField label="Почта" name="email" type="email" autoComplete="username" inputMode="email" placeholder="snab@company.ru" />
-        <TextField label="Пароль" name="password" type="password" autoComplete="current-password" error={error ?? undefined} />
-        <Button type="submit" variant="secondary" block disabled={busy !== null}>
-          {busy === "form" ? "Входим…" : "Войти"}
-        </Button>
-        <p className={s.help}>
-          Забыли пароль или нет доступа — позвоните менеджеру:{" "}
-          <a href={company.phoneHref} className="link">
-            {company.phone.replace(/ /g, "\u00a0")}
-          </a>
-        </p>
-      </form>
+      <div className={s.modes} role="tablist" aria-label="Вход или регистрация">
+        {(
+          [
+            ["login", "Вход по паролю"],
+            ["register", "Регистрация"],
+          ] as const
+        ).map(([key, label]) => (
+          <button
+            key={key}
+            id={`tab-${key}`}
+            type="button"
+            role="tab"
+            aria-selected={mode === key}
+            aria-controls={`panel-${key}`}
+            onClick={() => {
+              setMode(key);
+              setError(null);
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {mode === "login" ? (
+        <form className={s.form} onSubmit={onSubmit} noValidate aria-busy={busy === "form"} id="panel-login" role="tabpanel" aria-labelledby="tab-login">
+          <TextField label="Почта" name="email" type="email" autoComplete="username" inputMode="email" placeholder="snab@company.ru" />
+          <TextField label="Пароль" name="password" type="password" autoComplete="current-password" error={error ?? undefined} />
+          <Button type="submit" variant="secondary" block disabled={busy !== null}>
+            {busy === "form" ? "Входим…" : "Войти"}
+          </Button>
+          <p className={s.help}>
+            Забыли пароль или нет доступа — позвоните менеджеру:{" "}
+            <a href={company.phoneHref} className="link">
+              {company.phone.replace(/ /g, "\u00a0")}
+            </a>
+          </p>
+        </form>
+      ) : (
+        <RegisterForm
+          disabled={busy !== null}
+          onSubmit={async (request) => {
+            setBusy("form");
+            try {
+              await signUp(request);
+              router.replace(next);
+            } catch (err) {
+              setBusy(null);
+              throw err;
+            }
+          }}
+        />
+      )}
     </>
   );
 }

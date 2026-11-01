@@ -36,11 +36,46 @@
 .form {
   display: grid;
   gap: var(--space-5);
-  padding-top: var(--space-5);
-  border-top: var(--border-1) solid var(--color-line-strong);
 }
-.form h2 {
+/* Переключатель «Вход / Регистрация» — как вкладки кабинета */
+.modes {
+  display: flex;
+  gap: var(--space-6);
+  border-bottom: var(--border-1) solid var(--color-line);
+  margin-bottom: calc(var(--space-2) * -1);
+}
+.modes button {
+  min-height: var(--control-h);
+  padding: 0;
+  margin-bottom: -1px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
   color: var(--color-text-muted);
+  font-family: var(--font-cond);
+  font-weight: var(--fw-label);
+  font-size: var(--fs-small);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.modes button:hover {
+  color: var(--color-text);
+}
+.modes button[aria-selected="true"] {
+  color: var(--color-text);
+  border-bottom-color: var(--color-text);
+}
+.pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: var(--grid-gap);
+}
+.formError {
+  font-size: var(--fs-small);
+  color: var(--color-danger);
 }
 .help {
   font-size: var(--fs-small);
@@ -90,6 +125,9 @@
   }
   .demo {
     padding: var(--space-5) var(--space-4);
+  }
+  .pair {
+    grid-template-columns: minmax(0, 1fr);
   }
   .features div {
     grid-template-columns: minmax(0, 1fr);

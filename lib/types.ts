@@ -137,6 +137,9 @@ export type CompanyLookup = { inn: string; name: string; kpp: string; address: s
 
 export type User = { id: string; name: string; email: string; phone: string; company: CompanyLookup; deliveryAddresses: string[] };
 
+/** Регистрация закупщика (страница /login/, вкладка «Регистрация»). */
+export type RegisterRequest = { inn: string; name: string; phone: string; email: string; password: string };
+
 /** Запрос КП в кабинете. totalRub — только когда КП готово (сумма из КП). items — позиции, для «Повторить запрос». */
 export type KpRequestSummary = KpRequestResult & { itemsCount: number; totalWeightKg: number; totalRub?: number; items?: KpItem[] };
 

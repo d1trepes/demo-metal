@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ClipboardList, Phone, UserRound } from "lucide-react";
+import { ClipboardList, Phone } from "lucide-react";
+import { AccountLink } from "./AccountLink";
 import { KpCount } from "./KpCount";
 import { KpToast } from "./KpToast";
 import { mainNav } from "@/lib/nav";
@@ -44,9 +45,7 @@ export function Header({ variant = "solid" }: HeaderProps) {
           <KpCount />
           <span className="visually-hidden">— запрос коммерческого предложения</span>
         </Link>
-        <Link href="/account/" className={cx(s.pill, s.iconPill, s.account)} aria-label="Личный кабинет">
-          <UserRound aria-hidden="true" />
-        </Link>
+        <AccountLink className={cx(s.pill, s.iconPill, s.account)} />
         <Button href="/contacts/#callback" variant={glass ? "onInk" : "primary"} size="sm" className={s.call}>
           <Phone aria-hidden="true" className={s.callIcon} />
           <span className={cx(s.callText, "caps-center")}>Заказать звонок</span>
