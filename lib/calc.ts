@@ -19,10 +19,18 @@ export function pieceArea(product: Product): number {
   return MESH_CARD_M2;
 }
 
-/** Стандартная длина хлыста для длинномера, м: первое число из «6 / 11,7 м». */
+/**
+ * Длины хлыстов со склада, м: «6 / 11,7 м» → [6, 11.7], «10–12 м» → [10, 12].
+ * Пусто — товар в бухтах или листах: считаем метрами (длинномер) или штуками (лист, сетка).
+ */
+export function stockLengths(product: Product): number[] {
+  if (product.unit !== "м") return [];
+  return (product.length.match(/\d+(?:,\d+)?/g) ?? []).map((n) => Number(n.replace(",", ".")));
+}
+
+/** Длина одной штуки по умолчанию, м: первая складская длина; для бухты — 1 м (количество = метры). */
 export function defaultLength(product: Product): number {
-  const match = product.length.match(/\d+(?:,\d+)?/);
-  return match ? Number(match[0].replace(",", ".")) : 6;
+  return stockLengths(product)[0] ?? 1;
 }
 
 /** Масса одной штуки (хлыста длиной length, листа, карты), кг. */

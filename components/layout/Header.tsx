@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ClipboardList, Phone, UserRound } from "lucide-react";
+import { KpCount } from "./KpCount";
 import { mainNav } from "@/lib/nav";
 import { cx } from "@/lib/cx";
 import { Button } from "@/components/ui/Button";
@@ -39,6 +40,7 @@ export function Header({ variant = "solid" }: HeaderProps) {
         <Link href="/kp/" className={cx(s.pill, s.iconPill)}>
           <ClipboardList aria-hidden="true" />
           <span className={s.hideMd}>Список КП</span>
+          <KpCount />
           <span className="visually-hidden">— запрос коммерческого предложения</span>
         </Link>
         <Link href="/account/" className={cx(s.pill, s.iconPill, s.account)} aria-label="Личный кабинет">

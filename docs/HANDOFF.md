@@ -16,7 +16,64 @@
 Выход `QuoteRequestResult`: `id` — номер заявки для клиента (`Р-ДДММ-NNNN`), `callbackBy` — ISO-время, до которого перезвонит менеджер (заглушка: +2 ч в рабочее время Пн–Пт 8–18, иначе 10:00 ближайшего рабочего дня).
 Бэкенд: отправить менеджеру (Telegram/почта) с файлом, записать заявку в админку. Отправлять `multipart/form-data`. При ошибке — бросить исключение (форма сейчас ошибку не показывает — добавить сообщение «Не отправилось, позвоните …» при подключении).
 
-_Остальные функции (`getProducts`, `sendKpRequest`, `login`, `getOrders`, `uploadDrawing` …) появятся в чате 6._
+> Задержка 600 мс в заглушках — только в браузере (`typeof window`); при сборке функции отвечают сразу.
+> Типы — `lib/types.ts`. Формулы массы и цены — `lib/calc.ts` (бэкенду считать так же, чтобы КП совпадало с калькулятором).
+
+### Каталог (чат 6)
+
+#### `getCategory(slug): Promise<Category | null>`
+Категория по slug. Страница `/catalog/<slug>/` (при сборке).
+
+#### `getProducts(filter?: ProductFilter): Promise<Product[]>`
+Позиции каталога. `filter`: `category`, `q` (поиск по названию, ГОСТу, марке, размеру, коду; «40х40» = «40×40»), `steelGrades[]`, `gosts[]`, `inStockOnly`, `sort` (`default` — порядок склада по размеру, `price-asc`, `price-desc`, `name`). Логика фильтра — `lib/catalog.ts`.
+Сейчас каталог (`/catalog/`, `/catalog/<slug>/`) загружает **все** позиции при сборке и фильтрует в браузере — мгновенно и без сервера. Для каталога больше ~2 000 позиций: в `components/catalog/CatalogView.tsx` вызывать `getProducts(filter)` при смене фильтра, а фасеты (марки, ГОСТы с количеством) отдавать с бэкенда.
+Поля `Product`: `id` (код позиции, «P-0204»), `slug`, `category`, `name`, `gost`, `steelGrade`, `size` (`label` для показа + числа в мм: `d`, `a`, `b`, `t`, `h`, `w`, `l`, `cell`, `no`), `weightPerMeter` (кг на 1 м или на 1 м² — по `unit`), `pricePerTon` (₽/т с НДС), `unit` (`"м"` — длинномер, `"м²"` — лист и сетка), `length` (длины хлыстов или формат текстом: «6 / 11,7 м», «1,5×6 м», «карта 2×6 м», «бухта»; калькулятор берёт из строки числа), `inStock`, `image` (рендер, `public/catalog/`), `imageEnd` (торец крупно, `public/ends/`).
+Тестовые данные — `data/products.json` (70 позиций), генерирует `python3 scripts/gen-products.py` (он же пересчитывает `priceFrom` в `data/categories.json`).
+
+#### `getProduct(slug): Promise<Product | null>`
+Карточка `/product/<slug>/` (при сборке, `generateStaticParams` по `getProducts()`). При живых ценах — либо пересборка по расписанию, либо догружать цену и наличие в браузере.
+
+#### `getProductsByIds(ids): Promise<Product[]>`
+Позиции по `id` в том же порядке; неизвестные пропускаются. Для списка КП, избранного, заказов (чаты 7–8).
+
+#### `getSimilarProducts(product, limit = 4): Promise<Product[]>`
+Похожие в карточке: та же категория, ближайшие по массе 1 м.
+
+### Список для КП
+
+#### `lookupCompanyByInn(inn): Promise<CompanyLookup | null>`
+Автоподстановка реквизитов по ИНН (10 или 12 цифр) → `{ inn, name, kpp, address }`, `null` — не найдено. Заглушка отвечает тестовой компанией. В бою — DaData «Организация по ИНН» (ключ держать на сервере, не в браузере).
+
+#### `sendKpRequest(request: KpRequest): Promise<KpRequestResult>`
+Запрос КП со страницы `/kp/`. Вход: `items[]` (`productId`, `quantity` — штук/листов/карт, `length` — длина штуки в м для длинномера, `comment?`), `company` (`inn`, `name`, `kpp?`, `address?`), `contact` (`name`, `phone`, `email`), `delivery?`, `comment?`. Выход: `id` («КП-ДДММ-NNNN»), `status: "sent"`, `createdAt`. Бэкенд: в админку + уведомление менеджеру.
+Статусы КП: `sent` → `in-work` → `kp-ready` → `invoiced`.
+Сам список хранится в браузере: `lib/stores/kp.ts` (Zustand + localStorage, ключ `prolet-kp`). После входа можно синхронизировать с сервером — добавить функцию в api.
+
+### Формы
+
+#### `uploadDrawing(request: DrawingRequest): Promise<QuoteRequestResult>`
+«Расчёт по чертежу» на `/constructions/`: `name`, `phone`, `email?`, `company?`, `description`, `file` (обязателен). Номер «Ч-ДДММ-NNNN». Отправлять `multipart/form-data`, файл — менеджеру и в админку.
+
+### Вход и кабинет (вёрстка — чат 8)
+
+#### `login(email, password): Promise<User>` · `loginDemo(): Promise<User>` · `logout(): Promise<void>`
+Заглушка пускает с любым паролем; ошибка — исключение с текстом для формы. Пользователь кэшируется в `lib/stores/auth.ts` (ключ `prolet-auth`). В бою: сессия в httpOnly-cookie, `login` возвращает профиль, `logout` гасит сессию; `loginDemo` убрать.
+`User`: `id`, `name`, `email`, `phone`, `company` (`CompanyLookup`), `deliveryAddresses[]`.
+
+#### `getKpRequests(): Promise<KpRequestSummary[]>`
+Запросы КП пользователя: поля `KpRequestResult` + `itemsCount`, `totalWeightKg`, `totalRub?` (есть, когда КП готово). `data/kp-requests.json`.
+
+#### `getOrders(): Promise<Order[]>` · `getOrder(id): Promise<Order | null>`
+Заказы, новые сверху. `status`: `paid` → `production` → `ready` → `shipped`; `timeline` — даты пройденных этапов (ISO); `items` как в КП; `totalRub`, `totalWeightKg`, `delivery`. «Повторить заказ» = положить `items` в список КП. `data/orders.json`.
+
+#### `getDocuments(): Promise<DocumentFile[]>`
+КП, счета, УПД: `kind` (`kp` | `invoice` | `upd`), `title`, `date`, `orderId?`, `totalRub`, `url` (PDF). В демо — образцы `public/docs/*.pdf` (появятся в чате 8). В бою — ссылки с проверкой доступа.
+
+#### `updateCompany(company, deliveryAddresses): Promise<User>`
+Сохранение реквизитов и адресов доставки (кабинет → «Реквизиты»).
+
+## Состояние в браузере (не через API)
+`lib/stores/`: `kp.ts` (список КП), `favorites.ts` (избранное, `prolet-favorites`), `auth.ts` (вход). Все через `safeStorage.ts` — localStorage в try/catch. Счётчики из сторов рисуются после гидратации (`useHydrated`), иначе статичный HTML не совпадёт.
 
 ## Статичные данные главной (не через API)
 - Глобус: `public/globe/globe.json` (SVG-контуры регионов по зонам доставки, дуги), `globe.svg` и заглушка `globe-static.webp` — генерируются `node scripts/build-globe.mjs` и `python3 scripts/render-globe-static.py`. Зоны регионов и города — в `scripts/build-globe.mjs`, подписи зон и цифры — `components/home/globeData.ts`. Контуры регионов РФ — `docs/assets-src/geo/russia-regions.topo.json` (`scripts/prepare-regions.mjs`). Сервер не нужен: при смене зон перезапустить скрипты.

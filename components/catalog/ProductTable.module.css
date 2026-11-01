@@ -1,0 +1,11 @@
+.name {
+  font-weight: var(--fw-text-strong);
+  text-decoration: none;
+}
+.name:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.nowrap {
+  white-space: nowrap;
+}

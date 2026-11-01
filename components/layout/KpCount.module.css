@@ -1,0 +1,14 @@
+/* Счётчик рамкой цвета текста пункта — одинаково читается на стеклянной и на белой шапке */
+.count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 var(--space-1);
+  border: var(--border-1) solid currentColor;
+  border-radius: var(--radius-1);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-text-strong);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
