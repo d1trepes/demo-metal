@@ -1,75 +1,59 @@
 /*
- * Форма заявки (чат 5б): слева (1–5) заголовок, шаги и контакты, справа (7–12) форма.
- * Зеркало типовой раскладки «форма 1–6 + пояснение 8–12»: по одобренному прототипу контакты слева.
- * Без карточек и плашек — текст прямо на фоне, разделители линиями.
+ * Форма заявки (чат 5г): заголовок + подзаголовок по типовой раскладке; ниже слева (1–5) крупные контакты,
+ * справа (7–12) форма. Без карточек и плашек — текст прямо на фоне, разделители линиями.
  */
 .grid {
-  row-gap: var(--space-8);
+  row-gap: var(--space-7);
   align-items: start;
-}
-.info {
-  grid-column: 1 / span 5;
 }
 .formCol {
   grid-column: 7 / span 6;
 }
-.lead {
-  max-width: 34em;
-  margin-top: var(--space-5);
-  color: var(--color-text-muted);
-}
 
-/* ---------- Слева: что будет дальше ---------- */
-.steps {
-  display: grid;
-  margin-top: var(--space-7);
+/* ---------- Слева: контакты — метка над крупным значением, линии сверху ---------- */
+.contacts {
+  grid-column: 1 / span 5;
+  margin: 0;
   border-bottom: var(--border-1) solid var(--color-line);
 }
-.step {
+.contact {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  gap: var(--space-4);
-  padding-block: var(--space-4);
-  border-top: var(--border-1) solid var(--color-line-strong);
+  gap: var(--space-2);
+  padding-block: var(--space-4) var(--space-5);
+  border-top: var(--border-1) solid var(--color-line);
 }
-.step + .step {
-  border-top-color: var(--color-line);
+.contact:first-child {
+  border-top-color: var(--color-line-strong);
 }
-.stepTime {
-  font-family: var(--font-display);
-  font-weight: var(--fw-display);
-  font-size: var(--fs-h3);
-  line-height: 1;
-  text-transform: uppercase;
+.contact dd {
+  margin: 0;
 }
-
-/* Контакты с иконками; линии над ними нет — шаги уже закрыты своей нижней линией */
-.contacts {
-  display: grid;
-  gap: var(--space-3);
-  margin-top: var(--space-6);
-  font-size: var(--fs-small);
-}
-.contacts li {
-  display: grid;
-  grid-template-columns: var(--icon-size) 1fr;
-  gap: var(--space-3);
-  align-items: center;
-}
-.contacts svg {
-  width: var(--icon-size);
-  height: var(--icon-size);
+.contactLabel {
   color: var(--color-text-muted);
 }
-.phone {
-  font-family: var(--font-display);
-  font-weight: var(--fw-display);
+.contactBig {
+  font-family: var(--font-cond);
+  font-weight: var(--fw-heading);
   font-size: var(--fs-h3);
-  line-height: 1;
+  line-height: var(--lh-heading);
   text-decoration: none;
+  overflow-wrap: anywhere;
 }
-.phone:hover {
+a.contactBig:hover {
   text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+.contactPair {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  font-size: var(--fs-small);
+  line-height: var(--lh-tight);
+}
+.contactPair > div {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
 }
 
 /* ---------- Справа: форма, 2 колонки полей ---------- */
@@ -187,13 +171,16 @@
 }
 
 @media (max-width: 1024px) {
-  .info,
+  .contacts,
   .formCol {
     grid-column: 1 / -1;
   }
 }
 
 @media (max-width: 640px) {
+  .contactPair {
+    grid-template-columns: 1fr;
+  }
   .form {
     grid-template-columns: 1fr;
   }
@@ -205,9 +192,5 @@
   .fileError {
     margin-left: calc(var(--icon-size) + var(--space-3));
     text-align: left;
-  }
-  .step {
-    grid-template-columns: 1fr;
-    gap: var(--space-1);
   }
 }

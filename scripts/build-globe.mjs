@@ -14,9 +14,10 @@ import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { feature } from "topojson-client";
 import { geoArea, geoGraticule10, geoInterpolate, geoOrthographic, geoPath } from "d3-geo";
 
-const SIZE = 1000; // viewBox 0 0 1000 1000
-const R = 1180; // чат 5в: шар приближен ×2,4 (мелкие регионы Поволжья ≥ 20 px при 640 px), края срезаны рамкой
-const VIEW = { lon: 61, lat: 54 }; // от Калининграда до Красноярска, Казахстан и Средняя Азия внизу
+const W = 1000; // viewBox 0 0 1000 760: кадр шире, чем выше — сверху и снизу нет пустого моря
+const H = 760;
+const R = 1380; // чат 5г: шар ×3 — мелкие регионы Поволжья ≥ 24 px; края кадра растворяются в фон (CSS-маска)
+const VIEW = { lon: 60, lat: 54.5 }; // от Минска до Красноярска, Казахстан и Средняя Азия внизу
 const WAREHOUSE = { name: "Екатеринбург", lon: 60.6, lat: 56.84 };
 
 /** Регионы РФ по зонам доставки (имена — как в источнике). 8 + 18 + 12 = 38 регионов. */
@@ -86,9 +87,9 @@ const zoneOf = (name) => (ZONE_1.includes(name) ? 1 : ZONE_2.includes(name) ? 2 
 const projection = geoOrthographic()
   .rotate([-VIEW.lon, -VIEW.lat])
   .scale(R)
-  .translate([SIZE / 2, SIZE / 2])
+  .translate([W / 2, H / 2])
   .clipAngle(90)
-  .clipExtent([[0, 0], [SIZE, SIZE]]) // всё вне квадрата кадра отрезаем — файл меньше
+  .clipExtent([[0, 0], [W, H]]) // всё вне квадрата кадра отрезаем — файл меньше
   .precision(0.3);
 const path = geoPath(projection).digits(0);
 
@@ -103,10 +104,10 @@ function rewind(f) {
 }
 
 /** Центр региона для метки (по видимой в кадре части), площадь — для выбора среди одноимённых. */
-const clampIn = (v) => Math.min(SIZE - 20, Math.max(20, Math.round(v)));
+const clamp = (v, max) => Math.min(max - 40, Math.max(40, Math.round(v)));
 function center(f) {
   const [x, y] = path.centroid(f);
-  return { cx: clampIn(x), cy: clampIn(y), area: path.area(f) };
+  return { cx: clamp(x, W), cy: clamp(y, H), area: path.area(f) };
 }
 
 // ---------- Фон суши одним контуром (110m, без границ) + страны СНГ ----------
@@ -142,10 +143,10 @@ regions.forEach((r) => delete r.area);
 regions.sort((a, b) => (a.zone || 9) - (b.zone || 9)).reverse();
 
 // ---------- Дуги и города ----------
-const lift = (h, [x, y]) => [SIZE / 2 + (x - SIZE / 2) * h, SIZE / 2 + (y - SIZE / 2) * h];
+const lift = (h, [x, y]) => [W / 2 + (x - W / 2) * h, H / 2 + (y - H / 2) * h];
 const home = [WAREHOUSE.lon, WAREHOUSE.lat];
 const round = (n) => Math.round(n * 10) / 10;
-const inFrame = ([x, y]) => x >= 0 && x <= SIZE && y >= 0 && y <= SIZE;
+const inFrame = ([x, y]) => x >= 0 && x <= W && y >= 0 && y <= H;
 const cities = CITIES.map(([name, lon, lat]) => ({ name, lon, lat, p: projection([lon, lat]) }))
   .filter((c) => c.p && inFrame(c.p))
   .map(({ name, lon, lat, p }) => ({ name, lon, lat, x: round(p[0]), y: round(p[1]) }));
@@ -155,7 +156,7 @@ const arcs = cities.filter((c) => ARC_TO.includes(c.name)).map(({ name, lon, lat
   const steps = 32;
   const pts = [];
   const span = Math.hypot(lon - home[0], lat - home[1]);
-  const h0 = 0.01 + span * 0.0008; // чем дальше город, тем выше дуга (масштаб ×2 — подъём вдвое ниже)
+  const h0 = 0.008 + span * 0.0006; // чем дальше город, тем выше дуга (масштаб ×2 — подъём вдвое ниже)
   for (let i = 0; i <= steps; i++) {
     const t = i / steps;
     const p = projection(interp(t));
@@ -169,7 +170,7 @@ const sphere = path({ type: "Sphere" });
 const graticule = path(geoGraticule10());
 
 const data = {
-  size: SIZE, sphere, graticule, land, regions, arcs,
+  width: W, height: H, sphere, graticule, land, regions, arcs,
   cities: cities.map(({ name, x, y }) => ({ name, x, y })),
   warehouse: { name: WAREHOUSE.name, x: hx, y: hy },
   defaultRegion: DEFAULT_REGION,
@@ -180,12 +181,12 @@ writeFileSync(new URL("../public/globe/globe.json", import.meta.url), JSON.strin
 
 // ---------- Статичный SVG того же вида (для заглушки). Цвета = токены из styles/tokens.css ----------
 const C = {
-  ocean: "#ffffff", grid: "#e7e9ec", edge: "#d5d8dc", land: "#e7e9ec", z0: "#d5d8dc",
+  ocean: "#ffffff", grid: "#f2f3f5", edge: "#d5d8dc", land: "#f2f3f5", z0: "#e7e9ec",
   z1: "#0e1013", z2: "#5b6169", z3: "#a3a9b1", border: "#ffffff", arc: "#0e1013",
 };
 const fill = (z) => [C.z0, C.z1, C.z2, C.z3][z];
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SIZE} ${SIZE}">
-<path d="${sphere}" fill="${C.ocean}" stroke="${C.edge}" stroke-width="1.5"/>
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}">
+<path d="${sphere}" fill="${C.ocean}"/>
 <path d="${graticule}" fill="none" stroke="${C.grid}" stroke-width="1"/>
 <path d="${land}" fill="${C.land}" stroke="${C.border}" stroke-width="0.6"/>
 ${regions.map((r) => `<path d="${r.d}" fill="${fill(r.zone)}" stroke="${C.border}" stroke-width="0.6"/>`).join("\n")}
@@ -205,8 +206,8 @@ console.log(
 const missing = [...ZONE_1, ...ZONE_2, ...ZONE_3].filter((n) => !ruRegions.some((f) => f.properties.name === n));
 if (missing.length) console.warn("Нет в источнике:", missing);
 console.log(`городов в кадре: ${cities.length} из ${CITIES.length}`, CITIES.filter(([n]) => !cities.some((c) => c.name === n)).map(([n]) => n));
-// Проверка: мелкие регионы должны быть ≥ 20 px при показе глобуса шириной 640 px
-const k = 640 / SIZE;
+// Проверка: мелкие регионы должны быть ≥ 20 px при показе карты шириной 790 px
+const k = 790 / W; // ширина карты на 1440 px (колонки 6–12)
 for (const f of ruRegions) {
   const n = f.properties.name;
   if (!["Удмуртская республика", "Чувашия", "Марий Эл", "Московская область", "Республика Мордовия"].includes(n)) continue;

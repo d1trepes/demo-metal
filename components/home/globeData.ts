@@ -26,9 +26,10 @@ export const geoStats = [
   { label: "Сдано объектов", value: "340", unit: "с 2008 года" },
 ];
 
-/** Формат public/globe/globe.json (scripts/build-globe.mjs). viewBox 0 0 size size. */
+/** Формат public/globe/globe.json (scripts/build-globe.mjs). viewBox 0 0 width height. */
 export type GlobeData = {
-  size: number;
+  width: number;
+  height: number;
   sphere: string;
   graticule: string;
   land: string;

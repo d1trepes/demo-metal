@@ -9,10 +9,11 @@ import s from "./GeoSection.module.css";
 type Region = GlobeData["regions"][number];
 
 /**
- * Карта отгрузок (чат 5в). Фрагмент шара крупно: от Калининграда до Красноярска, края срезаны квадратом кадра.
+ * Карта отгрузок (чат 5г). Фрагмент шара крупно: от Минска до Красноярска; края кадра растворяются в фон
+ * CSS-маской, так что рамки-квадрата не видно.
  * Контуры посчитаны при сборке (scripts/build-globe.mjs → public/globe/globe.json), браузер только рисует SVG.
  *
- * Сначала стоит заглушка globe-static.webp того же вида (она же — вид без JS). JSON (~40 КБ) грузится,
+ * Сначала стоит заглушка globe-static.webp того же вида (она же — вид без JS). JSON (~36 КБ) грузится,
  * когда блок подходит к экрану (за 400 px), интерактивный слой проявляется поверх.
  * Метка всегда видна: по умолчанию — регион склада; при наведении плавно переезжает к центру региона,
  * при уходе курсора с карты возвращается. Дуги прорисовываются один раз (выключено при reduced-motion).
@@ -62,7 +63,7 @@ export function GlobeMap({ zones }: { zones: DeliveryZone[] }) {
         src={asset("/globe/globe-static.webp")}
         alt="Карта: склад в Екатеринбурге и зоны доставки по России, Казахстану, Беларуси и Средней Азии"
         width={1200}
-        height={1200}
+        height={912}
         loading="lazy"
         decoding="async"
         className={s.still}
@@ -71,7 +72,7 @@ export function GlobeMap({ zones }: { zones: DeliveryZone[] }) {
       {data && (
         <svg
           className={s.map}
-          viewBox={`0 0 ${data.size} ${data.size}`}
+          viewBox={`0 0 ${data.width} ${data.height}`}
           aria-hidden="true"
           onMouseMove={onMove}
           onClick={onMove}
@@ -106,8 +107,8 @@ export function GlobeMap({ zones }: { zones: DeliveryZone[] }) {
 
       {data && region && zone && (
         <div
-          className={cx(s.tip, region.cx > data.size * 0.6 && s.tipFlip)}
-          style={{ left: `${(region.cx / data.size) * 100}%`, top: `${(region.cy / data.size) * 100}%` }}
+          className={cx(s.tip, region.cx > data.width * 0.6 && s.tipFlip)}
+          style={{ left: `${(region.cx / data.width) * 100}%`, top: `${(region.cy / data.height) * 100}%` }}
           role="status"
         >
           <span className={s.tipLabel}>
