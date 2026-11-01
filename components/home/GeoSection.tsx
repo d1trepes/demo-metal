@@ -1,62 +1,65 @@
-import { Col, Container, Grid } from "@/components/layout/Grid";
+import { Container, Grid } from "@/components/layout/Grid";
 import { cx } from "@/lib/cx";
-import { GlobeStage } from "./GlobeStage";
-import { geoRegions, geoRegionsMore, geoStats, warehouse } from "./globeData";
-import tiles from "./CatalogTiles.module.css";
+import { typo, typoAll } from "@/lib/typo";
+import { GlobeMap } from "./GlobeMap";
+import { deliveryZones, geoStats } from "./globeData";
 import s from "./GeoSection.module.css";
 
-/** Главная: география отгрузок — 4 цифры + глобус + список регионов (реф. 03). */
+/**
+ * Главная: география отгрузок (чат 5б). Слева — заголовок, зоны доставки и цифры прямо на фоне
+ * (без карточек, разделители линиями), справа — глобус целиком, ничем не перекрыт.
+ */
 export function GeoSection() {
+  const zones = typoAll(deliveryZones);
+  const stats = typoAll(geoStats);
+
   return (
-    <section className={cx("section band", s.section)} aria-labelledby="geo-title">
+    <section className="section band" aria-labelledby="geo-title">
       <Container>
-        <Grid className={tiles.head}>
-          <Col area="head">
+        <Grid className={s.grid}>
+          <div className={s.info}>
             <h2 id="geo-title" className="t-h2">
               Отгружаем по России
-              <br />и СНГ
+              <br />
+              и&nbsp;СНГ
             </h2>
-          </Col>
-          <Col area="aside">
-            <p className="t-muted">
-              По УрФО — своими длинномерами 13,6 м за 1–2 дня. Дальше — транспортной компанией или ж/д, сертификаты
-              и УПД едут вместе с грузом.
+            <p className={cx("t-lead", s.lead)}>
+              {typo(
+                "По УрФО — своими длинномерами. Дальше — транспортной компанией или ж/д. Сертификаты и УПД едут вместе с грузом.",
+              )}
             </p>
-          </Col>
-        </Grid>
 
-        <dl className={s.stats}>
-          {geoStats.map((stat) => (
-            <div key={stat.label} className={s.stat}>
-              <dt className={cx("t-label", s.statLabel)}>{stat.label}</dt>
-              <dd className={cx("t-nums", s.statValue)}>
-                {stat.value}
-                {stat.unit && <span className={s.statUnit}>{stat.unit}</span>}
-              </dd>
-            </div>
-          ))}
-        </dl>
-
-        <div className={s.stage}>
-          <div className={s.clip}>
-            <GlobeStage />
-          </div>
-          <div className={s.regions}>
-            <h3 className="t-h3">Куда везём</h3>
-            <ul className={s.regionList}>
-              {geoRegions.map((r) => (
-                <li key={r}>{r}</li>
+            <ul className={s.zones} aria-label="Сроки доставки по зонам">
+              {zones.map((z) => (
+                <li key={z.zone} className={s.zoneRow}>
+                  <span className={cx(s.swatch, s[`zone${z.zone}`])} aria-hidden="true" />
+                  <b className={s.term}>{z.term}</b>
+                  <span>
+                    {z.where}
+                    <span className={s.method}>{z.method}</span>
+                  </span>
+                </li>
               ))}
             </ul>
-            <p className={cx("t-muted", s.more)}>{geoRegionsMore}</p>
-            <p className={s.legend}>
-              <span className={s.legendHome} aria-hidden="true" />
-              Склад, {warehouse.name}
-              <span className={s.legendShip} aria-hidden="true" />
-              Страны отгрузки
-            </p>
+
+            <dl className={s.stats}>
+              {stats.map((stat) => (
+                <div key={stat.label} className={s.stat}>
+                  <dt className={cx("t-label", s.statLabel)}>{stat.label}</dt>
+                  <dd className={s.statValue}>
+                    {stat.value}
+                    <span className={s.statUnit}>{stat.unit}</span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
-        </div>
+
+          <div className={s.globeCol}>
+            <GlobeMap zones={zones} />
+            <p className={s.hint}>{typo("Наведите или нажмите на регион — покажем срок и способ доставки.")}</p>
+          </div>
+        </Grid>
       </Container>
     </section>
   );

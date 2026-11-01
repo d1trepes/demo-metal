@@ -11,6 +11,7 @@
   margin-top: calc(-0.5 * var(--section-gap));
   height: calc(var(--truck-h) * (1 - var(--truck-overlap)));
   pointer-events: none;
+  overflow-x: clip; /* пока фура не въехала (Reveal, сдвиг 64 px вправо), страница не шире экрана */
 }
 .inner {
   display: flex;

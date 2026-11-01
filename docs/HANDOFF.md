@@ -19,5 +19,6 @@
 _Остальные функции (`getProducts`, `sendKpRequest`, `login`, `getOrders`, `uploadDrawing` …) появятся в чате 6._
 
 ## Статичные данные главной (не через API)
-- Глобус: `public/globe/land.bin` (точки суши, ~42 КБ) и `public/globe/globe-static.webp` (заглушка) — генерируются скриптами `scripts/build-globe.mjs` и `scripts/render-globe-static.py`. Города и регионы — `components/home/globeData.ts`.
+- Глобус: `public/globe/globe.json` (SVG-контуры регионов по зонам доставки, дуги), `globe.svg` и заглушка `globe-static.webp` — генерируются `node scripts/build-globe.mjs` и `python3 scripts/render-globe-static.py`. Зоны регионов и города — в `scripts/build-globe.mjs`, подписи зон и цифры — `components/home/globeData.ts`. Контуры регионов РФ — `docs/assets-src/geo/russia-regions.topo.json` (`scripts/prepare-regions.mjs`). Сервер не нужен: при смене зон перезапустить скрипты.
+- Типограф: `lib/typo.ts` (`typo`, `typoAll`) — только в серверных компонентах; клиентские получают тексты пропсами. Тексты из будущей админки прогонять через `typo()` при рендере.
 - Объекты и отзывы — `components/home/projectsData.ts`. Если появится админка объектов — вынести в `getProjects()`.
