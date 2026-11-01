@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { asset } from "@/lib/asset";
+import { asset, srcSet } from "@/lib/asset";
 import { cx } from "@/lib/cx";
 import type { Project } from "./projectsData";
 import s from "./ProjectsList.module.css";
@@ -63,6 +63,8 @@ export function ProjectsList({ projects }: { projects: Project[] }) {
                 <img
                   className={s.inlinePhoto}
                   src={asset(`/objects/${p.image}.webp`)}
+                  srcSet={srcSet(`/objects/${p.image}.webp`, 1312)}
+                  sizes="100vw"
                   alt={p.name}
                   width={1312}
                   height={816}
@@ -84,6 +86,8 @@ export function ProjectsList({ projects }: { projects: Project[] }) {
               key={p.slug}
               className={cx(index === active && s.shown)}
               src={asset(`/objects/${p.image}.webp`)}
+              srcSet={srcSet(`/objects/${p.image}.webp`, 1312)}
+              sizes="560px"
               alt={index === active ? p.name : ""}
               width={1312}
               height={816}

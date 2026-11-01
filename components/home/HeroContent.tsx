@@ -8,11 +8,14 @@ import s from "./Hero.module.css";
 /** Текст hero с переключением «Металлопрокат / Металлоконструкции». Тексты уже прошли типограф (Hero). */
 export function HeroContent({ slides: heroSlides }: { slides: HeroSlide[] }) {
   const [index, setIndex] = useState(0);
+  // Первый показ — без анимации (текст виден сразу, это LCP); въезд — только при переключении
+  const [switched, setSwitched] = useState(false);
+  const animate = switched ? "" : undefined;
   const slide = heroSlides[index];
 
   return (
     <>
-      <div key={slide.id} className={s.content}>
+      <div key={slide.id} className={s.content} data-animate={animate}>
         <h1 className={cx("t-display", s.title)}>
           {slide.title[0]}
           <br />
@@ -22,7 +25,7 @@ export function HeroContent({ slides: heroSlides }: { slides: HeroSlide[] }) {
       </div>
 
       <div className={s.bottom}>
-        <div key={`${slide.id}-facts`} className={s.facts}>
+        <div key={`${slide.id}-facts`} className={s.facts} data-animate={animate}>
           <p className="t-label">{slide.factsLabel}</p>
           <ul>
             {slide.facts.map((fact) => (
@@ -38,7 +41,10 @@ export function HeroContent({ slides: heroSlides }: { slides: HeroSlide[] }) {
               type="button"
               className={s.tab}
               aria-pressed={i === index}
-              onClick={() => setIndex(i)}
+              onClick={() => {
+                setIndex(i);
+                setSwitched(true);
+              }}
             >
               <span className="caps-center">{item.name}</span>
             </button>

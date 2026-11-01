@@ -3,12 +3,14 @@
 import { ChevronDown } from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { asset } from "@/lib/asset";
+import { asset, srcSet } from "@/lib/asset";
 import { cx } from "@/lib/cx";
 import type { ConstructionType } from "./constructionTypes";
 import s from "./ConstructionPanels.module.css";
 
 const DESKTOP = "(min-width: 1025px)";
+/** Рендер в панели: до ~580 px на широком экране, до 90 % ширины на мобилке. */
+const RENDER_SIZES = "(max-width: 1024px) 90vw, 580px";
 const CAN_HOVER = "(min-width: 1025px) and (hover: hover)";
 const HOVER_DELAY = 120; // мс: порог, чтобы панели не дёргались при пролёте курсора
 
@@ -67,6 +69,8 @@ export function ConstructionPanels({ items: constructionTypes }: { items: Constr
               <img
                 className={s.xray}
                 src={xraySrc}
+                srcSet={srcSet(`/constructions/xray/${item.slug}.webp`, item.image.width)}
+                sizes={RENDER_SIZES}
                 alt=""
                 {...item.image}
                 loading="lazy"
@@ -75,6 +79,8 @@ export function ConstructionPanels({ items: constructionTypes }: { items: Constr
               <img
                 className={s.render}
                 src={src}
+                srcSet={srcSet(`/constructions/${item.slug}.webp`, item.image.width)}
+                sizes={RENDER_SIZES}
                 alt=""
                 {...item.image}
                 loading="lazy"

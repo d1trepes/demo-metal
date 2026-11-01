@@ -2,6 +2,7 @@
 
 import { Children, cloneElement, isValidElement, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { cx } from "@/lib/cx";
+import { imagesReady } from "@/lib/imagesReady";
 import s from "./RevealList.module.css";
 
 type RevealState = "rest" | "waiting" | "in";
@@ -23,8 +24,8 @@ export function RevealList({ className, children }: { className?: string; childr
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
-        setState("in");
         observer.disconnect();
+        imagesReady(el).then(() => setState("in"));
       },
       { rootMargin: "0px 0px -15% 0px" },
     );

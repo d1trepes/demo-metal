@@ -1,9 +1,5 @@
 import type { Metadata, Viewport } from "next";
-// Шрифты Sofia Sans (variable, latin + cyrillic) раздаются со своего домена.
-// Подключены через @fontsource, а не next/font/google: сборка не зависит от доступа к Google Fonts.
-import "@fontsource-variable/sofia-sans";
-import "@fontsource-variable/sofia-sans-condensed";
-import "@fontsource-variable/sofia-sans-extra-condensed";
+import { fontFaceCss, fontPreloads } from "@/lib/fonts";
 import "@/styles/globals.css";
 import { Footer } from "@/components/layout/Footer";
 
@@ -24,6 +20,13 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ru">
+      <head>
+        {/* Шрифты со своего домена (файлы из @fontsource-variable): предзагрузка + @font-face до первой отрисовки */}
+        {fontPreloads.map((href) => (
+          <link key={href} rel="preload" href={href} as="font" type="font/woff2" crossOrigin="anonymous" />
+        ))}
+        <style dangerouslySetInnerHTML={{ __html: fontFaceCss }} />
+      </head>
       <body>
         <a href="#main" className="skip-link">
           К содержанию

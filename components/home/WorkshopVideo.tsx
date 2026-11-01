@@ -1,20 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { asset } from "@/lib/asset";
+import { canPlayVideo } from "@/lib/device";
+import { asset, srcSet } from "@/lib/asset";
 import s from "./WorkshopVideo.module.css";
 
 const POSTER = asset("/workshop/yard-poster.webp");
 const VIDEO_DESKTOP = asset("/workshop/yard-1080.mp4");
 const VIDEO_MOBILE = asset("/workshop/yard-540.mp4");
 const MOBILE_QUERY = "(max-width: 640px)";
-
-/** Видео только без reduced-motion и без режима экономии трафика (как в HeroVideo). */
-function canPlayVideo(): boolean {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
-  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-  return !connection?.saveData;
-}
 
 /**
  * Полоса во всю ширину между глобусом и объектами (чат 5в): склад металла с кран-эстакадами сверху,
@@ -48,7 +42,17 @@ export function WorkshopVideo() {
 
   return (
     <figure ref={ref} className={s.band} aria-hidden="true">
-      <img className={s.media} src={POSTER} alt="" width={1600} height={686} loading="lazy" decoding="async" />
+      <img
+        className={s.media}
+        src={POSTER}
+        srcSet={srcSet("/workshop/yard-poster.webp", 1600, [800])}
+        sizes="100vw"
+        alt=""
+        width={1600}
+        height={686}
+        loading="lazy"
+        decoding="async"
+      />
       {src && (
         <video
           ref={videoRef}

@@ -1,5 +1,5 @@
 import { Container } from "@/components/layout/Grid";
-import { asset } from "@/lib/asset";
+import { asset, srcSet } from "@/lib/asset";
 import { Reveal } from "./Reveal";
 import s from "./TruckDivider.module.css";
 
@@ -15,6 +15,8 @@ export function TruckDivider() {
         <Reveal from="right" className={s.truck}>
           <img
             src={asset("/truck/truck.webp")}
+            srcSet={srcSet("/truck/truck.webp", 1241)}
+            sizes="(max-width: 640px) 90vw, 920px"
             alt="Длинномер «Пролёт» с пачками трубы и арматуры"
             width={1241}
             height={667}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cx } from "@/lib/cx";
+import { imagesReady } from "@/lib/imagesReady";
 import s from "./Reveal.module.css";
 
 type RevealState = "rest" | "waiting" | "in";
@@ -32,8 +33,8 @@ export function Reveal({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
-        setState("in");
         observer.disconnect();
+        imagesReady(el).then(() => setState("in"));
       },
       { rootMargin: "0px 0px -15% 0px" },
     );

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, type PointerEvent, type RefObject } from "react";
 import { geoDistance, geoGraticule10, geoInterpolate, geoOrthographic, geoPath } from "d3-geo";
 import { feature } from "topojson-client";
+import { presimplify, quantile, simplify } from "topojson-simplify";
 import type { Feature, Geometry } from "geojson";
 import { MoveHorizontal } from "lucide-react";
 import { cx } from "@/lib/cx";
@@ -60,6 +61,9 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
   const box = useRef({ scale: 1, offX: 0, offY: 0, w: W });
   const drag = useRef<{ x: number; y: number; view: View; moved: boolean; target: string | null } | null>(null);
   const shownRef = useRef(shown);
+
+  /** Упрощённые контуры (половина точек) — рисуются только во время перетаскивания: кадр в ~2 раза дешевле. */
+  const coarse = useRef<{ regions: RegionFeature[]; land: ReturnType<typeof feature> } | null>(null);
 
   const { regions, land, arcCities } = useMemo(() => {
     const t = data.topo;
@@ -143,8 +147,9 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
     projection.rotate([-view.current.lon, -view.current.lat]);
     sphereRef.current?.setAttribute("d", path({ type: "Sphere" }) ?? "");
     gratRef.current?.setAttribute("d", path(GRATICULE) ?? "");
-    landRef.current?.setAttribute("d", path(land) ?? "");
-    regions.forEach((f, i) => regionRefs.current[i]?.setAttribute("d", path(f) ?? ""));
+    const rough = drag.current?.moved ? coarse.current : null;
+    landRef.current?.setAttribute("d", path(rough?.land ?? land) ?? "");
+    (rough?.regions ?? regions).forEach((f, i) => regionRefs.current[i]?.setAttribute("d", path(f) ?? ""));
     if (!drag.current?.moved) drawMarks();
     placeTip();
   }, [drawMarks, land, path, placeTip, projection, regions]);
@@ -171,6 +176,24 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
     shownRef.current = shown;
     placeTip();
   }, [shown, placeTip]);
+
+  // Упрощённая топология — в простое браузера после первого кадра (~30 мс), чтобы не тормозить появление карты
+  useEffect(() => {
+    const build = () => {
+      const pre = presimplify(data.topo as Parameters<typeof presimplify>[0]);
+      const t = simplify(pre, quantile(pre, 0.5));
+      coarse.current = {
+        regions: (feature(t, t.objects.regions) as unknown as { features: RegionFeature[] }).features,
+        land: feature(t, t.objects.land),
+      };
+    };
+    if ("requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(build, { timeout: 2000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = globalThis.setTimeout(build, 300); // Safari без requestIdleCallback
+    return () => globalThis.clearTimeout(id);
+  }, [data.topo]);
 
   // Масштаб кадра: SVG вписан «cover» по низу (xMidYMax slice)
   useEffect(() => {
@@ -255,7 +278,7 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
     drag.current = null;
     if (d?.moved) {
       boxRef.current?.removeAttribute("data-dragging");
-      drawMarks(); // дуги и точки — на новое место, затем плавно проявляются
+      requestDraw(); // точные контуры, дуги и точки — на новое место, затем плавно проявляются
     }
     if (pick && d && !d.moved && d.target) onPick(d.target);
   };

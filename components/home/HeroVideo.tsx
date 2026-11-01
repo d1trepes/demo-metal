@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { canPlayVideo } from "@/lib/device";
 import { asset } from "@/lib/asset";
 import s from "./Hero.module.css";
 
@@ -9,13 +10,6 @@ const POSTER_MOBILE = asset("/video/hero-poster-mobile.webp");
 const VIDEO_DESKTOP = asset("/video/hero-1440.mp4");
 const VIDEO_MOBILE = asset("/video/hero-720.mp4");
 const MOBILE_QUERY = "(max-width: 768px)";
-
-/** Можно ли грузить видео: не при reduced-motion и не в режиме экономии трафика. */
-function canPlayVideo(): boolean {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
-  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-  return !connection?.saveData;
-}
 
 /**
  * Фон hero. Сначала постер (он же LCP), видео подгружается после загрузки страницы

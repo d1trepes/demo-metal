@@ -56,6 +56,10 @@
   align-items: end;
   margin-top: auto;
   padding-top: var(--space-9);
+}
+/* Въезд текста — только при переключении направления, не при загрузке */
+.content[data-animate],
+.facts[data-animate] {
   animation: slideIn var(--dur-slow) var(--ease-out);
 }
 .title {
@@ -78,7 +82,6 @@
 }
 .facts {
   grid-column: 1 / span 8;
-  animation: slideIn var(--dur-slow) var(--ease-out);
 }
 .facts > p {
   padding-bottom: var(--space-3);

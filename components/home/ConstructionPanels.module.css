@@ -77,7 +77,6 @@
   max-width: none;
   height: calc(var(--panels-h) * 0.62);
   transform: translate(-50%, -50%);
-  will-change: transform, opacity;
   transition:
     opacity var(--dur-panel) var(--ease-panel),
     transform var(--dur-panel) var(--ease-panel);

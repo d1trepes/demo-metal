@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { asset } from "@/lib/asset";
+import { asset, srcSet } from "@/lib/asset";
 import { GlobeMap, type GlobeApi, type View } from "./GlobeMap";
 import { ShippingPanel } from "./ShippingPanel";
 import { GLOBE_VIEW, viewFor, type DeliveryZone, type GeoData } from "./globeData";
@@ -84,6 +84,8 @@ export function ShippingMap({ zones }: { zones: DeliveryZone[] }) {
         {/* eslint-disable-next-line @next/next/no-img-element -- статичный экспорт, картинка уже оптимизирована */}
         <img
           src={asset("/globe/globe-static.webp")}
+          srcSet={srcSet("/globe/globe-static.webp", 1300)}
+          sizes="(max-width: 1024px) 160vw, 1370px"
           alt="Карта: склад в Екатеринбурге и зоны доставки по России, Казахстану, Беларуси и Средней Азии"
           width={1300}
           height={700}

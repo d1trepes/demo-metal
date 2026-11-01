@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Col, Container, Grid } from "@/components/layout/Grid";
 import { Button } from "@/components/ui/Button";
 import { getCategories } from "@/lib/api";
-import { asset } from "@/lib/asset";
+import { asset, srcSet } from "@/lib/asset";
 import { formatPrice } from "@/lib/format";
 import { typo, typoAll } from "@/lib/typo";
 import type { Category } from "@/lib/types";
@@ -68,6 +68,8 @@ export async function CatalogTiles() {
               <img
                 className={s.ctaArt}
                 src={asset("/cta/spec.webp")}
+                srcSet={srcSet("/cta/spec.webp", 1000)}
+                sizes="(max-width: 640px) 100vw, 490px"
                 alt=""
                 width={1000}
                 height={779}
@@ -89,6 +91,8 @@ function CategoryTile({ category }: { category: Category }) {
       <div className={s.art}>
         <img
           src={asset(`/catalog/${category.slug}.webp`)}
+          srcSet={srcSet(`/catalog/${category.slug}.webp`, 1049, [400, 640])}
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 330px"
           alt=""
           width={1049}
           height={812}
