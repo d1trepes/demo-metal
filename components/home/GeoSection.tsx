@@ -1,14 +1,14 @@
 import { Col, Container, Grid } from "@/components/layout/Grid";
 import { cx } from "@/lib/cx";
 import { typo, typoAll } from "@/lib/typo";
-import { GlobeMap } from "./GlobeMap";
+import { ShippingMap } from "./ShippingMap";
 import { deliveryZones, geoStats } from "./globeData";
 import tiles from "./CatalogTiles.module.css";
 import s from "./GeoSection.module.css";
 
 /**
- * Главная: география отгрузок (чат 5г). Заголовок по типовой раскладке (1–8 + подзаголовок 9–12),
- * ниже слева зоны доставки, справа крупная карта без рамки; цифры — одной полосой на всю ширину.
+ * Главная: география отгрузок (чат 5д). Заголовок по типовой раскладке (1–8 + подзаголовок 9–12),
+ * ниже карта «Горизонт» на всю ширину контейнера с панелью поиска слева; цифры — одной полосой.
  */
 export function GeoSection() {
   const zones = typoAll(deliveryZones);
@@ -34,23 +34,7 @@ export function GeoSection() {
           </Col>
         </Grid>
 
-        <Grid className={s.grid}>
-          <ul className={s.zones} aria-label="Сроки доставки по зонам">
-            {zones.map((z) => (
-              <li key={z.zone} className={s.zoneRow}>
-                <b className={s.term}>{z.term}</b>
-                <span>
-                  {z.where}
-                  <span className={s.method}>{z.method}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <div className={s.mapCol}>
-            <GlobeMap zones={zones} />
-          </div>
-        </Grid>
+        <ShippingMap zones={zones} />
 
         <dl className={s.stats}>
           {stats.map((stat) => (

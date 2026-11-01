@@ -1,41 +1,367 @@
 /*
- * География отгрузок (чат 5г): заголовок + подзаголовок по типовой раскладке, ниже зоны (1–5) и карта (6–12),
- * цифры полосой на всю ширину. Без карточек, разделители линиями. DESIGN.md → «Глобус и цифры».
+ * География отгрузок (чат 5д): заголовок по типовой раскладке, ниже карта «Горизонт» на всю ширину контейнера —
+ * верх шара, который можно поворачивать; слева поверх карты панель (карточка региона, поиск, зоны, список).
+ * Цифры полосой на всю ширину. DESIGN.md → «Глобус и цифры».
  */
-.grid {
-  row-gap: var(--space-7);
-  align-items: center;
+
+/* ---------- Сцена: карта + панель ---------- */
+.stage {
+  position: relative;
+  aspect-ratio: 1300 / 700;
 }
-.mapCol {
-  grid-column: 6 / span 7;
+.mapBox {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.still {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 100%;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+.still[data-hidden] {
+  opacity: 0;
 }
 
-/* ---------- Зоны доставки: срок · куда + способ, линии-разделители (чат 5г: без полос и образцов) ---------- */
-.zones {
-  grid-column: 1 / span 5;
-  border-top: var(--border-1) solid var(--color-line-strong);
+/* Панель = 4 колонки сетки, поверх левой части шара */
+.panel {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: calc((100% - 11 * var(--grid-gap)) / 12 * 4 + 3 * var(--grid-gap));
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  border: var(--border-1) solid var(--color-line);
+  border-radius: var(--radius-1);
 }
-.zoneRow {
-  display: grid;
-  grid-template-columns: 6.5rem minmax(0, 1fr);
-  gap: var(--space-4);
-  align-items: center;
-  padding-block: var(--space-4);
+.card {
+  padding: var(--space-5);
   border-bottom: var(--border-1) solid var(--color-line);
-  font-size: var(--fs-small);
-  line-height: var(--lh-tight);
 }
-.term {
+.cardLabel {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-muted);
+}
+.cardName {
+  margin: 0;
   font-family: var(--font-cond);
   font-weight: var(--fw-heading);
-  font-size: var(--fs-lead);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-tight);
+  text-transform: uppercase;
+}
+.cardTerm {
+  margin: var(--space-2) 0 0;
+  font-size: var(--fs-small);
+  color: var(--color-text-muted);
+}
+.cardTerm b {
+  color: var(--color-text);
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--control-h);
+  margin: var(--space-4) var(--space-5) 0;
+  padding-inline: var(--space-3);
+  border: var(--border-1) solid var(--color-line);
+  border-radius: var(--radius-1);
+  color: var(--color-text-muted);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.search:focus-within {
+  border-color: var(--color-line-strong);
+}
+.search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--fs-body);
+  color: var(--color-text);
+}
+.search input::placeholder {
+  color: var(--color-text-faint);
+}
+
+.zoneTabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: var(--space-3) var(--space-5) 0;
+  border: var(--border-1) solid var(--color-line);
+  border-radius: var(--radius-1);
+}
+.zoneTab {
+  display: flex;
+  gap: var(--space-2);
+  min-height: var(--control-h);
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  background: none;
+  text-align: left;
+  font: inherit;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.zoneTab + .zoneTab {
+  border-left: var(--border-1) solid var(--color-line);
+}
+.zoneTab b {
+  font-family: var(--font-cond);
+  font-weight: var(--fw-heading);
+  font-size: var(--fs-body);
   text-transform: uppercase;
   white-space: nowrap;
 }
-.method {
-  display: block;
-  margin-top: var(--space-1);
+.zoneTab:hover {
+  background: var(--color-surface);
+}
+.zoneTab[aria-pressed="true"] {
+  background: var(--color-accent-tint);
+}
+
+/* Образец цвета зоны — легенда карты */
+.swatch {
+  width: 12px;
+  height: 12px;
+  flex: none;
+}
+.swatch0 {
+  background: var(--geo-zone-0);
+}
+.swatch1 {
+  background: var(--geo-zone-1);
+}
+.swatch2 {
+  background: var(--geo-zone-2);
+}
+.swatch3 {
+  background: var(--geo-zone-3);
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  margin: var(--space-3) 0 0;
+  padding: 0 var(--space-5) var(--space-3);
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) 0;
+  border: 0;
+  border-bottom: var(--border-1) solid var(--color-line);
+  background: none;
+  text-align: left;
+  font: inherit;
+  color: var(--color-text);
+  cursor: pointer;
+}
+.row .swatch {
+  transform: translateY(1px);
+}
+.rowName {
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--fs-small);
+  line-height: var(--lh-tight);
+}
+.rowName span {
   color: var(--color-text-muted);
+}
+.row:hover .rowName,
+.row[aria-current] .rowName {
+  font-weight: var(--fw-heading);
+}
+.row[aria-current] {
+  border-bottom-color: var(--color-line-strong);
+}
+.empty {
+  padding: var(--space-3) 0;
+  font-size: var(--fs-small);
+  color: var(--color-text-muted);
+}
+
+/* ---------- Шар ---------- */
+.globe {
+  position: absolute;
+  inset: 0;
+  animation: fadeIn var(--dur-slow) var(--ease-out) both;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+.map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: pan-y; /* пальцем: по горизонтали — крутим шар, по вертикали — листаем страницу */
+  user-select: none;
+}
+.globe[data-dragging] .map {
+  cursor: grabbing;
+}
+.hint {
+  position: absolute;
+  right: 0;
+  bottom: var(--space-3);
+  margin: 0;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.sphere {
+  fill: var(--color-bg);
+  stroke: var(--color-line);
+}
+.graticule {
+  fill: none;
+  stroke: var(--color-surface);
+  stroke-width: 1;
+}
+.land {
+  fill: var(--geo-land);
+}
+.region {
+  stroke: var(--color-bg);
+  stroke-width: 0.6;
+  transition:
+    fill var(--dur-fast) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out);
+  cursor: pointer;
+}
+.globe[data-dragging] .region {
+  cursor: grabbing;
+}
+.zone0 {
+  fill: var(--geo-zone-0);
+}
+.zone1 {
+  fill: var(--geo-zone-1);
+}
+.zone2 {
+  fill: var(--geo-zone-2);
+}
+.zone3 {
+  fill: var(--geo-zone-3);
+}
+/* Зона выбрана в панели — остальные приглушены */
+.regionDim {
+  opacity: 0.25;
+}
+/* Регион под курсором / выбранный: на ступень темнее + чёрная граница */
+.regionOn {
+  fill: var(--color-accent-hover);
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+  opacity: 1;
+}
+.zone1.regionOn {
+  fill: var(--color-ink-700);
+  stroke: var(--color-bg);
+}
+
+.arcs {
+  fill: none;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.arcHalo {
+  stroke: var(--color-bg);
+  stroke-width: 3.5;
+}
+.arc {
+  stroke: var(--color-ink-900);
+  stroke-width: 1.3;
+}
+.city {
+  fill: var(--color-ink-900);
+  stroke: var(--color-bg);
+  stroke-width: 1.5;
+  pointer-events: none;
+}
+.home {
+  fill: var(--color-bg);
+  stroke: var(--color-ink-900);
+  stroke-width: 3.5;
+  pointer-events: none;
+}
+
+/*
+ * Метка региона: точка в центре, тонкая выноска вверх, тёмная плашка без тени.
+ * Видна, только если центр региона на видимой стороне шара и в кадре; правее 60 % — плашка уходит влево.
+ */
+.tip {
+  position: absolute;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.tip::before {
+  content: "";
+  position: absolute;
+  left: -0.5px;
+  bottom: 0;
+  width: 1px;
+  height: var(--space-6);
+  background: var(--color-ink-900);
+}
+.tip::after {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-ink-900);
+  box-shadow: 0 0 0 1.5px var(--color-bg);
+}
+.tipLabel {
+  position: absolute;
+  left: 0;
+  bottom: var(--space-6);
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-ink-900);
+  color: var(--color-on-ink);
+  border-radius: var(--radius-1);
+  font-size: var(--fs-small);
+  line-height: var(--lh-tight);
+  white-space: nowrap;
+}
+.tipFlip .tipLabel {
+  left: auto;
+  right: 0;
+}
+.tipLabel span {
+  color: var(--color-on-ink-muted);
 }
 
 /* ---------- Цифры одной полосой на всю ширину: 4 по 3 колонки, линия сверху ---------- */
@@ -76,186 +402,25 @@
   color: var(--color-text-muted);
 }
 
-/* ---------- Карта ---------- */
-/* Кадр 1000 × 760. Края растворяются в фон секции маской — рамки-квадрата не видно (чат 5г) */
-.globe {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1000 / 760;
-}
-.still,
-.map {
-  -webkit-mask-image:
-    linear-gradient(to right, transparent, #000 16%, #000 84%, transparent),
-    linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to right, transparent, #000 16%, #000 84%, transparent),
-    linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
-  mask-composite: intersect;
-}
-.still,
-.map {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-.map {
-  opacity: 0;
-  transition: opacity var(--dur-slow) var(--ease-out);
-}
-.globe[data-ready] .map {
-  opacity: 1;
-}
-.globe[data-ready] .still {
-  visibility: hidden;
-  transition: visibility 0s linear var(--dur-slow);
-}
 
-.sphere {
-  fill: var(--color-bg);
-}
-.graticule {
-  fill: none;
-  stroke: var(--color-surface);
-  stroke-width: 1;
-}
-.land {
-  fill: var(--geo-land);
-}
-.region {
-  stroke: var(--color-bg);
-  stroke-width: 0.6;
-  transition: fill var(--dur-fast) var(--ease-out);
-}
-.zone0 {
-  fill: var(--geo-zone-0);
-}
-.zone1 {
-  fill: var(--geo-zone-1);
-}
-.zone2 {
-  fill: var(--geo-zone-2);
-}
-.zone3 {
-  fill: var(--geo-zone-3);
-}
-.region[data-zone] {
-  cursor: default;
-}
-/* Регион под курсором: на ступень темнее + чёрная граница поверх соседей */
-.regionOn {
-  fill: var(--color-accent-hover);
-  stroke: var(--color-text);
-  stroke-width: 1.5;
-}
-.zone1.regionOn {
-  fill: var(--color-ink-700);
-  stroke: var(--color-bg);
-}
-
-.arcs {
-  fill: none;
-  stroke-linecap: round;
-  pointer-events: none;
-}
-.arcHalo,
-.arc {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
-}
-.arcHalo {
-  stroke: var(--color-bg);
-  stroke-width: 3.5;
-}
-.arc {
-  stroke: var(--color-ink-900);
-  stroke-width: 1.3;
-}
-.globe[data-ready] .arcHalo,
-.globe[data-ready] .arc {
-  animation: drawArc 1.4s var(--ease-out) both;
-}
-@keyframes drawArc {
-  from {
-    stroke-dashoffset: 1;
-  }
-}
-.city {
-  fill: var(--color-ink-900);
-  stroke: var(--color-bg);
-  stroke-width: 1.5;
-  pointer-events: none;
-}
-.home {
-  fill: var(--color-bg);
-  stroke: var(--color-ink-900);
-  stroke-width: 3.5;
-  pointer-events: none;
-}
-
-/*
- * Метка региона (чат 5в): привязана к центру региона, всегда видна. Точка в центре, тонкая выноска вверх,
- * над ней тёмная метка без тени. Переезжает плавно (--dur-base); правее 60 % кадра — метка уходит влево.
- */
-.tip {
-  position: absolute;
-  z-index: 1;
-  width: 0;
-  height: 0;
-  pointer-events: none;
-  transition:
-    left var(--dur-base) var(--ease-out),
-    top var(--dur-base) var(--ease-out);
-}
-.tip::before {
-  content: "";
-  position: absolute;
-  left: -0.5px;
-  bottom: 0;
-  width: 1px;
-  height: var(--space-7);
-  background: var(--color-ink-900);
-}
-.tip::after {
-  content: "";
-  position: absolute;
-  left: -3px;
-  top: -3px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-ink-900);
-  box-shadow: 0 0 0 1.5px var(--color-bg);
-}
-.tipLabel {
-  position: absolute;
-  left: 0;
-  bottom: var(--space-7);
-  display: grid;
-  gap: var(--space-1);
-  padding: var(--space-2) var(--space-3);
-  background: var(--color-ink-900);
-  color: var(--color-on-ink);
-  border-radius: var(--radius-1);
-  font-size: var(--fs-small);
-  line-height: var(--lh-tight);
-  white-space: nowrap;
-}
-.tipFlip .tipLabel {
-  left: auto;
-  right: 0;
-}
-.tipLabel span {
-  color: var(--color-on-ink-muted);
-}
-
-/* ---------- ≤ 1024 px: глобус под текстом, по центру ---------- */
+/* ---------- ≤ 1024 px: панель над картой, карта выше по пропорции ---------- */
 @media (max-width: 1024px) {
-  .zones,
-  .mapCol {
-    grid-column: 1 / -1;
+  .stage {
+    aspect-ratio: auto;
+    display: grid;
+    gap: var(--space-4);
+  }
+  .panel {
+    position: static;
+    width: auto;
+  }
+  .list {
+    max-height: 264px;
+  }
+  .mapBox {
+    position: relative;
+    inset: auto;
+    aspect-ratio: 4 / 3;
   }
   .stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -263,15 +428,27 @@
 }
 
 @media (max-width: 640px) {
-  .zoneRow {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-1);
+  .mapBox {
+    aspect-ratio: 4 / 5;
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .globe[data-ready] .arcHalo,
-  .globe[data-ready] .arc {
-    animation: none;
+  .card,
+  .search,
+  .zoneTabs,
+  .list {
+    margin-inline: var(--space-4);
+  }
+  .card {
+    margin: 0;
+    padding: var(--space-4);
+  }
+  .list {
+    margin-inline: 0;
+    padding-inline: var(--space-4);
+  }
+  .zoneTab {
+    padding-inline: var(--space-2);
+  }
+  .zoneTab b {
+    font-size: var(--fs-small);
   }
 }

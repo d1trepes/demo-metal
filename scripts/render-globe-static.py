@@ -1,5 +1,5 @@
 """
-Заглушка глобуса (чат 5б): public/globe/globe.svg → public/globe/globe-static.webp, 1200 × 912 (кадр 1000 × 760, чат 5г).
+Заглушка глобуса (чат 5б): public/globe/globe.svg → public/globe/globe-static.webp, 1300 × 700 (кадр «Горизонт», чат 5д).
 Показывается до загрузки интерактивного слоя (GlobeMap.tsx) и без JS. Вид тот же — оба из scripts/build-globe.mjs.
 
 Запуск (после node scripts/build-globe.mjs):  python3 scripts/render-globe-static.py
@@ -15,7 +15,7 @@ from playwright.async_api import async_playwright
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "public/globe/globe.svg"
 OUT = ROOT / "public/globe/globe-static.webp"
-W, H = 1200, 912
+W, H = 1300, 700
 
 
 async def main():
