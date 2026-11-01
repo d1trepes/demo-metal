@@ -1,0 +1,37 @@
+[
+  {
+    "id": "D-1",
+    "kind": "kp",
+    "title": "Коммерческое предложение КП-2810-0377",
+    "date": "2026-10-28",
+    "totalRub": 241320,
+    "url": "/docs/kp-sample.pdf"
+  },
+  {
+    "id": "D-2",
+    "kind": "invoice",
+    "title": "Счёт № 341 от 29.10.2026",
+    "date": "2026-10-29",
+    "orderId": "З-2910-0341",
+    "totalRub": 241320,
+    "url": "/docs/invoice-sample.pdf"
+  },
+  {
+    "id": "D-3",
+    "kind": "invoice",
+    "title": "Счёт № 318 от 26.10.2026",
+    "date": "2026-10-26",
+    "orderId": "З-2610-0318",
+    "totalRub": 1070610,
+    "url": "/docs/invoice-sample.pdf"
+  },
+  {
+    "id": "D-4",
+    "kind": "upd",
+    "title": "УПД № 231 от 07.10.2026",
+    "date": "2026-10-07",
+    "orderId": "З-0210-0231",
+    "totalRub": 309350,
+    "url": "/docs/upd-sample.pdf"
+  }
+]

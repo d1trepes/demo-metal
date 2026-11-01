@@ -1,0 +1,82 @@
+[
+  {
+    "id": "КП-0111-0412",
+    "status": "sent",
+    "createdAt": "2026-11-01T09:20:00+05:00",
+    "items": [
+      {
+        "productId": "P-0706",
+        "quantity": 16,
+        "length": 12
+      }
+    ],
+    "itemsCount": 1,
+    "totalWeightKg": 6317
+  },
+  {
+    "id": "КП-3010-0398",
+    "status": "in-work",
+    "createdAt": "2026-10-30T13:10:00+05:00",
+    "items": [
+      {
+        "productId": "P-0407",
+        "quantity": 10
+      },
+      {
+        "productId": "P-0904",
+        "quantity": 50,
+        "length": 6
+      }
+    ],
+    "itemsCount": 2,
+    "totalWeightKg": 12152
+  },
+  {
+    "id": "КП-2810-0377",
+    "status": "kp-ready",
+    "createdAt": "2026-10-28T10:00:00+05:00",
+    "items": [
+      {
+        "productId": "P-0104",
+        "quantity": 120,
+        "length": 11.7
+      },
+      {
+        "productId": "P-0106",
+        "quantity": 80,
+        "length": 11.7
+      },
+      {
+        "productId": "P-1002",
+        "quantity": 40
+      }
+    ],
+    "itemsCount": 3,
+    "totalWeightKg": 3673,
+    "totalRub": 241320
+  },
+  {
+    "id": "КП-2410-0350",
+    "status": "invoiced",
+    "createdAt": "2026-10-24T15:40:00+05:00",
+    "items": [
+      {
+        "productId": "P-0704",
+        "quantity": 24,
+        "length": 12
+      },
+      {
+        "productId": "P-0605",
+        "quantity": 30,
+        "length": 12
+      },
+      {
+        "productId": "P-0406",
+        "quantity": 6
+      }
+    ],
+    "itemsCount": 3,
+    "totalWeightKg": 15485,
+    "totalRub": 1070610
+  }
+]

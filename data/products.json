@@ -1,0 +1,1404 @@
+[
+  {
+    "id": "P-0101",
+    "slug": "armatura-6-mm-a240",
+    "category": "armatura",
+    "name": "Арматура ⌀6 мм",
+    "gost": "ГОСТ 34028-2016",
+    "steelGrade": "А240",
+    "size": {
+      "label": "⌀6 мм",
+      "d": 6
+    },
+    "weightPerMeter": 0.222,
+    "pricePerTon": 63900,
+    "unit": "м",
+    "length": "бухта",
+    "inStock": true,
+    "image": "/catalog/armatura.webp",
+    "imageEnd": "/ends/armatura.webp"
+  },
+  {
+    "id": "P-0102",
+    "slug": "armatura-8-mm-a500s",
+    "category": "armatura",
+    "name": "Арматура ⌀8 мм",
+    "gost": "ГОСТ 34028-2016",
+    "steelGrade": "А500С",
+    "size": {
+      "label": "⌀8 мм",
+      "d": 8
+    },
+    "weightPerMeter": 0.395,
+    "pricePerTon": 61200,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": true,
+    "image": "/catalog/armatura.webp",
+    "imageEnd": "/ends/armatura.webp"
+  },
+  {
+    "id": "P-0103",
+    "slug": "armatura-10-mm-a500s",
+    "category": "armatura",
+    "name": "Арматура ⌀10 мм",
+    "gost": "ГОСТ 34028-2016",
+    "steelGrade": "А500С",
+    "size": {
+      "label": "⌀10 мм",
+      "d": 10
+    },
+    "weightPerMeter": 0.617,
+    "pricePerTon": 59800,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": true,
+    "image": "/catalog/armatura.webp",
+    "imageEnd": "/ends/armatura.webp"
+  },
+  {
+    "id": "P-0104",
+    "slug": "armatura-12-mm-a500s",
+    "category": "armatura",
+    "name": "Арматура ⌀12 мм",
+    "gost": "ГОСТ 34028-2016",
+    "steelGrade": "А500С",
+    "size": {
+      "label": "⌀12 мм",
+      "d": 12
+    },
+    "weightPerMeter": 0.888,
+    "pricePerTon": 58900,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": true,
+    "image": "/catalog/armatura.webp",
+    "imageEnd": "/ends/armatura.webp"
+  },
+  {
+    "id": "P-0105",
+    "slug": "armatura-14-mm-a500s",
+    "category": "armatura",
+    "name": "Арматура ⌀14 мм",
+    "gost": "ГОСТ 34028-2016",
+    "steelGrade": "А500С",
+    "size": {
+      "label": "⌀14 мм",
+      "d": 14
+    },
+    "weightPerMeter": 1.21,
+    "pricePerTon": 58900,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": true,
+    "image": "/catalog/armatura.webp",
+    "imageEnd": "/ends/armatura.webp"
+  },
+  {
+    "id": "P-0106",
+    "slug": "armatura-16-mm-a500s",
+    "category": "armatura",
+    "name": "Арматура ⌀16 мм",
+    "gost": "ГОСТ 34028-2016",
+    "steelGrade": "А500С",
+    "size": {
+      "label": "⌀16 мм",
+      "d": 16
+    },
+    "weightPerMeter": 1.58,
+    "pricePerTon": 59400,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": true,
+    "image": "/catalog/armatura.webp",
+    "imageEnd": "/ends/armatura.webp"
+  },
+  {
+    "id": "P-0107",
+    "slug": "armatura-20-mm-a500s",
+    "category": "armatura",
+    "name": "Арматура ⌀20 мм",
+    "gost": "ГОСТ 34028-2016",
+    "steelGrade": "А500С",
+    "size": {
+      "label": "⌀20 мм",
+      "d": 20
+    },
+    "weightPerMeter": 2.47,
+    "pricePerTon": 60100,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": true,
+    "image": "/catalog/armatura.webp",
+    "imageEnd": "/ends/armatura.webp"
+  },
+  {
+    "id": "P-0108",
+    "slug": "armatura-25-mm-a500s",
+    "category": "armatura",
+    "name": "Арматура ⌀25 мм",
+    "gost": "ГОСТ 34028-2016",
+    "steelGrade": "А500С",
+    "size": {
+      "label": "⌀25 мм",
+      "d": 25
+    },
+    "weightPerMeter": 3.85,
+    "pricePerTon": 61500,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": false,
+    "image": "/catalog/armatura.webp",
+    "imageEnd": "/ends/armatura.webp"
+  },
+  {
+    "id": "P-0201",
+    "slug": "truba-profilnaya-20-20-2-mm-st3sp",
+    "category": "truba-profilnaya",
+    "name": "Труба профильная 20×20×2 мм",
+    "gost": "ГОСТ 30245-2003",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "20×20×2 мм",
+      "a": 20,
+      "b": 20,
+      "t": 2
+    },
+    "weightPerMeter": 1.13,
+    "pricePerTon": 79500,
+    "unit": "м",
+    "length": "6 / 12 м",
+    "inStock": true,
+    "image": "/catalog/truba-profilnaya.webp",
+    "imageEnd": "/ends/truba-profilnaya.webp"
+  },
+  {
+    "id": "P-0202",
+    "slug": "truba-profilnaya-40-20-2-mm-st3sp",
+    "category": "truba-profilnaya",
+    "name": "Труба профильная 40×20×2 мм",
+    "gost": "ГОСТ 30245-2003",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "40×20×2 мм",
+      "a": 40,
+      "b": 20,
+      "t": 2
+    },
+    "weightPerMeter": 1.758,
+    "pricePerTon": 76800,
+    "unit": "м",
+    "length": "6 / 12 м",
+    "inStock": true,
+    "image": "/catalog/truba-profilnaya.webp",
+    "imageEnd": "/ends/truba-profilnaya.webp"
+  },
+  {
+    "id": "P-0203",
+    "slug": "truba-profilnaya-40-40-2-mm-st3sp",
+    "category": "truba-profilnaya",
+    "name": "Труба профильная 40×40×2 мм",
+    "gost": "ГОСТ 30245-2003",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "40×40×2 мм",
+      "a": 40,
+      "b": 40,
+      "t": 2
+    },
+    "weightPerMeter": 2.386,
+    "pricePerTon": 74900,
+    "unit": "м",
+    "length": "6 / 12 м",
+    "inStock": true,
+    "image": "/catalog/truba-profilnaya.webp",
+    "imageEnd": "/ends/truba-profilnaya.webp"
+  },
+  {
+    "id": "P-0204",
+    "slug": "truba-profilnaya-60-60-3-mm-st3sp",
+    "category": "truba-profilnaya",
+    "name": "Труба профильная 60×60×3 мм",
+    "gost": "ГОСТ 30245-2003",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "60×60×3 мм",
+      "a": 60,
+      "b": 60,
+      "t": 3
+    },
+    "weightPerMeter": 5.369,
+    "pricePerTon": 73200,
+    "unit": "м",
+    "length": "6 / 12 м",
+    "inStock": true,
+    "image": "/catalog/truba-profilnaya.webp",
+    "imageEnd": "/ends/truba-profilnaya.webp"
+  },
+  {
+    "id": "P-0205",
+    "slug": "truba-profilnaya-80-80-4-mm-st3sp",
+    "category": "truba-profilnaya",
+    "name": "Труба профильная 80×80×4 мм",
+    "gost": "ГОСТ 30245-2003",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "80×80×4 мм",
+      "a": 80,
+      "b": 80,
+      "t": 4
+    },
+    "weightPerMeter": 9.546,
+    "pricePerTon": 72400,
+    "unit": "м",
+    "length": "6 / 12 м",
+    "inStock": true,
+    "image": "/catalog/truba-profilnaya.webp",
+    "imageEnd": "/ends/truba-profilnaya.webp"
+  },
+  {
+    "id": "P-0206",
+    "slug": "truba-profilnaya-100-100-4-mm-st3sp",
+    "category": "truba-profilnaya",
+    "name": "Труба профильная 100×100×4 мм",
+    "gost": "ГОСТ 30245-2003",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "100×100×4 мм",
+      "a": 100,
+      "b": 100,
+      "t": 4
+    },
+    "weightPerMeter": 12.058,
+    "pricePerTon": 72400,
+    "unit": "м",
+    "length": "6 / 12 м",
+    "inStock": true,
+    "image": "/catalog/truba-profilnaya.webp",
+    "imageEnd": "/ends/truba-profilnaya.webp"
+  },
+  {
+    "id": "P-0207",
+    "slug": "truba-profilnaya-120-80-5-mm-09g2s",
+    "category": "truba-profilnaya",
+    "name": "Труба профильная 120×80×5 мм",
+    "gost": "ГОСТ 30245-2003",
+    "steelGrade": "09Г2С",
+    "size": {
+      "label": "120×80×5 мм",
+      "a": 120,
+      "b": 80,
+      "t": 5
+    },
+    "weightPerMeter": 14.915,
+    "pricePerTon": 81600,
+    "unit": "м",
+    "length": "6 / 12 м",
+    "inStock": false,
+    "image": "/catalog/truba-profilnaya.webp",
+    "imageEnd": "/ends/truba-profilnaya.webp"
+  },
+  {
+    "id": "P-0208",
+    "slug": "truba-profilnaya-150-150-6-mm-09g2s",
+    "category": "truba-profilnaya",
+    "name": "Труба профильная 150×150×6 мм",
+    "gost": "ГОСТ 30245-2003",
+    "steelGrade": "09Г2С",
+    "size": {
+      "label": "150×150×6 мм",
+      "a": 150,
+      "b": 150,
+      "t": 6
+    },
+    "weightPerMeter": 27.13,
+    "pricePerTon": 82900,
+    "unit": "м",
+    "length": "6 / 12 м",
+    "inStock": false,
+    "image": "/catalog/truba-profilnaya.webp",
+    "imageEnd": "/ends/truba-profilnaya.webp"
+  },
+  {
+    "id": "P-0301",
+    "slug": "truba-elektrosvarnaya-57-3-mm-st3sp",
+    "category": "truba-kruglaya",
+    "name": "Труба электросварная 57×3 мм",
+    "gost": "ГОСТ 10704-91",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "57×3 мм",
+      "d": 57,
+      "t": 3
+    },
+    "weightPerMeter": 3.995,
+    "pricePerTon": 71900,
+    "unit": "м",
+    "length": "10–12 м",
+    "inStock": true,
+    "image": "/catalog/truba-kruglaya.webp",
+    "imageEnd": "/ends/truba-kruglaya.webp"
+  },
+  {
+    "id": "P-0302",
+    "slug": "truba-elektrosvarnaya-76-3-5-mm-st3sp",
+    "category": "truba-kruglaya",
+    "name": "Труба электросварная 76×3,5 мм",
+    "gost": "ГОСТ 10704-91",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "76×3,5 мм",
+      "d": 76,
+      "t": 3.5
+    },
+    "weightPerMeter": 6.257,
+    "pricePerTon": 70900,
+    "unit": "м",
+    "length": "10–12 м",
+    "inStock": true,
+    "image": "/catalog/truba-kruglaya.webp",
+    "imageEnd": "/ends/truba-kruglaya.webp"
+  },
+  {
+    "id": "P-0303",
+    "slug": "truba-elektrosvarnaya-89-4-mm-st3sp",
+    "category": "truba-kruglaya",
+    "name": "Труба электросварная 89×4 мм",
+    "gost": "ГОСТ 10704-91",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "89×4 мм",
+      "d": 89,
+      "t": 4
+    },
+    "weightPerMeter": 8.384,
+    "pricePerTon": 69800,
+    "unit": "м",
+    "length": "10–12 м",
+    "inStock": true,
+    "image": "/catalog/truba-kruglaya.webp",
+    "imageEnd": "/ends/truba-kruglaya.webp"
+  },
+  {
+    "id": "P-0304",
+    "slug": "truba-elektrosvarnaya-108-4-mm-st3sp",
+    "category": "truba-kruglaya",
+    "name": "Труба электросварная 108×4 мм",
+    "gost": "ГОСТ 10704-91",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "108×4 мм",
+      "d": 108,
+      "t": 4
+    },
+    "weightPerMeter": 10.259,
+    "pricePerTon": 69800,
+    "unit": "м",
+    "length": "10–12 м",
+    "inStock": true,
+    "image": "/catalog/truba-kruglaya.webp",
+    "imageEnd": "/ends/truba-kruglaya.webp"
+  },
+  {
+    "id": "P-0305",
+    "slug": "truba-elektrosvarnaya-159-5-mm-st20",
+    "category": "truba-kruglaya",
+    "name": "Труба электросварная 159×5 мм",
+    "gost": "ГОСТ 10704-91",
+    "steelGrade": "Ст20",
+    "size": {
+      "label": "159×5 мм",
+      "d": 159,
+      "t": 5
+    },
+    "weightPerMeter": 18.988,
+    "pricePerTon": 74600,
+    "unit": "м",
+    "length": "10–12 м",
+    "inStock": true,
+    "image": "/catalog/truba-kruglaya.webp",
+    "imageEnd": "/ends/truba-kruglaya.webp"
+  },
+  {
+    "id": "P-0306",
+    "slug": "truba-elektrosvarnaya-219-6-mm-st20",
+    "category": "truba-kruglaya",
+    "name": "Труба электросварная 219×6 мм",
+    "gost": "ГОСТ 10704-91",
+    "steelGrade": "Ст20",
+    "size": {
+      "label": "219×6 мм",
+      "d": 219,
+      "t": 6
+    },
+    "weightPerMeter": 31.515,
+    "pricePerTon": 75900,
+    "unit": "м",
+    "length": "10–12 м",
+    "inStock": false,
+    "image": "/catalog/truba-kruglaya.webp",
+    "imageEnd": "/ends/truba-kruglaya.webp"
+  },
+  {
+    "id": "P-0401",
+    "slug": "list-h-k-0-8-mm-08ps",
+    "category": "list",
+    "name": "Лист х/к 0,8 мм",
+    "gost": "ГОСТ 19904-90",
+    "steelGrade": "08пс",
+    "size": {
+      "label": "0,8×1250×2500 мм",
+      "t": 0.8,
+      "w": 1250,
+      "l": 2500
+    },
+    "weightPerMeter": 6.28,
+    "pricePerTon": 79400,
+    "unit": "м²",
+    "length": "1,25×2,5 м",
+    "inStock": true,
+    "image": "/catalog/list.webp",
+    "imageEnd": "/ends/list.webp"
+  },
+  {
+    "id": "P-0402",
+    "slug": "list-h-k-1-5-mm-08ps",
+    "category": "list",
+    "name": "Лист х/к 1,5 мм",
+    "gost": "ГОСТ 19904-90",
+    "steelGrade": "08пс",
+    "size": {
+      "label": "1,5×1250×2500 мм",
+      "t": 1.5,
+      "w": 1250,
+      "l": 2500
+    },
+    "weightPerMeter": 11.775,
+    "pricePerTon": 77800,
+    "unit": "м²",
+    "length": "1,25×2,5 м",
+    "inStock": true,
+    "image": "/catalog/list.webp",
+    "imageEnd": "/ends/list.webp"
+  },
+  {
+    "id": "P-0403",
+    "slug": "list-g-k-3-mm-st3sp",
+    "category": "list",
+    "name": "Лист г/к 3 мм",
+    "gost": "ГОСТ 19903-2015",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "3×1500×6000 мм",
+      "t": 3,
+      "w": 1500,
+      "l": 6000
+    },
+    "weightPerMeter": 23.55,
+    "pricePerTon": 63900,
+    "unit": "м²",
+    "length": "1,5×6 м",
+    "inStock": true,
+    "image": "/catalog/list.webp",
+    "imageEnd": "/ends/list.webp"
+  },
+  {
+    "id": "P-0404",
+    "slug": "list-g-k-4-mm-st3sp",
+    "category": "list",
+    "name": "Лист г/к 4 мм",
+    "gost": "ГОСТ 19903-2015",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "4×1500×6000 мм",
+      "t": 4,
+      "w": 1500,
+      "l": 6000
+    },
+    "weightPerMeter": 31.4,
+    "pricePerTon": 62700,
+    "unit": "м²",
+    "length": "1,5×6 м",
+    "inStock": true,
+    "image": "/catalog/list.webp",
+    "imageEnd": "/ends/list.webp"
+  },
+  {
+    "id": "P-0405",
+    "slug": "list-g-k-6-mm-st3sp",
+    "category": "list",
+    "name": "Лист г/к 6 мм",
+    "gost": "ГОСТ 19903-2015",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "6×1500×6000 мм",
+      "t": 6,
+      "w": 1500,
+      "l": 6000
+    },
+    "weightPerMeter": 47.1,
+    "pricePerTon": 61500,
+    "unit": "м²",
+    "length": "1,5×6 м",
+    "inStock": true,
+    "image": "/catalog/list.webp",
+    "imageEnd": "/ends/list.webp"
+  },
+  {
+    "id": "P-0406",
+    "slug": "list-g-k-10-mm-st3sp",
+    "category": "list",
+    "name": "Лист г/к 10 мм",
+    "gost": "ГОСТ 19903-2015",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "10×1500×6000 мм",
+      "t": 10,
+      "w": 1500,
+      "l": 6000
+    },
+    "weightPerMeter": 78.5,
+    "pricePerTon": 61500,
+    "unit": "м²",
+    "length": "1,5×6 м",
+    "inStock": true,
+    "image": "/catalog/list.webp",
+    "imageEnd": "/ends/list.webp"
+  },
+  {
+    "id": "P-0407",
+    "slug": "list-g-k-12-mm-09g2s",
+    "category": "list",
+    "name": "Лист г/к 12 мм",
+    "gost": "ГОСТ 19903-2015",
+    "steelGrade": "09Г2С",
+    "size": {
+      "label": "12×2000×6000 мм",
+      "t": 12,
+      "w": 2000,
+      "l": 6000
+    },
+    "weightPerMeter": 94.2,
+    "pricePerTon": 69900,
+    "unit": "м²",
+    "length": "2×6 м",
+    "inStock": true,
+    "image": "/catalog/list.webp",
+    "imageEnd": "/ends/list.webp"
+  },
+  {
+    "id": "P-0408",
+    "slug": "list-g-k-20-mm-09g2s",
+    "category": "list",
+    "name": "Лист г/к 20 мм",
+    "gost": "ГОСТ 19903-2015",
+    "steelGrade": "09Г2С",
+    "size": {
+      "label": "20×2000×6000 мм",
+      "t": 20,
+      "w": 2000,
+      "l": 6000
+    },
+    "weightPerMeter": 157.0,
+    "pricePerTon": 70800,
+    "unit": "м²",
+    "length": "2×6 м",
+    "inStock": false,
+    "image": "/catalog/list.webp",
+    "imageEnd": "/ends/list.webp"
+  },
+  {
+    "id": "P-0501",
+    "slug": "ugolok-25-25-3-mm-st3sp",
+    "category": "ugolok",
+    "name": "Уголок 25×25×3 мм",
+    "gost": "ГОСТ 8509-93",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "25×25×3 мм",
+      "a": 25,
+      "t": 3
+    },
+    "weightPerMeter": 1.12,
+    "pricePerTon": 69900,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": true,
+    "image": "/catalog/ugolok.webp",
+    "imageEnd": "/ends/ugolok.webp"
+  },
+  {
+    "id": "P-0502",
+    "slug": "ugolok-32-32-4-mm-st3sp",
+    "category": "ugolok",
+    "name": "Уголок 32×32×4 мм",
+    "gost": "ГОСТ 8509-93",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "32×32×4 мм",
+      "a": 32,
+      "t": 4
+    },
+    "weightPerMeter": 1.91,
+    "pricePerTon": 68400,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": true,
+    "image": "/catalog/ugolok.webp",
+    "imageEnd": "/ends/ugolok.webp"
+  },
+  {
+    "id": "P-0503",
+    "slug": "ugolok-40-40-4-mm-st3sp",
+    "category": "ugolok",
+    "name": "Уголок 40×40×4 мм",
+    "gost": "ГОСТ 8509-93",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "40×40×4 мм",
+      "a": 40,
+      "t": 4
+    },
+    "weightPerMeter": 2.42,
+    "pricePerTon": 67300,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": true,
+    "image": "/catalog/ugolok.webp",
+    "imageEnd": "/ends/ugolok.webp"
+  },
+  {
+    "id": "P-0504",
+    "slug": "ugolok-50-50-5-mm-st3sp",
+    "category": "ugolok",
+    "name": "Уголок 50×50×5 мм",
+    "gost": "ГОСТ 8509-93",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "50×50×5 мм",
+      "a": 50,
+      "t": 5
+    },
+    "weightPerMeter": 3.77,
+    "pricePerTon": 66300,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": true,
+    "image": "/catalog/ugolok.webp",
+    "imageEnd": "/ends/ugolok.webp"
+  },
+  {
+    "id": "P-0505",
+    "slug": "ugolok-63-63-6-mm-st3sp",
+    "category": "ugolok",
+    "name": "Уголок 63×63×6 мм",
+    "gost": "ГОСТ 8509-93",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "63×63×6 мм",
+      "a": 63,
+      "t": 6
+    },
+    "weightPerMeter": 5.72,
+    "pricePerTon": 66300,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": true,
+    "image": "/catalog/ugolok.webp",
+    "imageEnd": "/ends/ugolok.webp"
+  },
+  {
+    "id": "P-0506",
+    "slug": "ugolok-75-75-6-mm-st3sp",
+    "category": "ugolok",
+    "name": "Уголок 75×75×6 мм",
+    "gost": "ГОСТ 8509-93",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "75×75×6 мм",
+      "a": 75,
+      "t": 6
+    },
+    "weightPerMeter": 6.89,
+    "pricePerTon": 66900,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": true,
+    "image": "/catalog/ugolok.webp",
+    "imageEnd": "/ends/ugolok.webp"
+  },
+  {
+    "id": "P-0507",
+    "slug": "ugolok-100-100-8-mm-09g2s",
+    "category": "ugolok",
+    "name": "Уголок 100×100×8 мм",
+    "gost": "ГОСТ 8509-93",
+    "steelGrade": "09Г2С",
+    "size": {
+      "label": "100×100×8 мм",
+      "a": 100,
+      "t": 8
+    },
+    "weightPerMeter": 12.25,
+    "pricePerTon": 74800,
+    "unit": "м",
+    "length": "6 / 11,7 м",
+    "inStock": false,
+    "image": "/catalog/ugolok.webp",
+    "imageEnd": "/ends/ugolok.webp"
+  },
+  {
+    "id": "P-0601",
+    "slug": "shveller-8p-st3sp",
+    "category": "shveller",
+    "name": "Швеллер 8П",
+    "gost": "ГОСТ 8240-97",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "№ 8П, h 80 мм",
+      "no": "8П",
+      "h": 80
+    },
+    "weightPerMeter": 7.05,
+    "pricePerTon": 71500,
+    "unit": "м",
+    "length": "11,7 / 12 м",
+    "inStock": true,
+    "image": "/catalog/shveller.webp",
+    "imageEnd": "/ends/shveller.webp"
+  },
+  {
+    "id": "P-0602",
+    "slug": "shveller-10p-st3sp",
+    "category": "shveller",
+    "name": "Швеллер 10П",
+    "gost": "ГОСТ 8240-97",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "№ 10П, h 100 мм",
+      "no": "10П",
+      "h": 100
+    },
+    "weightPerMeter": 8.59,
+    "pricePerTon": 70200,
+    "unit": "м",
+    "length": "11,7 / 12 м",
+    "inStock": true,
+    "image": "/catalog/shveller.webp",
+    "imageEnd": "/ends/shveller.webp"
+  },
+  {
+    "id": "P-0603",
+    "slug": "shveller-12p-st3sp",
+    "category": "shveller",
+    "name": "Швеллер 12П",
+    "gost": "ГОСТ 8240-97",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "№ 12П, h 120 мм",
+      "no": "12П",
+      "h": 120
+    },
+    "weightPerMeter": 10.4,
+    "pricePerTon": 68900,
+    "unit": "м",
+    "length": "11,7 / 12 м",
+    "inStock": true,
+    "image": "/catalog/shveller.webp",
+    "imageEnd": "/ends/shveller.webp"
+  },
+  {
+    "id": "P-0604",
+    "slug": "shveller-14p-st3sp",
+    "category": "shveller",
+    "name": "Швеллер 14П",
+    "gost": "ГОСТ 8240-97",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "№ 14П, h 140 мм",
+      "no": "14П",
+      "h": 140
+    },
+    "weightPerMeter": 12.3,
+    "pricePerTon": 68900,
+    "unit": "м",
+    "length": "11,7 / 12 м",
+    "inStock": true,
+    "image": "/catalog/shveller.webp",
+    "imageEnd": "/ends/shveller.webp"
+  },
+  {
+    "id": "P-0605",
+    "slug": "shveller-16p-st3sp",
+    "category": "shveller",
+    "name": "Швеллер 16П",
+    "gost": "ГОСТ 8240-97",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "№ 16П, h 160 мм",
+      "no": "16П",
+      "h": 160
+    },
+    "weightPerMeter": 14.2,
+    "pricePerTon": 69400,
+    "unit": "м",
+    "length": "11,7 / 12 м",
+    "inStock": true,
+    "image": "/catalog/shveller.webp",
+    "imageEnd": "/ends/shveller.webp"
+  },
+  {
+    "id": "P-0606",
+    "slug": "shveller-20p-st3sp",
+    "category": "shveller",
+    "name": "Швеллер 20П",
+    "gost": "ГОСТ 8240-97",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "№ 20П, h 200 мм",
+      "no": "20П",
+      "h": 200
+    },
+    "weightPerMeter": 18.4,
+    "pricePerTon": 70100,
+    "unit": "м",
+    "length": "11,7 / 12 м",
+    "inStock": true,
+    "image": "/catalog/shveller.webp",
+    "imageEnd": "/ends/shveller.webp"
+  },
+  {
+    "id": "P-0607",
+    "slug": "shveller-24p-st3sp",
+    "category": "shveller",
+    "name": "Швеллер 24П",
+    "gost": "ГОСТ 8240-97",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "№ 24П, h 240 мм",
+      "no": "24П",
+      "h": 240
+    },
+    "weightPerMeter": 24.0,
+    "pricePerTon": 72800,
+    "unit": "м",
+    "length": "11,7 / 12 м",
+    "inStock": false,
+    "image": "/catalog/shveller.webp",
+    "imageEnd": "/ends/shveller.webp"
+  },
+  {
+    "id": "P-0701",
+    "slug": "balka-10b1-s255",
+    "category": "balka",
+    "name": "Балка 10Б1",
+    "gost": "ГОСТ Р 57837-2017",
+    "steelGrade": "С255",
+    "size": {
+      "label": "10Б1, h 100 мм",
+      "no": "10Б1",
+      "h": 100
+    },
+    "weightPerMeter": 8.1,
+    "pricePerTon": 76900,
+    "unit": "м",
+    "length": "12 м",
+    "inStock": true,
+    "image": "/catalog/balka.webp",
+    "imageEnd": "/ends/balka.webp"
+  },
+  {
+    "id": "P-0702",
+    "slug": "balka-12b1-s255",
+    "category": "balka",
+    "name": "Балка 12Б1",
+    "gost": "ГОСТ Р 57837-2017",
+    "steelGrade": "С255",
+    "size": {
+      "label": "12Б1, h 117,6 мм",
+      "no": "12Б1",
+      "h": 117.6
+    },
+    "weightPerMeter": 8.7,
+    "pricePerTon": 75600,
+    "unit": "м",
+    "length": "12 м",
+    "inStock": true,
+    "image": "/catalog/balka.webp",
+    "imageEnd": "/ends/balka.webp"
+  },
+  {
+    "id": "P-0703",
+    "slug": "balka-16b1-s255",
+    "category": "balka",
+    "name": "Балка 16Б1",
+    "gost": "ГОСТ Р 57837-2017",
+    "steelGrade": "С255",
+    "size": {
+      "label": "16Б1, h 157 мм",
+      "no": "16Б1",
+      "h": 157
+    },
+    "weightPerMeter": 12.7,
+    "pricePerTon": 74200,
+    "unit": "м",
+    "length": "12 м",
+    "inStock": true,
+    "image": "/catalog/balka.webp",
+    "imageEnd": "/ends/balka.webp"
+  },
+  {
+    "id": "P-0704",
+    "slug": "balka-20b1-s255",
+    "category": "balka",
+    "name": "Балка 20Б1",
+    "gost": "ГОСТ Р 57837-2017",
+    "steelGrade": "С255",
+    "size": {
+      "label": "20Б1, h 200 мм",
+      "no": "20Б1",
+      "h": 200
+    },
+    "weightPerMeter": 21.3,
+    "pricePerTon": 74200,
+    "unit": "м",
+    "length": "12 м",
+    "inStock": true,
+    "image": "/catalog/balka.webp",
+    "imageEnd": "/ends/balka.webp"
+  },
+  {
+    "id": "P-0705",
+    "slug": "balka-25b1-s255",
+    "category": "balka",
+    "name": "Балка 25Б1",
+    "gost": "ГОСТ Р 57837-2017",
+    "steelGrade": "С255",
+    "size": {
+      "label": "25Б1, h 248 мм",
+      "no": "25Б1",
+      "h": 248
+    },
+    "weightPerMeter": 25.7,
+    "pricePerTon": 74800,
+    "unit": "м",
+    "length": "12 м",
+    "inStock": true,
+    "image": "/catalog/balka.webp",
+    "imageEnd": "/ends/balka.webp"
+  },
+  {
+    "id": "P-0706",
+    "slug": "balka-30b1-s345",
+    "category": "balka",
+    "name": "Балка 30Б1",
+    "gost": "ГОСТ Р 57837-2017",
+    "steelGrade": "С345",
+    "size": {
+      "label": "30Б1, h 298 мм",
+      "no": "30Б1",
+      "h": 298
+    },
+    "weightPerMeter": 32.9,
+    "pricePerTon": 81900,
+    "unit": "м",
+    "length": "12 м",
+    "inStock": true,
+    "image": "/catalog/balka.webp",
+    "imageEnd": "/ends/balka.webp"
+  },
+  {
+    "id": "P-0707",
+    "slug": "balka-35b1-s345",
+    "category": "balka",
+    "name": "Балка 35Б1",
+    "gost": "ГОСТ Р 57837-2017",
+    "steelGrade": "С345",
+    "size": {
+      "label": "35Б1, h 346 мм",
+      "no": "35Б1",
+      "h": 346
+    },
+    "weightPerMeter": 38.9,
+    "pricePerTon": 82400,
+    "unit": "м",
+    "length": "12 м",
+    "inStock": false,
+    "image": "/catalog/balka.webp",
+    "imageEnd": "/ends/balka.webp"
+  },
+  {
+    "id": "P-0708",
+    "slug": "balka-40b1-s345",
+    "category": "balka",
+    "name": "Балка 40Б1",
+    "gost": "ГОСТ Р 57837-2017",
+    "steelGrade": "С345",
+    "size": {
+      "label": "40Б1, h 396 мм",
+      "no": "40Б1",
+      "h": 396
+    },
+    "weightPerMeter": 48.1,
+    "pricePerTon": 83600,
+    "unit": "м",
+    "length": "12 м",
+    "inStock": false,
+    "image": "/catalog/balka.webp",
+    "imageEnd": "/ends/balka.webp"
+  },
+  {
+    "id": "P-0801",
+    "slug": "krug-10-mm-st3sp",
+    "category": "krug",
+    "name": "Круг ⌀10 мм",
+    "gost": "ГОСТ 2590-2006",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "⌀10 мм",
+      "d": 10
+    },
+    "weightPerMeter": 0.617,
+    "pricePerTon": 66800,
+    "unit": "м",
+    "length": "6 м",
+    "inStock": true,
+    "image": "/catalog/krug.webp",
+    "imageEnd": "/ends/krug.webp"
+  },
+  {
+    "id": "P-0802",
+    "slug": "krug-16-mm-st3sp",
+    "category": "krug",
+    "name": "Круг ⌀16 мм",
+    "gost": "ГОСТ 2590-2006",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "⌀16 мм",
+      "d": 16
+    },
+    "weightPerMeter": 1.578,
+    "pricePerTon": 65400,
+    "unit": "м",
+    "length": "6 м",
+    "inStock": true,
+    "image": "/catalog/krug.webp",
+    "imageEnd": "/ends/krug.webp"
+  },
+  {
+    "id": "P-0803",
+    "slug": "krug-20-mm-st3sp",
+    "category": "krug",
+    "name": "Круг ⌀20 мм",
+    "gost": "ГОСТ 2590-2006",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "⌀20 мм",
+      "d": 20
+    },
+    "weightPerMeter": 2.466,
+    "pricePerTon": 64700,
+    "unit": "м",
+    "length": "6 м",
+    "inStock": true,
+    "image": "/catalog/krug.webp",
+    "imageEnd": "/ends/krug.webp"
+  },
+  {
+    "id": "P-0804",
+    "slug": "krug-30-mm-45",
+    "category": "krug",
+    "name": "Круг ⌀30 мм",
+    "gost": "ГОСТ 2590-2006",
+    "steelGrade": "45",
+    "size": {
+      "label": "⌀30 мм",
+      "d": 30
+    },
+    "weightPerMeter": 5.548,
+    "pricePerTon": 79800,
+    "unit": "м",
+    "length": "6 м",
+    "inStock": true,
+    "image": "/catalog/krug.webp",
+    "imageEnd": "/ends/krug.webp"
+  },
+  {
+    "id": "P-0805",
+    "slug": "krug-40-mm-45",
+    "category": "krug",
+    "name": "Круг ⌀40 мм",
+    "gost": "ГОСТ 2590-2006",
+    "steelGrade": "45",
+    "size": {
+      "label": "⌀40 мм",
+      "d": 40
+    },
+    "weightPerMeter": 9.864,
+    "pricePerTon": 79800,
+    "unit": "м",
+    "length": "6 м",
+    "inStock": true,
+    "image": "/catalog/krug.webp",
+    "imageEnd": "/ends/krug.webp"
+  },
+  {
+    "id": "P-0806",
+    "slug": "krug-50-mm-40h",
+    "category": "krug",
+    "name": "Круг ⌀50 мм",
+    "gost": "ГОСТ 2590-2006",
+    "steelGrade": "40Х",
+    "size": {
+      "label": "⌀50 мм",
+      "d": 50
+    },
+    "weightPerMeter": 15.413,
+    "pricePerTon": 94600,
+    "unit": "м",
+    "length": "6 м",
+    "inStock": false,
+    "image": "/catalog/krug.webp",
+    "imageEnd": "/ends/krug.webp"
+  },
+  {
+    "id": "P-0901",
+    "slug": "polosa-20-4-mm-st3sp",
+    "category": "polosa",
+    "name": "Полоса 20×4 мм",
+    "gost": "ГОСТ 103-2006",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "20×4 мм",
+      "b": 20,
+      "t": 4
+    },
+    "weightPerMeter": 0.628,
+    "pricePerTon": 69900,
+    "unit": "м",
+    "length": "6 м",
+    "inStock": true,
+    "image": "/catalog/polosa.webp",
+    "imageEnd": "/ends/polosa.webp"
+  },
+  {
+    "id": "P-0902",
+    "slug": "polosa-40-4-mm-st3sp",
+    "category": "polosa",
+    "name": "Полоса 40×4 мм",
+    "gost": "ГОСТ 103-2006",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "40×4 мм",
+      "b": 40,
+      "t": 4
+    },
+    "weightPerMeter": 1.256,
+    "pricePerTon": 68400,
+    "unit": "м",
+    "length": "6 м",
+    "inStock": true,
+    "image": "/catalog/polosa.webp",
+    "imageEnd": "/ends/polosa.webp"
+  },
+  {
+    "id": "P-0903",
+    "slug": "polosa-50-5-mm-st3sp",
+    "category": "polosa",
+    "name": "Полоса 50×5 мм",
+    "gost": "ГОСТ 103-2006",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "50×5 мм",
+      "b": 50,
+      "t": 5
+    },
+    "weightPerMeter": 1.962,
+    "pricePerTon": 67500,
+    "unit": "м",
+    "length": "6 м",
+    "inStock": true,
+    "image": "/catalog/polosa.webp",
+    "imageEnd": "/ends/polosa.webp"
+  },
+  {
+    "id": "P-0904",
+    "slug": "polosa-60-6-mm-st3sp",
+    "category": "polosa",
+    "name": "Полоса 60×6 мм",
+    "gost": "ГОСТ 103-2006",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "60×6 мм",
+      "b": 60,
+      "t": 6
+    },
+    "weightPerMeter": 2.826,
+    "pricePerTon": 67500,
+    "unit": "м",
+    "length": "6 м",
+    "inStock": true,
+    "image": "/catalog/polosa.webp",
+    "imageEnd": "/ends/polosa.webp"
+  },
+  {
+    "id": "P-0905",
+    "slug": "polosa-80-8-mm-st3sp",
+    "category": "polosa",
+    "name": "Полоса 80×8 мм",
+    "gost": "ГОСТ 103-2006",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "80×8 мм",
+      "b": 80,
+      "t": 8
+    },
+    "weightPerMeter": 5.024,
+    "pricePerTon": 68100,
+    "unit": "м",
+    "length": "6 м",
+    "inStock": true,
+    "image": "/catalog/polosa.webp",
+    "imageEnd": "/ends/polosa.webp"
+  },
+  {
+    "id": "P-0906",
+    "slug": "polosa-100-10-mm-st3sp",
+    "category": "polosa",
+    "name": "Полоса 100×10 мм",
+    "gost": "ГОСТ 103-2006",
+    "steelGrade": "Ст3сп",
+    "size": {
+      "label": "100×10 мм",
+      "b": 100,
+      "t": 10
+    },
+    "weightPerMeter": 7.85,
+    "pricePerTon": 69300,
+    "unit": "м",
+    "length": "6 м",
+    "inStock": false,
+    "image": "/catalog/polosa.webp",
+    "imageEnd": "/ends/polosa.webp"
+  },
+  {
+    "id": "P-1001",
+    "slug": "setka-svarnaya-3-mm-yacheyka-50-50-vr-1",
+    "category": "setka",
+    "name": "Сетка сварная 3 мм, ячейка 50×50",
+    "gost": "ГОСТ 23279-2012",
+    "steelGrade": "Вр-1",
+    "size": {
+      "label": "⌀3, 50×50 мм",
+      "d": 3,
+      "cell": 50
+    },
+    "weightPerMeter": 2.219,
+    "pricePerTon": 92600,
+    "unit": "м²",
+    "length": "карта 2×6 м",
+    "inStock": true,
+    "image": "/catalog/setka.webp",
+    "imageEnd": "/ends/setka.webp"
+  },
+  {
+    "id": "P-1002",
+    "slug": "setka-svarnaya-4-mm-yacheyka-100-100-vr-1",
+    "category": "setka",
+    "name": "Сетка сварная 4 мм, ячейка 100×100",
+    "gost": "ГОСТ 23279-2012",
+    "steelGrade": "Вр-1",
+    "size": {
+      "label": "⌀4, 100×100 мм",
+      "d": 4,
+      "cell": 100
+    },
+    "weightPerMeter": 1.973,
+    "pricePerTon": 84500,
+    "unit": "м²",
+    "length": "карта 2×6 м",
+    "inStock": true,
+    "image": "/catalog/setka.webp",
+    "imageEnd": "/ends/setka.webp"
+  },
+  {
+    "id": "P-1003",
+    "slug": "setka-svarnaya-4-mm-yacheyka-150-150-vr-1",
+    "category": "setka",
+    "name": "Сетка сварная 4 мм, ячейка 150×150",
+    "gost": "ГОСТ 23279-2012",
+    "steelGrade": "Вр-1",
+    "size": {
+      "label": "⌀4, 150×150 мм",
+      "d": 4,
+      "cell": 150
+    },
+    "weightPerMeter": 1.315,
+    "pricePerTon": 72700,
+    "unit": "м²",
+    "length": "карта 2×6 м",
+    "inStock": true,
+    "image": "/catalog/setka.webp",
+    "imageEnd": "/ends/setka.webp"
+  },
+  {
+    "id": "P-1004",
+    "slug": "setka-svarnaya-5-mm-yacheyka-100-100-vr-1",
+    "category": "setka",
+    "name": "Сетка сварная 5 мм, ячейка 100×100",
+    "gost": "ГОСТ 23279-2012",
+    "steelGrade": "Вр-1",
+    "size": {
+      "label": "⌀5, 100×100 мм",
+      "d": 5,
+      "cell": 100
+    },
+    "weightPerMeter": 3.083,
+    "pricePerTon": 81900,
+    "unit": "м²",
+    "length": "карта 2×6 м",
+    "inStock": true,
+    "image": "/catalog/setka.webp",
+    "imageEnd": "/ends/setka.webp"
+  },
+  {
+    "id": "P-1005",
+    "slug": "setka-svarnaya-5-mm-yacheyka-150-150-vr-1",
+    "category": "setka",
+    "name": "Сетка сварная 5 мм, ячейка 150×150",
+    "gost": "ГОСТ 23279-2012",
+    "steelGrade": "Вр-1",
+    "size": {
+      "label": "⌀5, 150×150 мм",
+      "d": 5,
+      "cell": 150
+    },
+    "weightPerMeter": 2.055,
+    "pricePerTon": 79800,
+    "unit": "м²",
+    "length": "карта 2×6 м",
+    "inStock": true,
+    "image": "/catalog/setka.webp",
+    "imageEnd": "/ends/setka.webp"
+  },
+  {
+    "id": "P-1006",
+    "slug": "setka-svarnaya-4-mm-yacheyka-50-50-vr-1",
+    "category": "setka",
+    "name": "Сетка сварная 4 мм, ячейка 50×50",
+    "gost": "ГОСТ 23279-2012",
+    "steelGrade": "Вр-1",
+    "size": {
+      "label": "⌀4, 50×50 мм",
+      "d": 4,
+      "cell": 50
+    },
+    "weightPerMeter": 3.946,
+    "pricePerTon": 86400,
+    "unit": "м²",
+    "length": "карта 2×6 м",
+    "inStock": false,
+    "image": "/catalog/setka.webp",
+    "imageEnd": "/ends/setka.webp"
+  }
+]

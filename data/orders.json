@@ -1,0 +1,103 @@
+[
+  {
+    "id": "З-2610-0318",
+    "createdAt": "2026-10-26T10:12:00+05:00",
+    "status": "production",
+    "timeline": {
+      "paid": "2026-10-27T09:40:00+05:00",
+      "production": "2026-10-28T08:00:00+05:00"
+    },
+    "items": [
+      {
+        "productId": "P-0704",
+        "quantity": 24,
+        "length": 12
+      },
+      {
+        "productId": "P-0605",
+        "quantity": 30,
+        "length": 12
+      },
+      {
+        "productId": "P-0406",
+        "quantity": 6
+      }
+    ],
+    "delivery": "Екатеринбург, ЖК «Береговой», ул. Татищева, 49 — объект",
+    "totalWeightKg": 15485,
+    "totalRub": 1070610
+  },
+  {
+    "id": "З-2910-0341",
+    "createdAt": "2026-10-29T14:30:00+05:00",
+    "status": "paid",
+    "timeline": {
+      "paid": "2026-10-30T11:05:00+05:00"
+    },
+    "items": [
+      {
+        "productId": "P-0104",
+        "quantity": 120,
+        "length": 11.7
+      },
+      {
+        "productId": "P-0106",
+        "quantity": 80,
+        "length": 11.7
+      },
+      {
+        "productId": "P-1002",
+        "quantity": 40
+      }
+    ],
+    "delivery": "Екатеринбург, ЖК «Береговой», ул. Татищева, 49 — объект",
+    "totalWeightKg": 3673,
+    "totalRub": 241320
+  },
+  {
+    "id": "З-1410-0277",
+    "createdAt": "2026-10-14T09:00:00+05:00",
+    "status": "ready",
+    "timeline": {
+      "paid": "2026-10-14T16:20:00+05:00",
+      "production": "2026-10-15T08:00:00+05:00",
+      "ready": "2026-10-21T15:00:00+05:00"
+    },
+    "items": [
+      {
+        "productId": "P-0205",
+        "quantity": 60,
+        "length": 6
+      },
+      {
+        "productId": "P-0504",
+        "quantity": 40,
+        "length": 6
+      }
+    ],
+    "delivery": "Берёзовский, ул. Транспортников, 12 — склад",
+    "totalWeightKg": 4341,
+    "totalRub": 308840
+  },
+  {
+    "id": "З-0210-0231",
+    "createdAt": "2026-10-02T11:45:00+05:00",
+    "status": "shipped",
+    "timeline": {
+      "paid": "2026-10-02T15:00:00+05:00",
+      "production": "2026-10-03T08:00:00+05:00",
+      "ready": "2026-10-06T12:00:00+05:00",
+      "shipped": "2026-10-07T07:30:00+05:00"
+    },
+    "items": [
+      {
+        "productId": "P-0304",
+        "quantity": 36,
+        "length": 12
+      }
+    ],
+    "delivery": "Берёзовский, ул. Транспортников, 12 — склад",
+    "totalWeightKg": 4432,
+    "totalRub": 309350
+  }
+]
