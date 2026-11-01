@@ -1,41 +1,33 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { asset } from "@/lib/asset";
-import { GlobeMap } from "./GlobeMap";
+import { GlobeMap, type GlobeApi, type View } from "./GlobeMap";
 import { ShippingPanel } from "./ShippingPanel";
 import { GLOBE_VIEW, viewFor, type DeliveryZone, type GeoData } from "./globeData";
 import s from "./GeoSection.module.css";
 
-type View = { lon: number; lat: number };
-
 const WAREHOUSE = { lon: 60.6, lat: 56.84 };
-const FLY_MS = 700;
 const WIDE = "(min-width: 1025px)";
 
-/** Куда по ширине кадра ставить выбранный регион: правее панели на широком экране, по центру на узком. */
+/** Куда по ширине кадра ставить выбранный регион: чуть правее центра на широком экране (метка уходит вправо), по центру на узком. */
 function targetX() {
   const wide = typeof window !== "undefined" && window.matchMedia(WIDE).matches;
   return GLOBE_VIEW.width * (wide ? GLOBE_VIEW.targetXWide : 0.5);
 }
 
 /**
- * Карта отгрузок «Горизонт» (чат 5д): панель (поиск, зоны, список) + крутящийся шар.
+ * Карта отгрузок «Горизонт» (чаты 5д, 5е): над картой строка «поиск + зоны», карта на всю ширину контейнера.
  * До загрузки geo.json (~80 КБ, за 400 px до блока) стоит заглушка globe-static.webp того же вида.
  */
 export function ShippingMap({ zones }: { zones: DeliveryZone[] }) {
   const ref = useRef<HTMLDivElement>(null);
-  const fly = useRef(0);
+  const globe = useRef<GlobeApi | null>(null);
   const [data, setData] = useState<GeoData | null>(null);
-  const [view, setView] = useState<View>(() => viewFor(WAREHOUSE.lon, WAREHOUSE.lat, GLOBE_VIEW.width * GLOBE_VIEW.targetXWide));
-  const viewRef = useRef(view);
-  useEffect(() => {
-    viewRef.current = view;
-  }, [view]);
+  const [initialView, setInitialView] = useState<View | null>(null);
   const [selected, setSelected] = useState("Свердловская область");
   const [hovered, setHovered] = useState<string | null>(null);
   const [zone, setZone] = useState<number | null>(null);
-  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const el = ref.current;
@@ -49,8 +41,8 @@ export function ShippingMap({ zones }: { zones: DeliveryZone[] }) {
           .then((r) => (r.ok ? r.json() : null))
           .then((json: GeoData | null) => {
             if (cancelled || !json) return;
+            setInitialView(viewFor(WAREHOUSE.lon, WAREHOUSE.lat, targetX()));
             setData(json);
-            setView(viewFor(WAREHOUSE.lon, WAREHOUSE.lat, targetX())); // на узком экране склад — по центру
           })
           .catch(() => {}); // нет данных — остаётся картинка того же вида
       },
@@ -60,59 +52,34 @@ export function ShippingMap({ zones }: { zones: DeliveryZone[] }) {
     return () => {
       cancelled = true;
       io.disconnect();
-      cancelAnimationFrame(fly.current);
     };
-  }, []);
-
-  /** Плавный поворот к региону (при reduced-motion — сразу). */
-  const flyTo = useCallback((to: View) => {
-    cancelAnimationFrame(fly.current);
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setView(to);
-      return;
-    }
-    const from = viewRef.current;
-    const dLon = ((to.lon - from.lon + 540) % 360) - 180; // короткой дорогой
-    const start = performance.now();
-    const step = (now: number) => {
-      const t = Math.min(1, (now - start) / FLY_MS);
-      const e = 1 - Math.pow(1 - t, 3);
-      setView({ lon: from.lon + dLon * e, lat: from.lat + (to.lat - from.lat) * e });
-      if (t < 1) fly.current = requestAnimationFrame(step);
-    };
-    fly.current = requestAnimationFrame(step);
   }, []);
 
   const pick = (name: string) => {
     const region = data?.regions.find((r) => r.name === name);
     if (!region) return;
     setSelected(name);
-    flyTo(viewFor(region.lon, region.lat, targetX()));
-  };
-  const pickFromMap = (name: string) => {
-    setSelected(name);
-    setHovered(null);
+    setZone(null); // иначе найденный регион может оказаться приглушённым
+    globe.current?.flyTo(viewFor(region.lon, region.lat, targetX()));
   };
 
-  const shownName = hovered ?? selected;
-  const shown = data?.regions.find((r) => r.name === shownName);
+  const shown = data?.regions.find((r) => r.name === (hovered ?? selected));
+  const chosen = data?.regions.find((r) => r.name === selected);
+  const chosenZone = zones.find((z) => z.zone === chosen?.zone);
 
   return (
     <div ref={ref} className={s.stage}>
-      <ShippingPanel
-        zones={zones}
-        regions={data?.regions ?? null}
-        shown={shown}
-        selected={selected}
-        zone={zone}
-        query={query}
-        onZone={(z) => {
-          setZone(z);
-          setQuery("");
-        }}
-        onQuery={setQuery}
-        onPick={pick}
-      />
+      <ShippingPanel zones={zones} regions={data?.regions ?? null} zone={zone} onZone={setZone} onPick={pick} />
+
+      {/* На узком экране метка скрыта — срок выбранного региона строкой под поиском */}
+      <p className={s.result} role="status">
+        {chosen && (
+          <>
+            <b>{chosen.name}</b> — {chosenZone ? `${chosenZone.term}, ${chosenZone.method}` : "по запросу, ТК или ж/д"}
+          </>
+        )}
+      </p>
+
       <div className={s.mapBox}>
         {/* eslint-disable-next-line @next/next/no-img-element -- статичный экспорт, картинка уже оптимизирована */}
         <img
@@ -125,17 +92,19 @@ export function ShippingMap({ zones }: { zones: DeliveryZone[] }) {
           className={s.still}
           data-hidden={data ? "" : undefined}
         />
-        {data && (
+        {data && initialView && (
           <GlobeMap
             data={data}
             zones={zones}
-            view={view}
-            onViewChange={setView}
-            onDragStart={() => cancelAnimationFrame(fly.current)}
+            initialView={initialView}
+            apiRef={globe}
             shown={shown}
-            zone={query ? null : zone}
+            zone={zone}
             onHover={setHovered}
-            onPick={pickFromMap}
+            onPick={(name) => {
+              setSelected(name);
+              setHovered(null);
+            }}
           />
         )}
       </div>

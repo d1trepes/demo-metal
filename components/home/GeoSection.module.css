@@ -1,17 +1,17 @@
 /*
  * География отгрузок (чат 5д): заголовок по типовой раскладке, ниже карта «Горизонт» на всю ширину контейнера —
- * верх шара, который можно поворачивать; слева поверх карты панель (карточка региона, поиск, зоны, список).
+ * верх шара, который можно поворачивать; над картой строка «поиск + зоны» (чат 5е).
  * Цифры полосой на всю ширину. DESIGN.md → «Глобус и цифры».
  */
 
-/* ---------- Сцена: карта + панель ---------- */
+/* ---------- Сцена: строка «поиск + зоны» над картой, карта на всю ширину ---------- */
 .stage {
-  position: relative;
-  aspect-ratio: 1300 / 700;
+  display: grid;
 }
 .mapBox {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  aspect-ratio: 1300 / 700;
+  margin-top: var(--space-5);
   overflow: hidden;
 }
 .still {
@@ -27,59 +27,30 @@
   opacity: 0;
 }
 
-/* Панель = 4 колонки сетки, поверх левой части шара */
-.panel {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: calc((100% - 11 * var(--grid-gap)) / 12 * 4 + 3 * var(--grid-gap));
-  display: flex;
-  flex-direction: column;
-  background: var(--color-bg);
-  border: var(--border-1) solid var(--color-line);
-  border-radius: var(--radius-1);
+/* Строка над картой: поиск — колонки 1–4, зоны — сразу за ним */
+.controls {
+  position: relative;
+  z-index: 3;
+  align-items: start;
 }
-.card {
-  padding: var(--space-5);
-  border-bottom: var(--border-1) solid var(--color-line);
+.searchBox {
+  position: relative;
+  grid-column: 1 / span 4;
 }
-.cardLabel {
-  margin: 0 0 var(--space-2);
-  color: var(--color-text-muted);
-}
-.cardName {
-  margin: 0;
-  font-family: var(--font-cond);
-  font-weight: var(--fw-heading);
-  font-size: var(--fs-h3);
-  line-height: var(--lh-tight);
-  text-transform: uppercase;
-}
-.cardTerm {
-  margin: var(--space-2) 0 0;
-  font-size: var(--fs-small);
-  color: var(--color-text-muted);
-}
-.cardTerm b {
-  color: var(--color-text);
-}
-
 .search {
   display: flex;
   align-items: center;
   gap: var(--space-2);
   height: var(--control-h);
-  margin: var(--space-4) var(--space-5) 0;
   padding-inline: var(--space-3);
-  border: var(--border-1) solid var(--color-line);
+  background: var(--color-bg);
+  border: var(--border-1) solid var(--color-line-strong);
   border-radius: var(--radius-1);
   color: var(--color-text-muted);
   transition: border-color var(--dur-fast) var(--ease-out);
 }
 .search:focus-within {
-  border-color: var(--color-line-strong);
+  border-color: var(--color-text);
 }
 .search input {
   flex: 1;
@@ -96,22 +67,75 @@
   color: var(--color-text-faint);
 }
 
+/* Выпадающий список совпадений — поверх карты */
+.options {
+  position: absolute;
+  top: calc(100% - var(--border-1));
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--color-bg);
+  border: var(--border-1) solid var(--color-line-strong);
+  border-radius: 0 0 var(--radius-1) var(--radius-1);
+}
+.options[hidden] {
+  display: none;
+}
+.option,
+.optionEmpty {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  font-size: var(--fs-small);
+  line-height: var(--lh-tight);
+}
+.option {
+  cursor: pointer;
+}
+.option + .option {
+  border-top: var(--border-1) solid var(--color-line);
+}
+.option[aria-selected="true"] {
+  background: var(--color-surface);
+}
+.option b {
+  flex: none;
+  font-weight: var(--fw-heading);
+}
+.option .swatch {
+  align-self: center;
+}
+.optionMeta {
+  min-width: 0;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.optionEmpty {
+  color: var(--color-text-muted);
+}
+
 .zoneTabs {
+  grid-column: 5 / span 4;
+  justify-self: start;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin: var(--space-3) var(--space-5) 0;
+  grid-template-columns: repeat(3, auto);
   border: var(--border-1) solid var(--color-line);
   border-radius: var(--radius-1);
+  background: var(--color-bg);
 }
 .zoneTab {
   display: flex;
   gap: var(--space-2);
-  min-height: var(--control-h);
+  height: var(--control-h);
   align-items: center;
-  padding: var(--space-2) var(--space-3);
+  padding: 0 var(--space-4);
   border: 0;
   background: none;
-  text-align: left;
   font: inherit;
   color: var(--color-text);
   cursor: pointer;
@@ -153,52 +177,16 @@
   background: var(--geo-zone-3);
 }
 
-.list {
-  flex: 1;
-  min-height: 0;
+/* Срок выбранного региона строкой — только на узком экране, где метка на карте скрыта */
+.result {
+  display: none;
   margin: var(--space-3) 0 0;
-  padding: 0 var(--space-5) var(--space-3);
-  list-style: none;
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  font-size: var(--fs-small);
+  color: var(--color-text-muted);
 }
-.row {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
-  width: 100%;
-  padding: var(--space-3) 0;
-  border: 0;
-  border-bottom: var(--border-1) solid var(--color-line);
-  background: none;
-  text-align: left;
-  font: inherit;
+.result b {
   color: var(--color-text);
-  cursor: pointer;
-}
-.row .swatch {
-  transform: translateY(1px);
-}
-.rowName {
-  display: grid;
-  gap: var(--space-1);
-  font-size: var(--fs-small);
-  line-height: var(--lh-tight);
-}
-.rowName span {
-  color: var(--color-text-muted);
-}
-.row:hover .rowName,
-.row[aria-current] .rowName {
   font-weight: var(--fw-heading);
-}
-.row[aria-current] {
-  border-bottom-color: var(--color-line-strong);
-}
-.empty {
-  padding: var(--space-3) 0;
-  font-size: var(--fs-small);
-  color: var(--color-text-muted);
 }
 
 /* ---------- Шар ---------- */
@@ -223,13 +211,19 @@
 .globe[data-dragging] .map {
   cursor: grabbing;
 }
+/* Плашка «Потяните, чтобы повернуть» */
 .hint {
   position: absolute;
-  right: 0;
-  bottom: var(--space-3);
+  right: var(--space-4);
+  bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   margin: 0;
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-2) var(--space-3);
   background: var(--color-bg);
+  border: var(--border-1) solid var(--color-line);
+  border-radius: var(--radius-1);
   color: var(--color-text-muted);
   pointer-events: none;
 }
@@ -256,6 +250,15 @@
 }
 .globe[data-dragging] .region {
   cursor: grabbing;
+  transition: none;
+}
+/* Дуги и точки: во время перетаскивания скрыты, после — плавно возвращаются на новом месте */
+.marks {
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.globe[data-dragging] .marks {
+  opacity: 0;
+  transition: none;
 }
 .zone0 {
   fill: var(--geo-zone-0);
@@ -318,6 +321,8 @@
 .tip {
   position: absolute;
   z-index: 1;
+  top: 0;
+  left: 0;
   width: 0;
   height: 0;
   pointer-events: none;
@@ -403,23 +408,15 @@
 }
 
 
-/* ---------- ≤ 1024 px: панель над картой, карта выше по пропорции ---------- */
+/* ---------- ≤ 1024 px: поиск шире, карта выше по пропорции ---------- */
 @media (max-width: 1024px) {
-  .stage {
-    aspect-ratio: auto;
-    display: grid;
-    gap: var(--space-4);
+  .searchBox {
+    grid-column: 1 / span 4;
   }
-  .panel {
-    position: static;
-    width: auto;
-  }
-  .list {
-    max-height: 264px;
+  .zoneTabs {
+    grid-column: 5 / -1;
   }
   .mapBox {
-    position: relative;
-    inset: auto;
     aspect-ratio: 4 / 3;
   }
   .stats {
@@ -427,28 +424,32 @@
   }
 }
 
+/* ---------- ≤ 640 px: поиск на всю ширину, зоны строкой под ним, карта 4 : 5, срок строкой вместо метки ---------- */
 @media (max-width: 640px) {
-  .mapBox {
-    aspect-ratio: 4 / 5;
+  .searchBox,
+  .zoneTabs {
+    grid-column: 1 / -1;
   }
-  .card,
-  .search,
-  .zoneTabs,
-  .list {
-    margin-inline: var(--space-4);
-  }
-  .card {
-    margin: 0;
-    padding: var(--space-4);
-  }
-  .list {
-    margin-inline: 0;
-    padding-inline: var(--space-4);
+  .zoneTabs {
+    justify-self: stretch;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: var(--space-3);
   }
   .zoneTab {
+    justify-content: center;
     padding-inline: var(--space-2);
   }
   .zoneTab b {
     font-size: var(--fs-small);
+  }
+  .result {
+    display: block;
+  }
+  .tip {
+    display: none;
+  }
+  .mapBox {
+    aspect-ratio: 4 / 5;
+    margin-top: var(--space-4);
   }
 }

@@ -96,7 +96,7 @@ export function ConstructionPanels({ items: constructionTypes }: { items: Constr
                 <span className={s.mobileNumber} aria-hidden="true">
                   {item.number}
                 </span>
-                <span className={s.title}>{item.title}</span>
+                <PanelTitle text={item.title} />
                 <ChevronDown className={s.chevron} aria-hidden="true" />
               </button>
             </h3>
@@ -127,5 +127,19 @@ export function ConstructionPanels({ items: constructionTypes }: { items: Constr
         );
       })}
     </ul>
+  );
+}
+
+/**
+ * Заголовок панели: перенос фиксирован — первое слово, остальное второй строкой (чат 5е).
+ * Так строка не перестраивается 2 → 1 при раскрытии панели. На мобилке строки идут подряд.
+ */
+function PanelTitle({ text }: { text: string }) {
+  const [first, ...rest] = text.split(" ");
+  return (
+    <span className={s.title}>
+      <span className={s.titleLine}>{first}</span>
+      {rest.length > 0 && <span className={s.titleLine}> {rest.join(" ")}</span>}
+    </span>
   );
 }

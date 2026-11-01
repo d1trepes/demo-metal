@@ -23,7 +23,7 @@
   background: var(--color-bg);
   color: var(--color-text);
   cursor: pointer;
-  /* Анимируем только flex-grow и цвет: --dur-panel (560 мс) по мягкой кривой --ease-panel */
+  /* Анимируем только flex-grow и цвет: --dur-panel (700 мс) по мягкой кривой --ease-panel */
   transition:
     flex-grow var(--dur-panel) var(--ease-panel),
     background-color var(--dur-fast) var(--ease-out),
@@ -126,7 +126,11 @@
   font-size: var(--fs-lead);
   line-height: var(--lh-tight);
   text-transform: uppercase;
-  text-wrap: balance;
+}
+/* Каждое слово-строка без переноса: число строк одинаково в закрытой и открытой панели */
+.titleLine {
+  display: block;
+  white-space: nowrap;
 }
 .active .title {
   font-size: var(--fs-h3);
@@ -217,6 +221,10 @@
 
 /* ---------- ≤ 1024 px: список с раскрытием по нажатию ---------- */
 @media (max-width: 1024px) {
+  .titleLine {
+    display: inline;
+    white-space: normal;
+  }
   .panels {
     display: grid;
     height: auto;
