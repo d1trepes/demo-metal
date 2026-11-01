@@ -28,7 +28,7 @@
 - Главная готова (hero, каталог, фура, панели, карта отгрузок, видео склада, портфолио Б, форма). Деплой: https://d1trepes.github.io/demo-metal/
 - Каталог и карточки готовы: `/catalog/`, `/catalog/<slug>/`, 70 карточек `/product/<slug>/` с калькулятором. Все функции API — в `lib/api.ts` и `docs/HANDOFF.md`, сторы — `lib/stores/`.
 - Картинки брифа «чаты 6–9» обработаны: `public/ends/`, `public/equipment/`, `public/pages/` (исходники — `docs/assets-src/`).
-- Следующий чат — **7** (паспорт §11): Список для КП (`/kp/`, стор уже есть, реквизиты через `lookupCompanyByInn`) + Металлоконструкции (`/constructions/`, `uploadDrawing`, картинки `pages/frame`, `kmd`, `pack`, `equipment/*`).
+- Следующий чат — **6б** (правки по ревью, список в `docs/NEXT.md`), потом **7** (паспорт §11): Список для КП (`/kp/`, стор уже есть, реквизиты через `lookupCompanyByInn`) + Металлоконструкции (`/constructions/`, `uploadDrawing`, картинки `pages/frame`, `kmd`, `pack`, `equipment/*`).
 - Старый журнал — `docs/archive/PROGRESS-log.md` (не читать без нужды).
 
 ## Открытые проблемы
