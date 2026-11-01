@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { fontFaceCss, fontPreloads } from "@/lib/fonts";
 import "@/styles/globals.css";
-import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: {
@@ -32,7 +31,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           К содержанию
         </a>
         {children}
-        <Footer />
       </body>
     </html>
   );

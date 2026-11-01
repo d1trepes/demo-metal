@@ -28,7 +28,7 @@
   gap: var(--space-2);
   align-content: start;
   padding-block: var(--space-4) var(--space-5);
-  border-top: var(--border-1) solid var(--color-line-strong);
+  border-top: var(--border-1) solid var(--color-line);
 }
 .statValue {
   margin: 0;
@@ -57,27 +57,37 @@
 }
 
 /* ---------- Площадка ---------- */
+/* Две половины одинаковые (8б): строки «заголовок / текст / таблица» общие через subgrid —
+   таблицы начинаются на одной высоте при любой длине текста. */
 .parts {
   row-gap: var(--space-7);
+  grid-template-rows: auto auto auto;
 }
 .part {
   grid-column: span 6;
+  grid-row: span 3;
   display: grid;
+  grid-template-rows: subgrid;
+  row-gap: var(--space-4);
   align-content: start;
-  gap: var(--space-4);
-  max-width: 62ch;
+}
+.part p {
+  max-width: 52ch;
 }
 
 /* общая таблица «подпись — значение» по линиям */
 .specs {
   display: grid;
   margin: 0;
-  border-top: var(--border-1) solid var(--color-line-strong);
+  border-top: var(--border-1) solid var(--color-line);
 }
+/* Таблицы страницы (8б): все линии одного цвета и толщины, строки одной высоты. */
 .specs div {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: var(--space-4);
+  min-height: var(--row-h);
   padding-block: var(--space-2);
   border-bottom: var(--border-1) solid var(--color-line);
   font-size: var(--fs-small);
@@ -133,7 +143,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: var(--border-1) solid var(--color-line-strong);
+  border-top: var(--border-1) solid var(--color-line);
 }
 .doc,
 .person {
@@ -198,6 +208,8 @@
   }
   .part {
     grid-column: 1 / -1;
+    grid-row: auto;
+    grid-template-rows: none;
   }
   .machine {
     grid-column: span 4;

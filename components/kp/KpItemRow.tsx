@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Minus, Plus, X } from "lucide-react";
+import { ChevronDown, Minus, Plus, X } from "lucide-react";
 import { asset, srcSet } from "@/lib/asset";
 import { calcItem, defaultLength, isCoil, pieceForms, stockLengths } from "@/lib/calc";
 import { formatNumber, formatPrice, formatWeight, plural } from "@/lib/format";
@@ -48,18 +48,21 @@ export function KpItemRow({ item, product }: { item: KpItem; product: Product })
         {lengths.length > 0 ? (
           <label className={s.param}>
             <span>Длина</span>
-            <select
-              className={s.select}
-              value={custom ? "custom" : String(length)}
-              onChange={(e) => e.target.value !== "custom" && update(product.id, { length: Number(e.target.value) })}
-            >
-              {lengths.map((l) => (
-                <option key={l} value={l}>
-                  {formatNumber(l)} м
-                </option>
-              ))}
-              {custom && <option value="custom">{formatNumber(length)} м, резка</option>}
-            </select>
+            <span className={s.selectWrap}>
+              <select
+                className={s.select}
+                value={custom ? "custom" : String(length)}
+                onChange={(e) => e.target.value !== "custom" && update(product.id, { length: Number(e.target.value) })}
+              >
+                {lengths.map((l) => (
+                  <option key={l} value={l}>
+                    {formatNumber(l)} м
+                  </option>
+                ))}
+                {custom && <option value="custom">{formatNumber(length)} м, резка</option>}
+              </select>
+              <ChevronDown className={s.chevron} aria-hidden="true" />
+            </span>
           </label>
         ) : (
           <p className={s.param}>

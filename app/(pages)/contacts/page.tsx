@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CopyRequisites } from "@/components/contacts/CopyRequisites";
-import { RouteScheme } from "@/components/contacts/RouteScheme";
+import { YandexMap } from "@/components/contacts/YandexMap";
 import { QuoteForm } from "@/components/home/QuoteForm";
 import { Col, Container, Grid } from "@/components/layout/Grid";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -12,7 +12,7 @@ import s from "@/components/contacts/Contacts.module.css";
 
 export const metadata: Metadata = {
   title: "Контакты",
-  description: "Отдел продаж, склад и цех в Екатеринбурге: телефон, почта, схема проезда для фур, часы работы и реквизиты.",
+  description: "Отдел продаж, склад и цех в Екатеринбурге: телефон, почта, карта проезда для фур, часы работы и реквизиты.",
 };
 
 const requisites = [
@@ -35,7 +35,7 @@ const drivers = [
   { label: "Погрузка", value: "Пн–Сб до 17:00, краном за 40 минут" },
 ];
 
-/** Контакты (паспорт §4): крупные контакты, схема проезда, водителям, реквизиты, форма. */
+/** Контакты (паспорт §4): крупные контакты, карта проезда, водителям, реквизиты, форма. */
 export default function ContactsPage() {
   const requisitesText = [company.legalName, ...requisites.map((r) => `${r.label}: ${r.value}`)].join("\n");
 
@@ -88,8 +88,8 @@ export default function ContactsPage() {
               <dd className={s.contactAddress}>{typo(company.address)}</dd>
             </div>
           </dl>
-          <div className={s.schemeCol}>
-            <RouteScheme />
+          <div className={s.mapCol}>
+            <YandexMap caption={typo("С ЕКАД — съезд на Сибирский тракт в сторону центра, через 1,2 км направо на ул. Монтажников. Вторые ворота — для грузовых.")} />
           </div>
         </Grid>
       </Container>
@@ -101,7 +101,6 @@ export default function ContactsPage() {
               <h2 id="drive-title" className="t-h3">
                 Водителям
               </h2>
-              <p>{typo("С ЕКАД — съезд на Сибирский тракт в сторону центра, через 1,2 км направо на ул. Монтажников. Вторые ворота — для грузовых.")}</p>
               <dl className={s.specs}>
                 {drivers.map((d) => (
                   <div key={d.label}>
@@ -131,7 +130,7 @@ export default function ContactsPage() {
         </Container>
       </section>
 
-      <section id="write" className="section band surface" aria-labelledby="write-title">
+      <section id="write" className="section band" aria-labelledby="write-title">
         <Container>
           <Grid className={s.sectionHead}>
             <Col area="head">
@@ -147,7 +146,7 @@ export default function ContactsPage() {
             <Col area="form">
               <QuoteForm />
             </Col>
-            <Col area="formAside" className={s.formAside}>
+            <Col area="aside" className={s.formAside}>
               <p>
                 {typo("Нужен прокат по списку — удобнее собрать")}{" "}
                 <Link className="link" href="/kp/">

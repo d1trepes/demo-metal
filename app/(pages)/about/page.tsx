@@ -80,9 +80,6 @@ export default function AboutPage() {
                 Что на&nbsp;площадке
               </h2>
             </Col>
-            <Col area="aside">
-              <p className="t-muted">{typo(`${company.address}. Склад и цех — за одним забором: конструкции делаем из металла, который лежит в 200 метрах.`)}</p>
-            </Col>
           </Grid>
           <Grid className={s.parts}>
             {parts.map((p) => (

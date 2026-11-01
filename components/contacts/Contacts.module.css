@@ -1,6 +1,6 @@
 /*
- * Контакты (чат 8). Шапка как у каталога; ниже крупные контакты (1–5) и схема проезда (6–12);
- * «Водителям» и «Реквизиты» — две половины с таблицами по линиям; форма на серой полосе 1–6 + 8–12.
+ * Контакты (чат 8, 8б). Шапка как у каталога; ниже крупные контакты (1–5) и Яндекс.Карта (6–12);
+ * «Водителям» и «Реквизиты» — половины 1–6 / 7–12; форма на белой полосе 1–6 + 9–12, как на главной.
  */
 .top {
   padding-top: var(--space-6);
@@ -27,9 +27,6 @@
   padding-block: var(--space-4) var(--space-5);
   border-top: var(--border-1) solid var(--color-line);
 }
-.contact:first-child {
-  border-top-color: var(--color-line-strong);
-}
 .contact dd {
   margin: 0;
 }
@@ -50,121 +47,67 @@ a.contactBig:hover {
   font-size: var(--fs-lead);
   line-height: var(--lh-tight);
 }
-.schemeCol {
+.mapCol {
   grid-column: 6 / span 7;
   min-width: 0;
 }
 
-/* ---------- Схема проезда (SVG) ---------- */
-.scheme {
+/* ---------- Яндекс.Карта (8б) ---------- */
+.map {
   margin: 0;
   display: grid;
   gap: var(--space-3);
   font-size: var(--fs-small);
 }
-.schemeSvg {
-  display: block;
-  width: 100%;
-  height: auto;
+.mapFrame {
+  position: relative;
+  aspect-ratio: 4 / 3;
   background: var(--color-surface);
-  font-family: var(--font-cond);
 }
-.schemeBlock rect {
-  fill: var(--color-surface-2);
+.mapIframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: grayscale(1);
 }
-.schemeRoadMajor,
-.schemeRoad,
-.schemeRoadMinor {
-  fill: none;
-  stroke: var(--color-bg);
-  stroke-linecap: square;
+.mapCaption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-4);
 }
-.schemeRoadMajor {
-  stroke-width: 22;
+.mapCaption span:first-child {
+  max-width: 60ch;
 }
-.schemeRoad {
-  stroke-width: 14;
-}
-.schemeRoadMinor {
-  stroke-width: 8;
-}
-.schemeRail {
-  fill: none;
-  stroke: var(--color-text-faint);
-  stroke-width: 2;
-}
-.schemeRailTies {
-  fill: none;
-  stroke: var(--color-text-faint);
-  stroke-width: 8;
-  stroke-dasharray: 2 10;
-}
-.schemeSite {
-  fill: var(--color-bg);
-  stroke: var(--color-text);
-  stroke-width: 2;
-}
-.schemeHall {
-  fill: var(--color-ink-900);
-}
-.schemeSiteText {
-  font-family: var(--font-display);
-  font-weight: var(--fw-display);
-  font-size: 34px;
-  letter-spacing: 0.02em;
-  fill: var(--color-text);
-}
-.schemeRoute {
-  fill: none;
-  stroke: var(--color-text);
-  stroke-width: 4;
-  stroke-dasharray: 10 8;
-}
-.schemeGate circle {
-  fill: var(--color-bg);
-  stroke: var(--color-text);
-  stroke-width: 3;
-}
-.schemeLabel,
-.schemeLabelStrong,
-.schemeLabelInverse,
-.schemeNorth text {
-  font-size: 17px;
-  font-weight: var(--fw-label);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  fill: var(--color-text-muted);
-}
-.schemeLabelStrong {
-  fill: var(--color-text);
-}
-.schemeLabelInverse {
-  fill: var(--color-on-ink);
-}
-.schemeNorth path {
-  fill: var(--color-text);
+.mapCaption span:last-child {
+  flex: none;
 }
 
 /* ---------- Водителям / Реквизиты ---------- */
 .split {
-  row-gap: var(--space-8);
+  row-gap: var(--space-9);
 }
 .splitCol {
   grid-column: span 6;
   display: grid;
   align-content: start;
-  gap: var(--space-4);
+  gap: var(--space-5);
   min-width: 0;
 }
+/* Таблицы (8б): все линии одного цвета и толщины, строки одной высоты — как на /about. */
 .specs {
   display: grid;
   margin: 0;
-  border-top: var(--border-1) solid var(--color-line-strong);
+  border-top: var(--border-1) solid var(--color-line);
 }
 .specs div {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: var(--space-4);
+  min-height: var(--row-h);
   padding-block: var(--space-2);
   border-bottom: var(--border-1) solid var(--color-line);
   font-size: var(--fs-small);
@@ -192,7 +135,7 @@ a.contactBig:hover {
 
 @media (max-width: 1024px) {
   .contacts,
-  .schemeCol,
+  .mapCol,
   .splitCol {
     grid-column: 1 / -1;
   }
