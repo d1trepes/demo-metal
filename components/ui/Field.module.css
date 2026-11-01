@@ -34,6 +34,26 @@ textarea.input {
 .invalid .input {
   border-color: var(--color-danger);
 }
+/* Выпадающий список: своя стрелка вместо системной */
+.selectWrap {
+  position: relative;
+  display: grid;
+}
+.select {
+  appearance: none;
+  padding-right: calc(var(--space-4) * 2 + var(--icon-size));
+  color: var(--color-text);
+  cursor: pointer;
+}
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: var(--space-4);
+  width: var(--icon-size);
+  height: var(--icon-size);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
 .hint {
   font-size: var(--fs-small);
   color: var(--color-text-muted);

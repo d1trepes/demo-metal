@@ -78,82 +78,6 @@ a.contactBig:hover {
   grid-column: 1 / -1;
 }
 
-/* Зона файла внизу формы: низкая, в одну строку — скрепка · подпись · справа форматы (чат 5в) */
-.fileDrop {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  min-height: var(--space-8);
-  padding: var(--space-2) var(--space-4);
-  border: var(--border-1) dashed var(--color-text-muted);
-  border-radius: var(--radius-1);
-  cursor: pointer;
-  transition:
-    background-color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
-}
-.fileDrop:hover,
-.fileDrop.dragging {
-  background: var(--color-surface);
-  border-color: var(--color-text);
-}
-:global(#quote-file):focus-visible + .fileDrop {
-  outline: 2px solid var(--color-text);
-  outline-offset: 2px;
-}
-.fileDrop svg,
-.fileChosen svg {
-  width: var(--icon-size);
-  height: var(--icon-size);
-  flex: none;
-}
-.fileTitle {
-  font-weight: var(--fw-text-strong);
-}
-.fileTitle u {
-  text-underline-offset: 0.2em;
-  text-decoration-thickness: 1px;
-}
-.fileHint,
-.fileError {
-  margin-left: auto;
-  text-align: right;
-  font-size: var(--fs-small);
-  color: var(--color-text-muted);
-}
-.fileError {
-  color: var(--color-danger);
-}
-
-.fileChosen {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  min-height: var(--space-8);
-  padding: var(--space-2) var(--space-4);
-  border: var(--border-1) solid var(--color-text);
-  border-radius: var(--radius-1);
-  font-size: var(--fs-small);
-  font-weight: var(--fw-text-strong);
-}
-.fileName {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.fileRemove {
-  display: inline-flex;
-  margin-left: auto;
-  padding: var(--space-1);
-  border: 0;
-  background: none;
-  border-radius: var(--radius-1);
-}
-.fileRemove:hover {
-  background: var(--color-surface);
-}
-
 /* «Добавить реквизиты» — ссылка-действие, не кнопка */
 .submit {
   grid-column: 1 / -1;
@@ -187,14 +111,5 @@ a.contactBig:hover {
   }
   .form {
     grid-template-columns: 1fr;
-  }
-  .fileDrop {
-    flex-wrap: wrap;
-    row-gap: var(--space-1);
-  }
-  .fileHint,
-  .fileError {
-    margin-left: calc(var(--icon-size) + var(--space-3));
-    text-align: left;
   }
 }

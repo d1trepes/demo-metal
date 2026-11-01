@@ -25,3 +25,14 @@ export function plural(n: number, forms: [string, string, string]): string {
   if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return forms[1];
   return forms[2];
 }
+
+/** Срок звонка словами: «сегодня до 14:30», «завтра до 10:00», «в понедельник до 10:00». */
+export function callbackText(at: Date): string {
+  const NB = "\u00a0";
+  const time = at.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
+  const days = Math.round((new Date(at).setHours(0, 0, 0, 0) - new Date().setHours(0, 0, 0, 0)) / 86400000);
+  if (days === 0) return `сегодня до${NB}${time}`;
+  if (days === 1) return `завтра до${NB}${time}`;
+  const weekday = ["в воскресенье", "в понедельник", "во вторник", "в среду", "в четверг", "в пятницу", "в субботу"];
+  return `${weekday[at.getDay()]} до${NB}${time}`;
+}

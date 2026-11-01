@@ -137,8 +137,11 @@
 .similarHead {
   align-items: end;
 }
+/* Ссылка прижата к правому краю сетки — к краю последней плитки */
 .allLink {
   padding-bottom: var(--space-7);
+  justify-self: end;
+  text-align: right;
 }
 .similar {
   display: grid;
@@ -170,6 +173,8 @@
   }
   .allLink {
     padding-bottom: var(--space-6);
+    justify-self: start;
+    text-align: left;
   }
 }
 @media (max-width: 640px) {

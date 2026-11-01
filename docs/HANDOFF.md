@@ -57,7 +57,7 @@
 ### Формы
 
 #### `uploadDrawing(request: DrawingRequest): Promise<QuoteRequestResult>`
-«Расчёт по чертежу» на `/constructions/`: `name`, `phone`, `email?`, `company?`, `description`, `file` (обязателен). Номер «Ч-ДДММ-NNNN». Отправлять `multipart/form-data`, файл — менеджеру и в админку.
+«Расчёт по чертежу» на `/constructions/`: `name`, `phone`, `email?`, `company?`, `description`, `file` (обязателен). Номер «Ч-ДДММ-NNNN». Отправлять `multipart/form-data`, файл — менеджеру и в админку. На сайте лимит файла 50 МБ (форма проверяет до отправки) — сервер должен принимать столько же или больше.
 
 ### Вход и кабинет (вёрстка — чат 8)
 

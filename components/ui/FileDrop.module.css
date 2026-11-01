@@ -1,0 +1,86 @@
+/* Поле файла в одну строку (чат 5в, вынесено в UI в чате 7) */
+.drop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--space-8);
+  padding: var(--space-2) var(--space-4);
+  border: var(--border-1) dashed var(--color-text-muted);
+  border-radius: var(--radius-1);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.drop:hover,
+.drop.dragging {
+  background: var(--color-surface);
+  border-color: var(--color-text);
+}
+.drop.invalid {
+  border-color: var(--color-danger);
+}
+.input:focus-visible + .drop {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+.drop svg,
+.chosen svg {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  flex: none;
+}
+.title {
+  font-weight: var(--fw-text-strong);
+}
+.hint,
+.error {
+  margin-left: auto;
+  text-align: right;
+  font-size: var(--fs-small);
+  color: var(--color-text-muted);
+}
+.error {
+  color: var(--color-danger);
+}
+
+.chosen {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--space-8);
+  padding: var(--space-2) var(--space-4);
+  border: var(--border-1) solid var(--color-text);
+  border-radius: var(--radius-1);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-text-strong);
+}
+.name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.remove {
+  display: inline-flex;
+  margin-left: auto;
+  padding: var(--space-1);
+  border: 0;
+  background: none;
+  border-radius: var(--radius-1);
+}
+.remove:hover {
+  background: var(--color-surface);
+}
+
+@media (max-width: 640px) {
+  .drop {
+    flex-wrap: wrap;
+    row-gap: var(--space-1);
+  }
+  .hint,
+  .error {
+    margin-left: calc(var(--icon-size) + var(--space-3));
+    text-align: left;
+  }
+}

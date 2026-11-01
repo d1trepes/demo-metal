@@ -1,0 +1,231 @@
+/*
+ * Металлоконструкции (чат 7). Шапка как у каталога + рендер каркаса во всю ширину сетки;
+ * «Что делаем» — первый тип крупно (1–6), остальные 2 × 2 (по 3 колонки); этапы — строками по линиям;
+ * форма «Расчёт по чертежу» — типовая раскладка 1–6 + 8–12 на серой полосе.
+ */
+.top {
+  padding-top: var(--space-6);
+}
+.cover {
+  background: var(--color-surface);
+}
+.cover img {
+  display: block;
+  width: 100%;
+  max-height: 640px;
+  height: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.sectionHead {
+  row-gap: var(--space-4);
+  align-items: end;
+  margin-bottom: var(--space-7);
+}
+
+/* ---------- Что делаем ---------- */
+.types {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  row-gap: var(--space-7);
+}
+.type {
+  grid-column: span 3;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--space-4);
+}
+.type:first-child {
+  grid-column: 1 / span 6;
+  grid-row: span 2;
+}
+.typeArt {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  padding: var(--space-4);
+  background: var(--color-surface);
+}
+.type:first-child .typeArt {
+  aspect-ratio: auto;
+  height: 100%;
+}
+.typeArt img {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  max-width: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+.typeBody {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+}
+.typeNum {
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-faint);
+}
+.specs {
+  display: grid;
+  margin: var(--space-3) 0 0;
+  border-top: var(--border-1) solid var(--color-line-strong);
+}
+.specs div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-2);
+  border-bottom: var(--border-1) solid var(--color-line);
+  font-size: var(--fs-small);
+}
+.specs dt {
+  color: var(--color-text-muted);
+}
+.specs dd {
+  margin: 0;
+  font-weight: var(--fw-text-strong);
+  text-align: right;
+}
+
+/* ---------- Этапы: номер · название · текст и срок · картинка ---------- */
+.stages {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--border-1) solid var(--color-line-strong);
+}
+.stage {
+  align-items: start;
+  padding-block: var(--space-5);
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+.stageNum {
+  grid-column: 1 / span 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-faint);
+}
+.stageTitle {
+  grid-column: 2 / span 3;
+}
+.stageText {
+  grid-column: 5 / span 4;
+  display: grid;
+  gap: var(--space-3);
+}
+.stageTerm {
+  font-size: var(--fs-small);
+  font-weight: var(--fw-text-strong);
+}
+.stageArt {
+  grid-column: 10 / span 3;
+  min-width: 0;
+  aspect-ratio: 4 / 3;
+  padding: var(--space-3);
+  background: var(--color-surface);
+}
+.stageArt img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+/* ---------- Форма ---------- */
+.formGrid {
+  row-gap: var(--space-7);
+  align-items: start;
+}
+.formAside {
+  display: grid;
+  gap: var(--space-5);
+  font-size: var(--fs-small);
+}
+.form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+.form input:not([type="checkbox"]):not([type="file"]) {
+  min-height: var(--control-h-md);
+  padding-block: var(--space-2);
+  background: var(--color-bg);
+}
+.form textarea {
+  min-height: 88px;
+  padding-block: var(--space-2);
+}
+.wide {
+  grid-column: 1 / -1;
+}
+.submit {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-5);
+  padding-top: var(--space-2);
+  font-size: var(--fs-small);
+}
+.done {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+  padding-top: var(--space-5);
+  border-top: var(--border-1) solid var(--color-line-strong);
+}
+
+@media (max-width: 1024px) {
+  .type,
+  .type:first-child {
+    grid-column: span 4;
+    grid-row: auto;
+  }
+  .type:first-child .typeArt {
+    aspect-ratio: 4 / 3;
+    height: auto;
+  }
+  .stageNum {
+    grid-column: 1 / span 1;
+  }
+  .stageTitle {
+    grid-column: 2 / span 3;
+  }
+  .stageText {
+    grid-column: 2 / span 4;
+    grid-row: 2;
+  }
+  .stageArt {
+    grid-column: 6 / span 3;
+    grid-row: 1 / span 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .type,
+  .type:first-child {
+    grid-column: 1 / -1;
+  }
+  .stageNum {
+    grid-column: 1 / -1;
+  }
+  .stageTitle,
+  .stageText,
+  .stageArt {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+  .stageArt {
+    max-width: 280px;
+  }
+  .form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

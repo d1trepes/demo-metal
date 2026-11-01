@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { useId, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from "react";
+import { ChevronDown } from "lucide-react";
+import { useId, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from "react";
 import { cx } from "@/lib/cx";
 import s from "./Field.module.css";
 
@@ -55,6 +56,28 @@ export function TextArea({ label, hint, error, className, id, ...rest }: FieldSh
         aria-describedby={error || hint ? `${fieldId}-msg` : undefined}
         {...rest}
       />
+    </Shell>
+  );
+}
+
+/** Выпадающий список (адрес доставки, длина хлыста). Нативный select — удобен на телефоне. */
+export function SelectField({ label, hint, error, className, id, children, ...rest }: FieldShell & SelectHTMLAttributes<HTMLSelectElement>) {
+  const autoId = useId();
+  const fieldId = id ?? autoId;
+  return (
+    <Shell id={fieldId} label={label} hint={hint} error={error} className={className}>
+      <span className={s.selectWrap}>
+        <select
+          id={fieldId}
+          className={cx(s.input, s.select)}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error || hint ? `${fieldId}-msg` : undefined}
+          {...rest}
+        >
+          {children}
+        </select>
+        <ChevronDown aria-hidden="true" className={s.chevron} />
+      </span>
     </Shell>
   );
 }
