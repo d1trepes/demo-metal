@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Col, Container, Grid } from "@/components/layout/Grid";
 import { cx } from "@/lib/cx";
+import { typo, typoAll } from "@/lib/typo";
+import { constructionTypes } from "./constructionTypes";
 import { ConstructionPanels } from "./ConstructionPanels";
 import { afterTruck } from "./TruckDivider";
 import tiles from "./CatalogTiles.module.css";
@@ -21,15 +23,16 @@ export function ConstructionsSection() {
           </Col>
           <Col area="aside" className={tiles.aside}>
             <p className="t-muted">
-              Свой цех 4 200 м², до 180 т в месяц. Считаем по чертежу за 2 рабочих дня, отгружаем вместе с прокатом
-              одной машиной.
+              {typo(
+                "Свой цех 4 200 м², до 180 т в месяц. Считаем по чертежу за 2 рабочих дня, отгружаем вместе с прокатом одной машиной.",
+              )}
             </p>
             <Link href="/constructions/" className={tiles.allLink}>
               Все конструкции
             </Link>
           </Col>
         </Grid>
-        <ConstructionPanels />
+        <ConstructionPanels items={typoAll(constructionTypes)} />
       </Container>
     </section>
   );

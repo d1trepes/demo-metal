@@ -5,19 +5,19 @@ import { useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { asset } from "@/lib/asset";
 import { cx } from "@/lib/cx";
-import { constructionTypes } from "./constructionTypes";
+import type { ConstructionType } from "./constructionTypes";
 import s from "./ConstructionPanels.module.css";
 
 const DESKTOP = "(min-width: 1025px)";
 const CAN_HOVER = "(min-width: 1025px) and (hover: hover)";
-const HOVER_DELAY = 80; // мс: короткий порог, чтобы панели не дёргались при быстром проходе курсора
+const HOVER_DELAY = 120; // мс: порог, чтобы панели не дёргались при пролёте курсора
 
 /**
  * Раскрывающиеся панели 01–05 (реф. docs/refs/05-accordion-panels.png).
  * Десктоп: одна активная — тёмная и широкая, остальные светлые с «рентгеном» рендера;
  * раскрытие по наведению, клику и фокусу. ≤ 1024 px — список, раскрытие по нажатию.
  */
-export function ConstructionPanels() {
+export function ConstructionPanels({ items: constructionTypes }: { items: ConstructionType[] }) {
   const [active, setActive] = useState<number | null>(0);
   const hoverTimer = useRef<number | undefined>(undefined);
 

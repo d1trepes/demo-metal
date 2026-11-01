@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { cx } from "@/lib/cx";
-import { heroSlides } from "./heroSlides";
+import type { HeroSlide } from "./heroSlides";
 import s from "./Hero.module.css";
 
-/** Текст hero с переключением «Металлопрокат / Металлоконструкции». */
-export function HeroContent() {
+/** Текст hero с переключением «Металлопрокат / Металлоконструкции». Тексты уже прошли типограф (Hero). */
+export function HeroContent({ slides: heroSlides }: { slides: HeroSlide[] }) {
   const [index, setIndex] = useState(0);
   const slide = heroSlides[index];
 

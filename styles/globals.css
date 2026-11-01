@@ -85,6 +85,23 @@ button {
 }
 
 /* ---------- Типографика ---------- */
+/* Переносы (чат 5б): заголовки — balance, текст — pretty (без «висячих» слов). Неразрывные пробелы — lib/typo.ts */
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+p,
+li,
+dd,
+dt,
+figcaption,
+blockquote,
+label {
+  text-wrap: pretty;
+}
+
 .t-display,
 .t-h1,
 .t-h2 {

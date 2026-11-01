@@ -4,16 +4,17 @@ import { Button } from "@/components/ui/Button";
 import { getCategories } from "@/lib/api";
 import { asset } from "@/lib/asset";
 import { formatPrice } from "@/lib/format";
+import { typo, typoAll } from "@/lib/typo";
 import type { Category } from "@/lib/types";
 import { RevealList } from "./RevealList";
 import s from "./CatalogTiles.module.css";
 
 /** Условия в тёмной плитке «Нет нужной позиции?»: метка — значение. */
-const ctaFacts = [
+const ctaFacts = typoAll([
   { label: "Ответ", value: "КП с ценами за 2 часа" },
   { label: "Формат", value: "XLS, PDF, фото от руки" },
   { label: "Замена", value: "аналог по ГОСТ и марке стали" },
-];
+]);
 
 /** Главная: сетка категорий проката (реф. 02) + плитка «нет позиции — пришлите спецификацию». */
 export async function CatalogTiles() {
@@ -31,7 +32,7 @@ export async function CatalogTiles() {
           </Col>
           <Col area="aside" className={s.aside}>
             <p className="t-muted">
-              1 860 позиций по ГОСТ и ТУ. Цены за тонну с НДС, обновляем каждый день в 10:00 по Екатеринбургу.
+              {typo("1 860 позиций по ГОСТ и ТУ. Цены за тонну с НДС, обновляем каждый день в 10:00 по Екатеринбургу.")}
             </p>
             <Link href="/catalog/" className={s.allLink}>
               Весь каталог
@@ -50,7 +51,7 @@ export async function CatalogTiles() {
               <div className={s.ctaMain}>
                 <div>
                   <h3 className="t-h3">Нет нужной позиции?</h3>
-                  <p className={s.ctaText}>Пришлите спецификацию — подберём замену по ГОСТ и марке стали.</p>
+                  <p className={s.ctaText}>{typo("Пришлите спецификацию — подберём замену по ГОСТ и марке стали.")}</p>
                 </div>
                 <dl className={s.ctaFacts}>
                   {ctaFacts.map((fact) => (
@@ -98,7 +99,7 @@ function CategoryTile({ category }: { category: Category }) {
       <div className={s.body}>
         <span className={s.rule} aria-hidden="true" />
         <h3 className={s.name}>{category.name}</h3>
-        <p className={s.caption}>{category.caption}</p>
+        <p className={s.caption}>{typo(category.caption)}</p>
         <p className={s.price}>от {formatPrice(category.priceFrom, category.unit)}</p>
       </div>
     </Link>

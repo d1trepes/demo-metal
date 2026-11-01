@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getCategories } from "@/lib/api";
 import { company, mainNav } from "@/lib/nav";
+import { typo } from "@/lib/typo";
 import { Container, Grid } from "./Grid";
 import { Logo } from "./Logo";
 import s from "./Footer.module.css";
@@ -15,8 +16,9 @@ export async function Footer() {
           <div className={s.brand}>
             <Logo />
             <p className={s.muted}>
-              Металлобаза и цех металлоконструкций в Екатеринбурге. Прокат со склада, резка в размер, изготовление
-              по КМ и КМД.
+              {typo(
+                "Металлобаза и цех металлоконструкций в Екатеринбурге. Прокат со склада, резка в размер, изготовление по КМ и КМД.",
+              )}
             </p>
           </div>
 
@@ -51,7 +53,7 @@ export async function Footer() {
               {company.phone}
             </a>
             <a href={`mailto:${company.email}`}>{company.email}</a>
-            <p className={s.muted}>{company.address}</p>
+            <p className={s.muted}>{typo(company.address)}</p>
             <p className={s.muted}>{company.hours}</p>
           </address>
         </Grid>

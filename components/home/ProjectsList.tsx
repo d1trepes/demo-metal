@@ -1,87 +1,111 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { asset } from "@/lib/asset";
 import { cx } from "@/lib/cx";
-import { projects, type Project } from "./projectsData";
+import type { Project } from "./projectsData";
 import s from "./ProjectsList.module.css";
 
-const tons = (n: number) => `${n.toLocaleString("ru-RU")} т`;
+const NB = " ";
+const tons = (n: number) => n.toLocaleString("ru-RU").replace(/\s/g, NB);
+const HOVER_DELAY = 120; // мс, как у панелей: строки не мигают при пролёте курсора
 
 /**
- * Список объектов слева, карточка выбранного справа (≥ 1025 px).
- * ≤ 1024 px карточка раскрывается под строкой. Выбор — наведением (как панели), кликом, фокусом.
+ * Портфолио, вариант Б (чат 5б): слева список объектов, справа липкое фото и отзыв выбранного.
+ * Выбор — наведением, фокусом, кликом. ≤ 1024 px липкой колонки нет: фото и отзыв раскрываются под строкой.
+ * Тексты приходят уже после типографа (ProjectsSection).
  */
-export function ProjectsList() {
-  const [active, setActive] = useState(projects[0].slug);
-  const current = projects.find((p) => p.slug === active) ?? projects[0];
+export function ProjectsList({ projects }: { projects: Project[] }) {
+  const [active, setActive] = useState(0);
+  const timer = useRef<number | undefined>(undefined);
+  const current = projects[active];
+
+  const select = (index: number, delay = 0) => {
+    window.clearTimeout(timer.current);
+    if (delay) timer.current = window.setTimeout(() => setActive(index), delay);
+    else setActive(index);
+  };
 
   return (
     <div className={s.layout}>
-      <ul className={s.list}>
-        {projects.map((p) => {
-          const isActive = p.slug === active;
+      <ul className={s.list} onMouseLeave={() => window.clearTimeout(timer.current)}>
+        {projects.map((p, index) => {
+          const isActive = index === active;
           return (
-            <li key={p.slug} className={cx(s.item, isActive && s.active)}>
+            <li
+              key={p.slug}
+              className={cx(s.item, isActive && s.active)}
+              onMouseEnter={() => {
+                if (window.matchMedia("(hover: hover) and (min-width: 1025px)").matches) select(index, HOVER_DELAY);
+              }}
+            >
               <button
                 type="button"
                 className={s.row}
                 aria-expanded={isActive}
                 aria-controls={`project-${p.slug}`}
-                onClick={() => setActive(p.slug)}
-                onFocus={() => setActive(p.slug)}
-                onPointerEnter={(e) => e.pointerType === "mouse" && setActive(p.slug)}
+                onClick={() => select(index)}
+                onFocus={() => select(index)}
               >
-                <span className={cx("t-label", s.year)}>
+                <span className={s.where}>
                   {p.year} · {p.city}
                 </span>
                 <span className={s.name}>{p.name}</span>
                 <span className={s.scope}>{p.scope}</span>
-                <span className={cx("t-nums", s.tons)}>{tons(p.tonnage)}</span>
+                <span className={s.tons}>
+                  {tons(p.tonnage)}
+                  <small>т</small>
+                </span>
               </button>
-              {/* Телефон и планшет: подробности под строкой */}
+
+              {/* ≤ 1024 px: фото и отзыв под строкой */}
               <div id={`project-${p.slug}`} className={s.inline} hidden={!isActive}>
-                <ProjectDetails project={p} />
+                <img
+                  className={s.inlinePhoto}
+                  src={asset(`/objects/${p.image}.webp`)}
+                  alt={p.name}
+                  width={1312}
+                  height={816}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <Review project={p} />
               </div>
             </li>
           );
         })}
       </ul>
 
-      <div className={s.panel} aria-live="polite">
-        <ProjectDetails key={current.slug} project={current} big />
+      {/* ≥ 1025 px: липкая колонка. Все фото лежат стопкой, меняется только opacity — без перезагрузки */}
+      <div className={s.aside} aria-live="polite">
+        <div className={s.photo}>
+          {projects.map((p, index) => (
+            <img
+              key={p.slug}
+              className={cx(index === active && s.shown)}
+              src={asset(`/objects/${p.image}.webp`)}
+              alt={index === active ? p.name : ""}
+              width={1312}
+              height={816}
+              loading="lazy"
+              decoding="async"
+            />
+          ))}
+        </div>
+        <Review key={current.slug} project={current} className={s.fade} />
       </div>
     </div>
   );
 }
 
-function ProjectDetails({ project, big }: { project: Project; big?: boolean }) {
+function Review({ project, className }: { project: Project; className?: string }) {
+  const { review } = project;
   return (
-    <article className={cx(s.details, big && s.detailsBig)}>
-      {big && (
-        <p className={cx("t-nums", s.bigTons)}>
-          {project.tonnage.toLocaleString("ru-RU")}
-          <span>т</span>
-        </p>
-      )}
-      <dl className={s.facts}>
-        {project.facts.map((f) => (
-          <div key={f.label} className={s.fact}>
-            <dt className={cx("t-label", s.factLabel)}>{f.label}</dt>
-            <dd>{f.value}</dd>
-          </div>
-        ))}
-      </dl>
-      <figure className={s.review}>
-        <blockquote className={s.quote}>
-          <p>«{project.review.text}»</p>
-        </blockquote>
-        <figcaption className={s.author}>
-          <strong>{project.review.author}</strong>
-          <span className="t-muted">
-            {project.review.role}, {project.review.company}
-          </span>
-        </figcaption>
-      </figure>
-    </article>
+    <figure className={cx(s.review, className)}>
+      <blockquote className={s.quote}>«{review.text}»</blockquote>
+      <figcaption className={s.who}>
+        <b>{review.author}</b>, {review.role}, {review.company}
+      </figcaption>
+    </figure>
   );
 }

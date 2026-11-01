@@ -1,6 +1,6 @@
 /*
- * Объекты и отзывы (чат 5). ≥ 1025 px: список в колонках 1–6, карточка выбранного объекта в 8–12, липкая.
- * Выбранная строка и карточка — белые на сером фоне секции. ≤ 1024 px: карточка раскрывается под строкой.
+ * Портфолио, вариант Б (чат 5б): список в колонках 1–6, липкие фото + отзыв в 8–12.
+ * Без карточек: строки разделены линиями, выбранная — чёрная и сдвинута на --space-4.
  */
 .layout {
   display: grid;
@@ -9,58 +9,56 @@
   align-items: start;
 }
 
+/* ---------- Список ---------- */
 .list {
   grid-column: 1 / span 6;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-bottom: var(--border-1) solid var(--color-line);
+  border-top: var(--border-1) solid var(--color-line-strong);
 }
 .item {
-  border-top: var(--border-1) solid var(--color-line);
-  transition: background-color var(--dur-base) var(--ease-out);
+  border-bottom: var(--border-1) solid var(--color-line);
 }
-.item.active {
-  background: var(--color-bg);
-  border-top-color: var(--color-line-strong);
-}
-
 .row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   column-gap: var(--space-5);
   row-gap: var(--space-1);
   width: 100%;
-  padding: var(--space-5);
+  padding: var(--space-5) 0;
   border: 0;
   background: none;
-  text-align: left;
   color: var(--color-text-muted);
-  cursor: pointer;
-  transition: color var(--dur-fast) var(--ease-out);
+  text-align: left;
+  transition:
+    color var(--dur-base) var(--ease-panel),
+    padding var(--dur-base) var(--ease-panel);
 }
-.row:hover,
 .active .row {
   color: var(--color-text);
+  padding-left: var(--space-4);
 }
 .row:focus-visible {
-  outline: 2px solid var(--color-text);
   outline-offset: -2px;
 }
-.year {
-  grid-column: 1;
+.where {
+  font-family: var(--font-cond);
+  font-weight: var(--fw-label);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
 }
 .name {
   grid-column: 1;
-  font-family: var(--font-cond);
-  font-weight: var(--fw-heading);
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
   font-size: var(--fs-h3);
-  line-height: var(--lh-tight);
+  line-height: var(--lh-heading);
   text-transform: uppercase;
+  text-wrap: balance;
 }
 .scope {
   grid-column: 1;
   font-size: var(--fs-small);
+  text-wrap: pretty;
 }
 .tons {
   grid-column: 2;
@@ -68,114 +66,105 @@
   align-self: center;
   font-family: var(--font-display);
   font-weight: var(--fw-display);
-  font-size: var(--fs-h3);
+  font-size: var(--fs-h2);
+  line-height: 1;
   white-space: nowrap;
 }
+.tons small {
+  margin-left: var(--space-1);
+  font-size: 0.45em;
+}
 
-/* ---------- Карточка объекта ---------- */
-.panel {
+/* ---------- Липкая колонка: фото + отзыв ---------- */
+.aside {
   grid-column: 8 / span 5;
   position: sticky;
   top: calc(var(--header-height) + var(--space-5));
-  background: var(--color-bg);
-}
-.inline {
-  display: none;
-}
-
-.details {
   display: grid;
-  gap: var(--space-6);
-  padding: var(--space-6);
-  animation: details-in var(--dur-base) var(--ease-out);
+  gap: var(--space-5);
 }
-@keyframes details-in {
-  from {
-    opacity: 0;
-    transform: translateY(var(--space-2));
-  }
+.photo {
+  position: relative;
+  aspect-ratio: 1312 / 816;
+  overflow: hidden;
+  background: var(--color-surface-2);
 }
-.bigTons {
-  font-family: var(--font-display);
-  font-weight: var(--fw-display);
-  font-size: var(--fs-stat);
-  line-height: var(--lh-display);
-  letter-spacing: var(--ls-display);
+.photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-panel);
 }
-.bigTons span {
-  margin-left: 0.12em;
-  font-size: 0.5em;
-}
-
-.facts {
-  display: grid;
-  margin: 0;
-}
-.fact {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  gap: var(--space-4);
-  padding-block: var(--space-3);
-  border-top: var(--border-1) solid var(--color-line);
-  font-size: var(--fs-small);
-}
-.fact dd {
-  margin: 0;
-}
-.factLabel {
-  color: var(--color-text-muted);
-  padding-top: 0.15em;
+.photo img.shown {
+  opacity: 1;
 }
 
 .review {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-3);
   margin: 0;
-  padding-top: var(--space-5);
-  border-top: var(--border-1) solid var(--color-line-strong);
 }
 .quote {
   margin: 0;
+  max-width: 40em;
   font-size: var(--fs-lead);
   line-height: var(--lh-tight);
 }
-.author {
-  display: grid;
-  gap: var(--space-1);
+.who {
   font-size: var(--fs-small);
+  color: var(--color-text-muted);
+}
+.who b {
+  color: var(--color-text);
+  font-weight: var(--fw-text-strong);
+}
+.fade {
+  animation: fadeIn var(--dur-base) var(--ease-out);
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
 }
 
+/* На десктопе под строкой ничего не раскрываем */
+.inline {
+  display: none;
+}
+
+/* ---------- ≤ 1024 px: без липкой колонки, фото и отзыв под строкой ---------- */
 @media (max-width: 1024px) {
   .list {
     grid-column: 1 / -1;
   }
-  .panel {
+  .aside {
     display: none;
   }
-  .inline:not([hidden]) {
-    display: block;
+  .active .row {
+    padding-left: 0;
   }
-  .details {
-    padding: 0 var(--space-5) var(--space-6);
+  .inline:not([hidden]) {
+    display: grid;
+    gap: var(--space-4);
+    padding-bottom: var(--space-5);
+  }
+  .inlinePhoto {
+    width: 100%;
+    height: auto;
   }
 }
 
 @media (max-width: 640px) {
-  .row {
-    padding: var(--space-4);
-    column-gap: var(--space-3);
-  }
-  .details {
-    padding: 0 var(--space-4) var(--space-5);
-  }
-  .fact {
-    grid-template-columns: 1fr;
-    gap: var(--space-1);
+  .tons {
+    font-size: var(--fs-h3);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .details {
+  .fade {
     animation: none;
   }
 }

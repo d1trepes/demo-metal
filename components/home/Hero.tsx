@@ -1,5 +1,7 @@
 import { Header } from "@/components/layout/Header";
+import { typoAll } from "@/lib/typo";
 import { HeroContent } from "./HeroContent";
+import { heroSlides } from "./heroSlides";
 import { HeroVideo } from "./HeroVideo";
 import s from "./Hero.module.css";
 
@@ -13,7 +15,7 @@ export function Hero() {
       <HeroVideo />
       <div className={s.panel}>
         <Header variant="glass" />
-        <HeroContent />
+        <HeroContent slides={typoAll(heroSlides)} />
       </div>
     </section>
   );
