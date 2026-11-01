@@ -84,6 +84,16 @@ export type Product = {
   imageEnd: string;
 };
 
+/** Подсказки поиска в шапке (getSearchSuggestions). */
+export type SearchSuggestions = {
+  /** Категории, где есть совпадения: count — сколько подходящих позиций в категории. */
+  categories: { slug: string; name: string; count: number }[];
+  /** Первые подходящие позиции (до limit). */
+  products: Product[];
+  /** Всего подходящих позиций — для строки «Все результаты». */
+  total: number;
+};
+
 /** Фильтры каталога. Пустое значение — фильтр не задан. */
 export type ProductFilter = {
   category?: string;

@@ -103,7 +103,7 @@
 }
 .input {
   min-height: var(--control-h);
-  padding: 0 var(--space-3);
+  padding: var(--field-shift) var(--space-3) 0;
   border: var(--border-1) solid var(--color-line);
   border-radius: var(--radius-1);
   background: var(--color-bg);
@@ -149,8 +149,7 @@
 .stepper button:hover {
   background: var(--color-surface-2);
 }
-.stepper svg,
-.added svg {
+.stepper svg {
   width: var(--icon-size);
   height: var(--icon-size);
 }
@@ -194,17 +193,11 @@
   color: var(--color-text-muted);
 }
 .actions {
-  display: grid;
-}
-.added {
   display: flex;
-  align-items: center;
   gap: var(--space-2);
-  font-size: var(--fs-small);
 }
-.added svg {
-  flex: none;
-  color: var(--color-success);
+.add {
+  flex: 1 1 auto;
 }
 
 @media (max-width: 640px) {

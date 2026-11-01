@@ -12,7 +12,7 @@ import userData from "@/data/user.json";
 import ordersData from "@/data/orders.json";
 import kpRequestsData from "@/data/kp-requests.json";
 import documentsData from "@/data/documents.json";
-import { filterProducts, similarProducts } from "./catalog";
+import { filterProducts, searchSuggestions, similarProducts } from "./catalog";
 import type {
   Category,
   CompanyLookup,
@@ -26,6 +26,7 @@ import type {
   ProductFilter,
   QuoteRequest,
   QuoteRequestResult,
+  SearchSuggestions,
   User,
 } from "./types";
 
@@ -79,6 +80,15 @@ export async function getProductsByIds(ids: string[]): Promise<Product[]> {
 export async function getSimilarProducts(product: Product, limit = 4): Promise<Product[]> {
   await wait();
   return similarProducts(products, product, limit);
+}
+
+/**
+ * Подсказки поиска в шапке: с 2 символов, до 3 категорий и до limit позиций.
+ * Вызывается на каждый ввод (с паузой 150 мс), поэтому задержка заглушки короче обычной.
+ */
+export async function getSearchSuggestions(query: string, limit = 6): Promise<SearchSuggestions> {
+  await wait(150);
+  return searchSuggestions(products, categoriesData as Category[], query, limit);
 }
 
 /* ---------- Список для КП ---------- */

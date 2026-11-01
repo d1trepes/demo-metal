@@ -39,6 +39,11 @@
 #### `getSimilarProducts(product, limit = 4): Promise<Product[]>`
 Похожие в карточке: та же категория, ближайшие по массе 1 м.
 
+#### `getSearchSuggestions(query, limit = 6): Promise<SearchSuggestions>`
+Подсказки в поиске шапки (`components/layout/HeaderSearch.tsx`). Вызывается с 2 символов, с паузой 150 мс после ввода; устаревшие ответы интерфейс отбрасывает сам.
+Возвращает `{ categories: [{ slug, name, count }] (до 3, count — подходящих позиций в категории), products: Product[] (до limit, сначала в наличии), total }`.
+Сравнение без учёта регистра, ё/е и ×/x/х; запрос «арма» находит категорию «Арматура» и её позиции. В бою — полнотекстовый поиск (Postgres FTS, Meilisearch и т. п.), ответ до 200 мс.
+
 ### Список для КП
 
 #### `lookupCompanyByInn(inn): Promise<CompanyLookup | null>`

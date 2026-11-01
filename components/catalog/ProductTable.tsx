@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { Table, type Column } from "@/components/ui/Table";
-import { defaultLength } from "@/lib/calc";
+import { defaultLength, kpItemLabel } from "@/lib/calc";
 import { formatNumber, formatPrice } from "@/lib/format";
 import type { Product } from "@/lib/types";
 import { AddToKpButton } from "./AddToKpButton";
+import { FavoriteToggle } from "./FavoriteToggle";
 import s from "./ProductTable.module.css";
 
 /** Вид «Таблица»: как прайс металлобазы. На телефоне прокручивается внутри себя. */
@@ -28,7 +29,12 @@ export function ProductTable({ products }: { products: Product[] }) {
     {
       key: "kp",
       title: "",
-      render: (p) => <AddToKpButton item={{ productId: p.id, quantity: 1, length: defaultLength(p) }} label="В КП" />,
+      render: (p) => (
+        <span className={s.actions}>
+          <AddToKpButton item={{ productId: p.id, quantity: 1, length: defaultLength(p) }} notice={kpItemLabel(p, 1)} label="В КП" />
+          <FavoriteToggle productId={p.id} productName={p.name} />
+        </span>
+      ),
     },
   ];
   return <Table columns={columns} rows={products} rowKey={(p) => p.id} caption="Позиции каталога" />;

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductTile } from "@/components/catalog/ProductTile";
 import { Col, Container, Grid } from "@/components/layout/Grid";
-import { FavoriteButton } from "@/components/product/FavoriteButton";
 import { ProductCalculator } from "@/components/product/ProductCalculator";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { Badge } from "@/components/ui/Badge";
@@ -73,19 +72,17 @@ export default async function ProductPage({ params }: Params) {
             {product.steelGrade} · {product.gost} · код {product.id}
           </p>
 
+          {/* Цена — отдельной плашкой, другим начертанием, чтобы не сливалась с заголовком (чат 6б) */}
           <div className={s.priceRow}>
+            <span className={s.priceLabel}>Цена с НДС</span>
             <p className={s.price}>
               {formatPrice(product.pricePerTon, "т")}
-              <span>с НДС{product.unit === "м²" ? ` · ≈ ${formatPrice(pricePerSquareMeter(product), "м²")}` : ""}</span>
+              {product.unit === "м²" && <span>≈ {formatPrice(pricePerSquareMeter(product), "м²")}</span>}
             </p>
             <Badge tone={product.inStock ? "success" : "warning"}>{product.inStock ? "В наличии" : "Под заказ, 5–7 дней"}</Badge>
           </div>
 
           <ProductCalculator product={product} />
-
-          <div className={s.secondary}>
-            <FavoriteButton productId={product.id} />
-          </div>
 
           <dl className={s.terms}>
             {TERMS.map((t) => (

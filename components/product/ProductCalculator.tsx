@@ -1,9 +1,9 @@
 "use client";
-import { Check, Minus, Plus } from "lucide-react";
-import Link from "next/link";
+import { Minus, Plus } from "lucide-react";
 import { useId, useState } from "react";
 import { AddToKpButton } from "@/components/catalog/AddToKpButton";
-import { calcItem, piecesForTons, stockLengths } from "@/lib/calc";
+import { FavoriteToggle } from "@/components/catalog/FavoriteToggle";
+import { calcItem, isCoil, kpItemLabel, pieceForms, piecesForTons, stockLengths } from "@/lib/calc";
 import { cx } from "@/lib/cx";
 import { formatNumber, formatPrice, formatWeight, plural } from "@/lib/format";
 import { useKpStore } from "@/lib/stores/kp";
@@ -11,14 +11,6 @@ import type { Product } from "@/lib/types";
 import s from "./ProductCalculator.module.css";
 
 type Mode = "pieces" | "tons";
-
-/** Как называем штуку: хлыст, лист, карта; для бухты считаем метрами. */
-function pieceForms(product: Product, coil: boolean): [string, string, string] {
-  if (coil) return ["метр", "метра", "метров"];
-  if (product.category === "list") return ["лист", "листа", "листов"];
-  if (product.category === "setka") return ["карта", "карты", "карт"];
-  return ["хлыст", "хлыста", "хлыстов"];
-}
 
 const toNumber = (value: string) => Number(value.replace(",", ".").replace(/[^\d.]/g, "")) || 0;
 
@@ -30,15 +22,14 @@ const toNumber = (value: string) => Number(value.replace(",", ".").replace(/[^\d
 export function ProductCalculator({ product }: { product: Product }) {
   const id = useId();
   const lengths = stockLengths(product);
-  const coil = product.unit === "м" && lengths.length === 0;
-  const forms = pieceForms(product, coil);
+  const coil = isCoil(product);
+  const forms = pieceForms(product);
 
   const [mode, setMode] = useState<Mode>("pieces");
   const [length, setLength] = useState<number | "custom">(lengths[0] ?? 1);
   const [customLength, setCustomLength] = useState("3");
   const [qtyInput, setQtyInput] = useState(coil ? "100" : "10");
   const [tonsInput, setTonsInput] = useState("1");
-  const [added, setAdded] = useState<number | null>(null);
   const kpCount = useKpStore((st) => st.items.length);
 
   const pieceLength = coil ? 1 : length === "custom" ? Math.min(12, Math.max(0.1, toNumber(customLength))) : length;
@@ -46,7 +37,6 @@ export function ProductCalculator({ product }: { product: Product }) {
   const result = calcItem(product, { quantity: pieces, length: pieceLength });
 
   const step = (delta: number) => {
-    setAdded(null);
     setQtyInput(String(Math.max(0, Math.round(toNumber(qtyInput)) + delta)));
   };
 
@@ -106,7 +96,6 @@ export function ProductCalculator({ product }: { product: Product }) {
               inputMode="numeric"
               value={qtyInput}
               onChange={(e) => {
-                setAdded(null);
                 setQtyInput(e.target.value);
               }}
               className={s.input}
@@ -126,7 +115,6 @@ export function ProductCalculator({ product }: { product: Product }) {
             inputMode="decimal"
             value={tonsInput}
             onChange={(e) => {
-              setAdded(null);
               setTonsInput(e.target.value);
             }}
             className={cx(s.input, s.wide)}
@@ -164,18 +152,11 @@ export function ProductCalculator({ product }: { product: Product }) {
           block
           label={kpCount ? "Добавить в список КП" : "В список для КП"}
           disabled={pieces === 0}
-          onAdded={() => setAdded(pieces)}
+          notice={kpItemLabel(product, pieces)}
+          className={s.add}
         />
+        <FavoriteToggle productId={product.id} productName={product.name} size="md" />
       </div>
-      {added !== null && (
-        <p className={s.added} role="status">
-          <Check aria-hidden="true" />
-          Добавлено {formatNumber(added, 0)} {plural(added, forms)}.{" "}
-          <Link href="/kp/" className="link">
-            Открыть список КП
-          </Link>
-        </p>
-      )}
     </div>
   );
 }

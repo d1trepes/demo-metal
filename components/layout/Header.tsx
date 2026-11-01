@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ClipboardList, Phone, UserRound } from "lucide-react";
 import { KpCount } from "./KpCount";
+import { KpToast } from "./KpToast";
 import { mainNav } from "@/lib/nav";
 import { cx } from "@/lib/cx";
 import { Button } from "@/components/ui/Button";
@@ -37,7 +38,7 @@ export function Header({ variant = "solid" }: HeaderProps) {
       <HeaderSearch className={s.search} id={glass ? "hero-search" : "header-search"} />
 
       <div className={s.actions}>
-        <Link href="/kp/" className={cx(s.pill, s.iconPill)}>
+        <Link href="/kp/" className={cx(s.pill, s.iconPill, s.kp)} data-kp-link>
           <ClipboardList aria-hidden="true" />
           <span className={s.hideMd}>Список КП</span>
           <KpCount />
@@ -56,6 +57,9 @@ export function Header({ variant = "solid" }: HeaderProps) {
   );
 
   return (
-    <header className={cx(s.header, glass ? s.glass : s.solid)}>{glass ? bar : <Container>{bar}</Container>}</header>
+    <header className={cx(s.header, glass ? s.glass : s.solid)}>
+      {glass ? bar : <Container>{bar}</Container>}
+      <KpToast />
+    </header>
   );
 }

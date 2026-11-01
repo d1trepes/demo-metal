@@ -1,0 +1,50 @@
+/* Сердце «В избранное». Активное — залитое цветом текста (монохром) */
+.toggle {
+  display: grid;
+  place-items: center;
+  flex: none;
+  padding: 0;
+  border: var(--border-1) solid transparent;
+  border-radius: var(--radius-1);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.toggle svg {
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+.toggle:hover,
+.active {
+  color: var(--color-text);
+}
+.toggle:hover {
+  background: var(--color-surface-2);
+}
+.active svg {
+  fill: currentColor;
+}
+.toggle:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+.sm {
+  width: var(--control-h-sm);
+  height: var(--control-h-sm);
+}
+.md {
+  width: var(--control-h);
+  height: var(--control-h);
+  border-color: var(--color-line);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.md:hover {
+  border-color: var(--color-text);
+  background: var(--color-bg);
+}

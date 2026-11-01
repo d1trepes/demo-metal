@@ -9,7 +9,7 @@
 .input {
   width: 100%;
   min-height: var(--control-h);
-  padding: var(--space-3) var(--space-4);
+  padding: calc(var(--space-3) + var(--field-shift) / 2) var(--space-4) calc(var(--space-3) - var(--field-shift) / 2); /* высота задана отступами — сдвиг половинный */
   border: var(--border-1) solid var(--color-line);
   border-radius: var(--radius-1);
   background: var(--color-bg);

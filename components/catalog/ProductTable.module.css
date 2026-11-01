@@ -9,3 +9,11 @@
 .nowrap {
   white-space: nowrap;
 }
+
+/* «В КП» и сердце в одной ячейке */
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}

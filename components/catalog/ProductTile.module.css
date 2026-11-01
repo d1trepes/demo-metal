@@ -85,6 +85,14 @@
   font-size: var(--fs-micro);
   color: var(--color-text-muted);
 }
+/* Сердце — правый верхний угол, поверх растянутой ссылки */
+.favorite {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  z-index: 1;
+}
+
 /* Кнопка поверх растянутой ссылки */
 .add {
   position: relative;

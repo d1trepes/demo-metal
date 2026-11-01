@@ -7,6 +7,7 @@
  *   Площадь листа — из size.w × size.l (мм), карты сетки — 2 × 6 м.
  * - Стоимость = масса / 1000 × цена за тонну.
  */
+import { formatNumber, plural } from "./format";
 import type { KpItem, Product } from "./types";
 
 /** Карта сварной сетки 2 × 6 м (паспорт поставки в data/products.json). */
@@ -71,4 +72,22 @@ export function calcTotal(items: KpItem[], products: Map<string, Product>): Calc
     },
     { weightKg: 0, priceRub: 0 },
   );
+}
+
+/** Бухта: длинномер без складских длин (арматура ⌀6) — количество считаем метрами. */
+export function isCoil(product: Product): boolean {
+  return product.unit === "м" && stockLengths(product).length === 0;
+}
+
+/** Как называем штуку: хлыст, лист, карта; для бухты — метры. */
+export function pieceForms(product: Product): [string, string, string] {
+  if (isCoil(product)) return ["метр", "метра", "метров"];
+  if (product.category === "list") return ["лист", "листа", "листов"];
+  if (product.category === "setka") return ["карта", "карты", "карт"];
+  return ["хлыст", "хлыста", "хлыстов"];
+}
+
+/** Подпись для уведомления «Добавлено: Труба 60×60×3 мм, 16 хлыстов». */
+export function kpItemLabel(product: Product, quantity: number): string {
+  return `${product.name}, ${formatNumber(quantity, 0)} ${plural(quantity, pieceForms(product))}`;
 }

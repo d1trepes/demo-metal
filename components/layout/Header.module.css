@@ -6,6 +6,8 @@
   --field-border: var(--color-line);
   --field-focus: var(--color-text);
   --field-muted: var(--color-text-muted);
+  --count-bg: var(--color-ink-900);
+  --count-fg: var(--color-white);
 }
 .solid {
   position: sticky;
@@ -15,6 +17,9 @@
   border-bottom: var(--border-1) solid var(--color-line);
 }
 .glass {
+  position: relative; /* опора для уведомления KpToast */
+  --count-bg: var(--color-white);
+  --count-fg: var(--color-ink-900);
   --pill-border: var(--glass-border);
   --pill-hover: var(--glass-field-hover);
   --field-bg: var(--glass-field);
@@ -70,6 +75,10 @@
   transition:
     background-color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
+}
+/* Кнопка «Список КП» — опора для счётчика на её углу */
+.kp {
+  position: relative;
 }
 .pill:hover {
   background: var(--pill-hover);

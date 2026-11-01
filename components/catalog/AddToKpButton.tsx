@@ -7,6 +7,8 @@ import type { KpItem } from "@/lib/types";
 
 type Props = {
   item: KpItem;
+  /** Текст уведомления в шапке: «Уголок 25×25×3 мм, 1 хлыст» (lib/calc.ts → kpItemLabel). */
+  notice: string;
   size?: "md" | "sm";
   variant?: "primary" | "secondary";
   block?: boolean;
@@ -14,15 +16,13 @@ type Props = {
   label?: string;
   className?: string;
   disabled?: boolean;
-  /** Вызывается после добавления (карточка показывает «Добавлено …»). */
-  onAdded?: () => void;
 };
 
 /**
  * «В список КП». Если позиция уже в списке — кнопка становится ссылкой «В списке КП» на /kp/.
  * В карточке товара передаём количество и длину из калькулятора; повторное нажатие там добавляет ещё.
  */
-export function AddToKpButton({ item, size = "sm", variant = "secondary", block, label = "В список КП", className, disabled, onAdded }: Props) {
+export function AddToKpButton({ item, notice, size = "sm", variant = "secondary", block, label = "В список КП", className, disabled }: Props) {
   const hydrated = useHydrated();
   const inList = useKpStore((s) => s.items.some((i) => i.productId === item.productId));
   const add = useKpStore((s) => s.add);
@@ -37,10 +37,7 @@ export function AddToKpButton({ item, size = "sm", variant = "secondary", block,
   }
   return (
     <Button variant={variant} size={size} block={block} className={className} disabled={disabled}
-      onClick={() => {
-        add(item);
-        onAdded?.();
-      }}
+      onClick={() => add(item, notice)}
     >
       <Plus aria-hidden="true" />
       {label}
