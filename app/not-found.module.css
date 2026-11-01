@@ -1,4 +1,4 @@
-/* 404 (чат 8б): без шапки и подвала. Логотип на высоте шапки, текст по левому краю сетки. */
+/* 404 (чат 8, 8б): без шапки и подвала. Логотип на высоте шапки; рендер 1–6, текст 8–12, по центру экрана. */
 .page {
   min-height: 100svh;
   display: grid;
@@ -13,26 +13,50 @@
 .main {
   display: flex;
   align-items: center;
-  padding-block: var(--space-8) var(--space-10);
+  padding-block: var(--space-6) var(--space-9);
+}
+.main > * {
+  flex: 1;
+}
+.grid {
+  align-items: center;
+  row-gap: var(--space-6);
+}
+.art {
+  grid-column: 1 / span 6;
+  width: 100%;
+  height: auto;
+}
+.text {
+  grid-column: 8 / span 5;
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+}
+.text p {
+  max-width: 52ch;
 }
 .code {
   font-family: var(--font-display);
   font-weight: var(--fw-display);
-  font-size: var(--fs-display);
+  font-size: var(--fs-stat);
   line-height: var(--lh-display);
   font-variant-numeric: tabular-nums;
   color: var(--color-text-faint);
-}
-.title {
-  margin-top: var(--space-3);
-}
-.lead {
-  margin-top: var(--space-4);
-  max-width: 52ch;
 }
 .actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
-  margin-top: var(--space-6);
+  padding-top: var(--space-2);
+}
+
+@media (max-width: 1024px) {
+  .art,
+  .text {
+    grid-column: 1 / -1;
+  }
+  .art {
+    max-width: 560px;
+  }
 }

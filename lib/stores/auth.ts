@@ -13,6 +13,8 @@ type AuthState = {
   signIn: (email: string, password: string) => Promise<void>;
   signInDemo: () => Promise<void>;
   signOut: () => Promise<void>;
+  /** Обновить профиль после сохранения реквизитов (updateCompany). */
+  setUser: (user: User) => void;
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -29,6 +31,7 @@ export const useAuthStore = create<AuthState>()(
         await logout();
         set({ user: null });
       },
+      setUser: (user) => set({ user }),
     }),
     { name: "prolet-auth", storage: safeJSONStorage, version: 1, partialize: (s) => ({ user: s.user }) },
   ),
