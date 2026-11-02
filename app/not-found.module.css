@@ -1,6 +1,6 @@
 /* 404 (чат 8, 8б): без шапки и подвала. Логотип на высоте шапки; рендер 1–6, текст 8–12, по центру экрана. */
 .page {
-  min-height: 100svh;
+  min-height: var(--vh-fixed);
   display: grid;
   grid-template-rows: auto 1fr;
   background: var(--color-bg);

@@ -18,22 +18,32 @@
 }
 
 /*
- * 11б: html — цвет подвала (резиновая прокрутка iOS за нижним краем не показывает белое),
- * body — белый. overflow-x: clip на обоих: у html обрезает вьюпорт, у body — сам body,
- * иначе iOS даёт сдвинуть страницу пальцем вбок (Chrome этого не показывает).
+ * Фон за краями страницы (11б → 11в). html белый: резиновая прокрутка сверху — белая.
+ * body::before — тёмный слой (цвет подвала) на нижнюю половину окна, position: fixed, z-index -1:
+ * его закрывает белый фон body, виден он только за нижним краем, когда тянут дальше подвала.
+ * overscroll-behavior-y: none из 11б убран: в Safari он не давал тёмного низа.
+ * overflow-x: clip на html и body: иначе iOS даёт сдвинуть страницу пальцем вбок.
  * Без scroll-behavior: smooth — в Telegram-браузере дёргает прокрутку.
  */
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  background: var(--color-ink-900);
+  background: var(--color-bg);
   overflow-x: clip;
-  overscroll-behavior-y: none;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 50% 0 0;
+  z-index: -1;
+  background: var(--color-ink-900);
+  pointer-events: none;
 }
 
 body {
   margin: 0;
-  min-height: 100svh;
+  min-height: var(--vh-fixed);
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-text);

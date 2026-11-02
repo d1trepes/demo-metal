@@ -12,14 +12,26 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+/*
+ * 11в: theme-color белый — верх окна на белых страницах белый (тёмный низ даёт слой
+ * за подвалом в globals.css). Safari 26 theme-color не читает, берёт цвет с краёв страницы.
+ */
 export const viewport: Viewport = {
-  themeColor: "#0e1013",
+  themeColor: "#ffffff",
 };
+
+/*
+ * 11в: --vh-fixed = innerHeight в px до первой отрисовки. Пересчёт только при смене ширины
+ * (поворот, окно на десктопе): WebView Telegram и Safari меняют высоту, пряча панели при
+ * прокрутке, — из-за этого hero и блоки на 100svh «дышали».
+ */
+const fixedVhScript = `(function(){var d=document.documentElement,w=-1;function s(){if(innerWidth===w)return;w=innerWidth;d.style.setProperty("--vh-fixed",innerHeight+"px")}s();addEventListener("resize",s);addEventListener("orientationchange",function(){w=-1;setTimeout(s,250)})})()`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru">
+    <html lang="ru" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: fixedVhScript }} />
         {/* Шрифты со своего домена (файлы из @fontsource-variable): предзагрузка + @font-face до первой отрисовки */}
         {fontPreloads.map((href) => (
           <link key={href} rel="preload" href={href} as="font" type="font/woff2" crossOrigin="anonymous" />

@@ -7,7 +7,7 @@
   --hero-pad: clamp(var(--space-4), 2.2vw, var(--space-7));
   position: relative;
   isolation: isolate;
-  min-height: 100svh;
+  min-height: var(--vh-fixed);
   display: flex;
   background: var(--color-ink-900);
   color: var(--color-accent-on-ink);
@@ -42,7 +42,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 100svh;
+  min-height: var(--vh-fixed);
   padding: 0 var(--hero-pad) var(--hero-pad);
   background: var(--glass-bg);
 }

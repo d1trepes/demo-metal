@@ -17,7 +17,7 @@
   background: var(--color-surface);
 }
 .loading {
-  min-height: 50vh;
+  min-height: calc(var(--vh-fixed) * 0.5);
 }
 
 /* ---------- Список ---------- */

@@ -71,7 +71,7 @@
   left: -1px;
   z-index: var(--z-dropdown);
   width: max(calc(100% + 2px), 32rem);
-  max-height: min(70vh, 40rem);
+  max-height: min(calc(var(--vh-fixed) * 0.7), 40rem);
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: var(--space-2) 0;

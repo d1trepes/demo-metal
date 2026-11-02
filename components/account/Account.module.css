@@ -1,6 +1,6 @@
 /* Личный кабинет (чат 9). Шапка как у каталога, вкладки, дальше — строки по линиям, без карточек с тенями. */
 .page {
-  min-height: 60vh;
+  min-height: calc(var(--vh-fixed) * 0.6);
   padding-top: var(--space-6);
   padding-bottom: var(--section-gap);
 }
