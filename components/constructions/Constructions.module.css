@@ -69,7 +69,7 @@
 .typeNum {
   font-size: var(--fs-small);
   font-variant-numeric: tabular-nums;
-  color: var(--color-text-faint);
+  color: var(--color-text-muted); /* 11б: контраст для Lighthouse */
 }
 .specs {
   display: grid;
@@ -108,7 +108,7 @@
 .stageNum {
   grid-column: 1 / span 1;
   font-variant-numeric: tabular-nums;
-  color: var(--color-text-faint);
+  color: var(--color-text-muted); /* 11б: контраст для Lighthouse */
 }
 .stageTitle {
   grid-column: 2 / span 3;
@@ -217,10 +217,35 @@
     grid-column: 1 / -1;
     grid-row: auto;
   }
+  /* 11б: картинка этапа по центру, текст на всю ширину — как нумерованный список на /about */
   .stageArt {
+    justify-self: center;
+    width: 100%;
     max-width: 280px;
   }
   .form {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/*
+ * 11б: на телефоне рендер — сразу под хлебными крошками, над H1.
+ * Сетка шапки и колонка заголовка раскрываются (display: contents), порядок задаёт order.
+ */
+@media (max-width: 640px) {
+  .top {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .top > :first-child,
+  .top > :first-child > :first-child {
+    display: contents;
+  }
+  .top > :first-child > :first-child > :first-child {
+    order: -2;
+  }
+  .top > .cover {
+    order: -1;
   }
 }

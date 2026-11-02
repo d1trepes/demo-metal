@@ -226,13 +226,15 @@
   .cta {
     grid-template-columns: minmax(0, 1fr);
   }
+  /* 11б: спецификация целиком в кадре, меньше и по центру — без обрезки справа */
   .ctaArt {
     grid-row: 1;
-    justify-self: end;
-    width: 120%;
-    margin: var(--space-4) -40% 0 0;
+    justify-self: center;
+    width: 72%;
+    margin: var(--space-5) 0 0;
   }
   .ctaMain {
-    padding: var(--space-4) var(--space-5) var(--space-5);
+    align-items: stretch;
+    padding: var(--space-4) var(--space-4) var(--space-5);
   }
 }

@@ -17,13 +17,23 @@
   box-sizing: border-box;
 }
 
+/*
+ * 11б: html — цвет подвала (резиновая прокрутка iOS за нижним краем не показывает белое),
+ * body — белый. overflow-x: clip на обоих: у html обрезает вьюпорт, у body — сам body,
+ * иначе iOS даёт сдвинуть страницу пальцем вбок (Chrome этого не показывает).
+ * Без scroll-behavior: smooth — в Telegram-браузере дёргает прокрутку.
+ */
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  background: var(--color-ink-900);
+  overflow-x: clip;
+  overscroll-behavior-y: none;
 }
 
 body {
   margin: 0;
+  min-height: 100svh;
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-text);
@@ -70,8 +80,23 @@ textarea {
   color: inherit;
 }
 
+/* 11б: без системного вида iOS (синий текст и серый фон у button[type=submit]) */
 button {
   cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/*
+ * 11б: на телефоне все поля ввода — не меньше 16 px. Иначе iOS приближает страницу при фокусе,
+ * и после этого её можно сдвинуть вбок. :not([data-x]) поднимает вес выше классов модулей.
+ */
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select:not([data-x]),
+  textarea:not([data-x]) {
+    font-size: max(var(--fs-body), 1em);
+  }
 }
 
 :focus-visible {

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { LoginForm } from "@/components/account/LoginForm";
 import { Container, Grid } from "@/components/layout/Grid";
 import { asset, srcSet } from "@/lib/asset";
@@ -29,10 +28,7 @@ export default function LoginPage() {
           <p className={s.lead}>
             {typo("Заказы, счета и УПД — в одном месте. Регистрация по ИНН занимает минуту, цены по договору подключит менеджер.")}
           </p>
-          {/* useSearchParams внутри формы — для статичного экспорта нужен Suspense */}
-          <Suspense>
-            <LoginForm demoNote={typo("Заказы, запросы КП, счета и УПД вымышленной компании «УралСтройМонтаж». Пароль не нужен.")} />
-          </Suspense>
+          <LoginForm demoNote={typo("Заказы, запросы КП, счета и УПД вымышленной компании «УралСтройМонтаж». Пароль не нужен.")} />
         </div>
         <div className={s.asideCol}>
           <div className={s.art}>
@@ -43,6 +39,7 @@ export default function LoginPage() {
               alt=""
               width={1370}
               height={754}
+              fetchPriority="high"
             />
           </div>
           <dl className={s.features}>

@@ -41,6 +41,8 @@
   --glass-bg: rgba(14, 16, 19, 0.42);
   --glass-border: rgba(255, 255, 255, 0.18);
   --glass-blur: 18px;
+  --hero-scrim-light: rgba(14, 16, 19, 0.22);  /* hero на телефоне: тонировка сверху/по центру (11б) */
+  --hero-scrim-dense: rgba(14, 16, 19, 0.72);  /* hero на телефоне: низ под текстом */
   --glass-field: rgba(255, 255, 255, 0.08);    /* поле поиска и кнопки-рамки на стекле */
   --glass-field-hover: rgba(255, 255, 255, 0.16);
 
@@ -153,5 +155,12 @@
     --dur-hover: 0ms;
     --reveal-step: 0ms;
     --dur-panel: 0ms;
+  }
+}
+
+/* 11б: на телефоне малые кнопки, чипы и поля калькулятора — не ниже 40 px (зона нажатия) */
+@media (max-width: 640px) {
+  :root {
+    --control-h-sm: 40px;
   }
 }

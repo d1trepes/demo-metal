@@ -83,6 +83,7 @@
 }
 
 .art img {
+  aspect-ratio: 1370 / 754; /* место под рендер до загрузки (CLS, 11б) */
   display: block;
   width: 100%;
   height: auto;

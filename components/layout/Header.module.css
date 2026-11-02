@@ -104,6 +104,12 @@
 .callIcon {
   display: none;
 }
+/* Лупа поиска — только на телефоне (SearchToggle) */
+.searchToggle {
+  display: none;
+  background: none;
+  color: inherit;
+}
 
 @media (max-width: 1360px) {
   .hideMd {
@@ -140,6 +146,9 @@
   .account {
     display: none; /* кабинет — в меню */
   }
+  .searchToggle {
+    display: inline-flex;
+  }
   .call {
     width: var(--control-h-md);
     padding: 0;
@@ -154,5 +163,11 @@
     overflow: hidden;
     clip: rect(0 0 0 0);
     white-space: nowrap;
+  }
+}
+
+@media (max-width: 400px) {
+  .actions {
+    gap: var(--space-1);
   }
 }

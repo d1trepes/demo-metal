@@ -127,6 +127,7 @@ function KpEmpty() {
         width={1023}
         height={723}
         className={s.emptyArt}
+        fetchPriority="high"
       />
       <div className={s.emptyText}>
         <h2 className="t-h2">Список пуст</h2>

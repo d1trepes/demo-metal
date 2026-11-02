@@ -205,3 +205,10 @@
     grid-column: 2;
   }
 }
+
+/* 11б: вне главной и каталога на телефоне строка поиска свёрнута до лупы в шапке */
+@media (max-width: 640px) {
+  .collapsible:not(.expanded) {
+    display: none;
+  }
+}

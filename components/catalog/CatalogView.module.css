@@ -9,7 +9,7 @@
   grid-column: 1 / span 3;
   position: sticky;
   top: calc(var(--header-height) + var(--space-5));
-  max-height: calc(100dvh - var(--header-height) - var(--space-6));
+  max-height: calc(100svh - var(--header-height) - var(--space-6));
   overflow-y: auto;
   padding-right: var(--space-3);
   scrollbar-width: thin;
@@ -223,12 +223,23 @@
   .search {
     flex-basis: 100%;
   }
+  /* 11б: одна строка над списком — «Фильтры» и сортировка; число позиций — в кнопке панели фильтров */
+  .views {
+    display: none;
+  }
   .count {
-    flex: 1;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  .filtersBtn {
+    flex: none;
   }
   .sort {
-    order: 1;
-    flex: 1 1 100%;
+    flex: 1 1 0;
+    min-width: 0;
   }
   .sort select {
     width: 100%;

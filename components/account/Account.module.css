@@ -73,6 +73,8 @@
   margin-bottom: var(--space-7);
   border-bottom: var(--border-1) solid var(--color-line);
   overflow-x: auto;
+  overflow-y: hidden; /* 11б: полоса прокручивается только вбок (без 1 px вертикального зазора от линии) */
+  overscroll-behavior-x: contain;
   scrollbar-width: none;
 }
 .tabs ul {
@@ -627,5 +629,54 @@
   }
   .empty {
     padding: var(--space-6) var(--space-4);
+  }
+}
+
+/* Документы: таблица на десктопе, на телефоне — строки-карточки (11б: таблица резала дату и номер) */
+.docCards {
+  display: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--border-1) solid var(--color-line-strong);
+}
+.docCards li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--space-4);
+  row-gap: var(--space-1);
+  padding-block: var(--space-3);
+  border-bottom: var(--border-1) solid var(--color-line);
+  font-size: var(--fs-small);
+}
+.docCards li > p:first-child {
+  grid-column: 1;
+}
+.docCards .docKind {
+  margin-right: var(--space-1);
+}
+.docCardMeta {
+  grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-3);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.docCardMeta span {
+  white-space: nowrap;
+}
+.docCards .docLink {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  min-height: var(--control-h);
+}
+@media (max-width: 640px) {
+  .docTable {
+    display: none;
+  }
+  .docCards {
+    display: block;
   }
 }

@@ -34,6 +34,7 @@ export function DocumentsView() {
           </button>
         ))}
       </div>
+      <div className={s.docTable}>
       <Table<DocumentFile>
         caption="Документы"
         rowKey={(d) => d.id}
@@ -57,6 +58,26 @@ export function DocumentsView() {
           },
         ]}
       />
+      </div>
+      {/* 11б: на телефоне — строками-карточками вместо таблицы */}
+      <ul className={s.docCards}>
+        {rows.map((d) => (
+          <li key={d.id}>
+            <p>
+              <span className={s.docKind}>{DOC_KIND[d.kind]}</span> {d.title}
+            </p>
+            <p className={s.docCardMeta}>
+              <span>{d.orderId ? `Заказ ${d.orderId}` : "Без заказа"}</span>
+              <span>{formatDate(d.date)}</span>
+              <span>{formatPrice(d.totalRub)}</span>
+            </p>
+            <a href={asset(d.url)} download className={s.docLink} aria-label={`Скачать: ${d.title}`}>
+              <FileDown aria-hidden="true" />
+              <span>PDF</span>
+            </a>
+          </li>
+        ))}
+      </ul>
       <p className={s.meta}>Оригиналы с подписью и печатью — в пакете с металлом или через ЭДО (Диадок, СБИС).</p>
     </div>
   );

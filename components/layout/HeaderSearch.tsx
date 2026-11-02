@@ -10,6 +10,7 @@ import { highlightParts } from "@/lib/catalog";
 import { cx } from "@/lib/cx";
 import { formatPrice, plural } from "@/lib/format";
 import type { SearchSuggestions } from "@/lib/types";
+import { isSearchPinned, useMobileSearch } from "./SearchToggle";
 import s from "./HeaderSearch.module.css";
 
 const MIN_CHARS = 2;
@@ -52,6 +53,15 @@ export function HeaderSearch({
   const [data, setData] = useState<SearchSuggestions | null>(null);
   const [active, setActive] = useState(-1);
   const [mobileTop, setMobileTop] = useState<number | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Телефон: вне главной и каталога строка поиска свёрнута до лупы (SearchToggle)
+  const collapsible = !isSearchPinned(pathname);
+  const expanded = useMobileSearch((st) => st.open);
+  const setExpanded = useMobileSearch((st) => st.setOpen);
+  useEffect(() => {
+    if (expanded && collapsible) inputRef.current?.focus();
+  }, [expanded, collapsible]);
 
   const trimmed = query.trim();
   const ready = trimmed.length >= MIN_CHARS;
@@ -88,21 +98,24 @@ export function HeaderSearch({
 
   // Клик мимо — закрыть
   useEffect(() => {
-    if (!open) return;
+    if (!open && !expanded) return;
     const onPointer = (e: PointerEvent) => {
       const target = e.target as Node;
-      if (
-        !formRef.current?.contains(target) &&
-        !dropdownRef.current?.contains(target)
-      )
-        setOpen(false);
+      const inside =
+        formRef.current?.contains(target) || dropdownRef.current?.contains(target);
+      if (!inside) setOpen(false);
+      // Свёрнутый поиск закрываем тапом мимо шапки (лупа сама переключает)
+      if (!inside && !(target as Element).closest?.("header")) setExpanded(false);
     };
     document.addEventListener("pointerdown", onPointer);
     return () => document.removeEventListener("pointerdown", onPointer);
-  }, [open]);
+  }, [open, expanded, setExpanded]);
 
   // Переход на другую страницу — закрыть
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    setOpen(false);
+    setExpanded(false);
+  }, [pathname, setExpanded]);
 
   // Телефон: выпадашка от нижнего края шапки до низа экрана
   useEffect(() => {
@@ -126,12 +139,14 @@ export function HeaderSearch({
 
   const go = (href: string) => {
     setOpen(false);
+    setExpanded(false);
     router.push(href);
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Escape") {
       setOpen(false);
+      setExpanded(false);
       setActive(-1);
       return;
     }
@@ -253,7 +268,13 @@ export function HeaderSearch({
   return (
     <form
       ref={formRef}
-      className={cx(s.search, shown && s.open, className)}
+      className={cx(
+        s.search,
+        shown && s.open,
+        collapsible && s.collapsible,
+        collapsible && expanded && s.expanded,
+        className,
+      )}
       action={asset("/catalog/")}
       method="get"
       role="search"
@@ -268,11 +289,12 @@ export function HeaderSearch({
       </label>
       <Search className={s.icon} aria-hidden="true" />
       <input
+        ref={inputRef}
         id={id}
         name="q"
         type="search"
         className={s.input}
-        placeholder="Арматура 12 А500С, балка 20Б1"
+        placeholder="Арматура 12, балка 20Б1"
         autoComplete="off"
         role="combobox"
         aria-autocomplete="list"

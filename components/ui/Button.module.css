@@ -7,6 +7,7 @@
   padding: 0 var(--space-5);
   border: var(--border-1) solid transparent;
   border-radius: var(--radius-1);
+  background-color: transparent;
   font-family: var(--font-cond);
   font-weight: var(--fw-label);
   font-size: var(--fs-body);
@@ -37,6 +38,20 @@
 }
 .block {
   width: 100%;
+}
+
+/*
+ * 11б: на телефоне основные кнопки (md, кроме ghost) — во всю ширину, высота --control-h у всех.
+ * В flex-строке каждая встаёт отдельной строкой; длинная надпись переносится, а не вылезает за поле.
+ */
+@media (max-width: 640px) {
+  .btn:not(.sm):not(.ghost) {
+    flex: 1 1 100%;
+    width: 100%;
+    padding-inline: var(--space-4);
+    white-space: normal;
+    text-align: center;
+  }
 }
 
 /* На белом */

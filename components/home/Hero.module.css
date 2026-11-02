@@ -175,21 +175,41 @@
   .mediaItem {
     object-position: 66% 50%;
   }
-  .content {
-    padding-top: var(--space-8);
+  /* 11б: тонировка светлее сверху и в центре (видно человека на видео), снизу плотная под текст */
+  .panel {
+    background: linear-gradient(
+      to bottom,
+      var(--hero-scrim-light) 0%,
+      var(--hero-scrim-light) 35%,
+      var(--hero-scrim-dense) 85%
+    );
   }
+  .content {
+    padding-top: var(--space-7);
+  }
+  /*
+   * 11б: самое длинное слово «МЕТАЛЛОКОНСТРУКЦИИ» ≈ 7,2 кегля в ширину — кегль не больше
+   * ширины колонки / 7,6, чтобы слово влезало с полями на любом телефоне.
+   */
   .title {
-    font-size: clamp(2.5rem, 13.4vw, var(--fs-display));
+    font-size: min(clamp(2.5rem, 13.4vw, var(--fs-display)), calc((100vw - 2 * var(--gutter)) / 7.6));
   }
   .lead {
     grid-column: 1 / -1;
   }
   .bottom {
-    margin-top: var(--space-7);
+    margin-top: var(--space-5);
+    row-gap: var(--space-4);
+  }
+  .facts > p {
+    padding-bottom: var(--space-2);
   }
   .facts ul {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: var(--space-4);
+    row-gap: var(--space-3);
+  }
+  .facts li {
+    padding-top: var(--space-2);
   }
   .switcher {
     justify-self: stretch;

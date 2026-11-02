@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900">
+  <!-- Фавикон (11б): упрощённый знак «Пролёт» из components/layout/Logo.tsx, белым на --color-ink-900 -->
+  <rect width="900" height="900" fill="#0e1013"/>
+  <g transform="translate(75 207)" fill="#ffffff">
+    <path fill-rule="evenodd" d="M0 0H750V30L707 40V106L750 116V146H0V116L43 106V40L0 30ZM65 30V116H685V30ZM80 58H670V88H80Z"/>
+    <path d="M42 164H261L239 194H190V452H232V486H70V452H112V194H64Z"/>
+    <path d="M42 164H261L239 194H190V452H232V486H70V452H112V194H64Z" transform="matrix(-1 0 0 1 750 0)"/>
+  </g>
+</svg>

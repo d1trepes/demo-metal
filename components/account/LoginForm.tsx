@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { TextField } from "@/components/ui/Field";
 import { company } from "@/lib/nav";
@@ -9,7 +9,14 @@ import { useAuthStore } from "@/lib/stores/auth";
 import { RegisterForm } from "./RegisterForm";
 import s from "./Login.module.css";
 
-/** Куда вернуть после входа: ?next=/account/orders/ (только разделы кабинета). */
+/**
+ * Куда вернуть после входа: ?next=/account/orders/ (только разделы кабинета).
+ * Параметры читаем из location, а не useSearchParams: тогда форма есть в статичном HTML
+ * без Suspense и колонка справа не прыгает при загрузке (CLS на /login, чат 11б).
+ */
+function getParam(name: string): string | null {
+  return typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get(name);
+}
 function safeNext(next: string | null): string {
   return next && next.startsWith("/account/") ? next : "/account/";
 }
@@ -17,12 +24,13 @@ function safeNext(next: string | null): string {
 /** Форма входа + кнопка демо-кабинета (основная: посетитель демки не знает пароля). Заглушка api.login пускает с любой почтой и непустым паролем. */
 export function LoginForm({ demoNote }: { demoNote: string }) {
   const router = useRouter();
-  const next = safeNext(useSearchParams().get("next"));
   const signUp = useAuthStore((st) => st.signUp);
   const signIn = useAuthStore((st) => st.signIn);
   const signInDemo = useAuthStore((st) => st.signInDemo);
-  const params = useSearchParams();
-  const [mode, setMode] = useState<"login" | "register">(params.get("mode") === "register" ? "register" : "login");
+  const [mode, setMode] = useState<"login" | "register">("login");
+  useEffect(() => {
+    if (getParam("mode") === "register") setMode("register");
+  }, []);
   const [busy, setBusy] = useState<"form" | "demo" | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,7 +47,7 @@ export function LoginForm({ demoNote }: { demoNote: string }) {
     setBusy("form");
     try {
       await signIn(email, password);
-      router.replace(next);
+      router.replace(safeNext(getParam("next")));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Не удалось войти");
       setBusy(null);
@@ -49,7 +57,7 @@ export function LoginForm({ demoNote }: { demoNote: string }) {
   async function onDemo() {
     setBusy("demo");
     await signInDemo();
-    router.replace(next);
+    router.replace(safeNext(getParam("next")));
   }
 
   return (
@@ -92,7 +100,7 @@ export function LoginForm({ demoNote }: { demoNote: string }) {
         <form className={s.form} onSubmit={onSubmit} noValidate aria-busy={busy === "form"} id="panel-login" role="tabpanel" aria-labelledby="tab-login">
           <TextField label="Почта" name="email" type="email" autoComplete="username" inputMode="email" placeholder="snab@company.ru" />
           <TextField label="Пароль" name="password" type="password" autoComplete="current-password" error={error ?? undefined} />
-          <Button type="submit" variant="secondary" block disabled={busy !== null}>
+          <Button type="submit" block disabled={busy !== null}>
             {busy === "form" ? "Входим…" : "Войти"}
           </Button>
           <p className={s.help}>
@@ -109,7 +117,7 @@ export function LoginForm({ demoNote }: { demoNote: string }) {
             setBusy("form");
             try {
               await signUp(request);
-              router.replace(next);
+              router.replace(safeNext(getParam("next")));
             } catch (err) {
               setBusy(null);
               throw err;

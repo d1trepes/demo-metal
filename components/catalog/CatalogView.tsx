@@ -40,6 +40,15 @@ export function CatalogView({ products, categories, activeCategory }: Props) {
   const [sort, setSort] = useState<ProductSort>("default");
   const [view, setView] = useState<View>("tiles");
   const [panelOpen, setPanelOpen] = useState(false);
+  // 11б: на телефоне (≤ 640 px) переключатель вида скрыт — всегда плитка
+  const [isPhone, setIsPhone] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)");
+    const update = () => setIsPhone(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
   const [ready, setReady] = useState(false);
 
   // Начальное состояние из адреса (поиск в шапке ведёт на /catalog/?q=…)
@@ -179,7 +188,7 @@ export function CatalogView({ products, categories, activeCategory }: Props) {
               <Button href="/#calc">Отправить спецификацию</Button>
             </div>
           </div>
-        ) : view === "tiles" ? (
+        ) : view === "tiles" || isPhone ? (
           <ul className={s.tiles}>
             {result.map((p, i) => (
               <li key={p.id}>

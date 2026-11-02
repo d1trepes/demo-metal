@@ -25,3 +25,16 @@
 .crumbs [aria-current] {
   color: var(--color-text);
 }
+
+/* 11б: зона нажатия на телефоне ≥ 40 px */
+@media (max-width: 640px) {
+  .crumbs ol {
+    align-items: center;
+    row-gap: 0;
+  }
+  .crumbs a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-h-md);
+  }
+}

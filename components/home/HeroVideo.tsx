@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { canPlayVideo } from "@/lib/device";
+import { canPlayVideo, isSlowConnection } from "@/lib/device";
 import { asset } from "@/lib/asset";
 import s from "./Hero.module.css";
 
@@ -24,8 +24,11 @@ export function HeroVideo() {
   // Выбираем файл после первого кадра с постером: постер остаётся LCP, видео не ждёт картинок ниже.
   useEffect(() => {
     if (!canPlayVideo()) return;
+    const mobile = window.matchMedia(MOBILE_QUERY).matches;
+    // Телефон на 2g/3g — только постер; на 4g — 720p после первого кадра (чат 11б)
+    if (mobile && isSlowConnection()) return;
     let frame = requestAnimationFrame(() => {
-      frame = requestAnimationFrame(() => setSrc(window.matchMedia(MOBILE_QUERY).matches ? VIDEO_MOBILE : VIDEO_DESKTOP));
+      frame = requestAnimationFrame(() => setSrc(mobile ? VIDEO_MOBILE : VIDEO_DESKTOP));
     });
     return () => cancelAnimationFrame(frame);
   }, []);

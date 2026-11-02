@@ -10,6 +10,7 @@ import { Container } from "./Grid";
 import { HeaderSearch } from "./HeaderSearch";
 import { Logo } from "./Logo";
 import { MobileMenu } from "./MobileMenu";
+import { SearchToggle } from "./SearchToggle";
 import s from "./Header.module.css";
 
 type HeaderProps = {
@@ -39,6 +40,7 @@ export function Header({ variant = "solid" }: HeaderProps) {
       <HeaderSearch className={s.search} id={glass ? "hero-search" : "header-search"} />
 
       <div className={s.actions}>
+        <SearchToggle className={cx(s.pill, s.iconPill, s.searchToggle)} />
         <Link href="/kp/" className={cx(s.pill, s.iconPill, s.kp)} data-kp-link>
           <ClipboardList aria-hidden="true" />
           <span className={s.hideMd}>Список КП</span>

@@ -71,7 +71,7 @@ export function RegisterForm({ onSubmit, disabled }: { onSubmit: (request: Regis
           {errors.form}
         </p>
       )}
-      <Button type="submit" variant="secondary" block disabled={disabled}>
+      <Button type="submit" block disabled={disabled}>
         {disabled ? "Регистрируем…" : "Зарегистрироваться"}
       </Button>
       <p className={s.help}>

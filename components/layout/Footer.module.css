@@ -106,3 +106,22 @@
     margin-left: 0;
   }
 }
+
+/* 11б: ссылки подвала на телефоне — зона нажатия ≥ 40 px */
+@media (max-width: 640px) {
+  .list,
+  .listTwo {
+    row-gap: 0;
+  }
+  .list a,
+  .listTwo a,
+  .colContacts a,
+  .bottom a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-h-md);
+  }
+  .bottom {
+    row-gap: 0;
+  }
+}
