@@ -308,6 +308,13 @@
 }
 
 @media (max-width: 640px) {
+  /* 11в: абзац на всю ширину панели — без pretty/balance, которые переносят раньше края */
+  .text,
+  .spec dd {
+    justify-self: stretch;
+    max-width: none;
+    text-wrap: wrap;
+  }
   .specs {
     grid-template-columns: 1fr;
     gap: var(--space-2);

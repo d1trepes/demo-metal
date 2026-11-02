@@ -80,6 +80,7 @@ export function ConstructionPanels({ items: constructionTypes }: { items: Constr
                 {...item.image}
                 loading="lazy"
                 decoding="async"
+                data-preload-media={DESKTOP}
               />
               <img
                 className={s.render}

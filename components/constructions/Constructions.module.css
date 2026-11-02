@@ -217,6 +217,12 @@
     grid-column: 1 / -1;
     grid-row: auto;
   }
+  /* 11в: текст этапа до правого края сетки — без pretty, который переносит раньше */
+  .stageText,
+  .stageText p {
+    max-width: none;
+    text-wrap: wrap;
+  }
   /* 11б: картинка этапа по центру, текст на всю ширину — как нумерованный список на /about */
   .stageArt {
     justify-self: center;
