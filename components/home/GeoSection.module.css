@@ -205,11 +205,41 @@
   width: 100%;
   height: 100%;
   cursor: grab;
-  touch-action: pan-y; /* пальцем: по горизонтали — крутим шар, по вертикали — листаем страницу */
+  touch-action: none; /* пальцем крутим во все стороны и щипком приближаем; страницу листают за поля и панель (11г) */
   user-select: none;
 }
 .globe[data-dragging] .map {
   cursor: grabbing;
+}
+/* Кнопки «+ / −» (11г) */
+.zoom {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  display: grid;
+  background: var(--color-bg);
+  border: var(--border-1) solid var(--color-line);
+  border-radius: var(--radius-1);
+}
+.zoomBtn {
+  display: grid;
+  place-items: center;
+  width: var(--control-h-md);
+  height: var(--control-h-md);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.zoomBtn + .zoomBtn {
+  border-top: var(--border-1) solid var(--color-line);
+}
+@media (hover: hover) {
+  .zoomBtn:hover {
+    background: var(--color-surface);
+  }
 }
 /* Плашка «Потяните, чтобы повернуть» */
 .hint {
@@ -450,6 +480,7 @@
   }
   .mapBox {
     aspect-ratio: 4 / 5;
+    max-height: var(--globe-max-h-mobile); /* кадр не выше ~58 % окна: страницу листают за поля (11г) */
     margin-top: var(--space-4);
   }
 }

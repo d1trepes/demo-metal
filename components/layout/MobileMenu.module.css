@@ -19,14 +19,47 @@
   }
 }
 
-.sheet {
+/* Слой меню: затемнение + выдвижная панель. Закрытый — прозрачный, не ловит касания, inert. */
+.root {
   position: fixed;
   inset: 0;
   z-index: var(--z-modal);
+  pointer-events: none;
+  visibility: hidden;
+  transition: visibility 0s linear var(--dur-base);
+}
+.root[data-open="true"] {
+  pointer-events: auto;
+  visibility: visible;
+  transition: none;
+}
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--menu-scrim);
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.root[data-open="true"] .scrim {
+  opacity: 1;
+}
+.sheet {
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  width: var(--menu-panel-w);
   overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y; /* вертикально листается список, по горизонтали — свайп-закрытие */
   background: var(--color-ink-900);
   color: var(--color-on-ink);
   --pill-border: var(--glass-border);
+  transform: translateX(100%);
+  transition: transform var(--dur-base) var(--ease-out);
+  will-change: transform;
+}
+.root[data-open="true"] .sheet {
+  transform: translateX(0);
 }
 .inner {
   display: flex;

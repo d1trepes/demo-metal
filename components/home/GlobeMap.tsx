@@ -5,7 +5,7 @@ import { geoDistance, geoGraticule10, geoInterpolate, geoOrthographic, geoPath }
 import { feature } from "topojson-client";
 import { presimplify, quantile, simplify } from "topojson-simplify";
 import type { Feature, Geometry } from "geojson";
-import { MoveHorizontal } from "lucide-react";
+import { Minus, Move, Plus } from "lucide-react";
 import { cx } from "@/lib/cx";
 import { GLOBE_VIEW, type DeliveryZone, type GeoData, type GeoRegion } from "./globeData";
 import s from "./GeoSection.module.css";
@@ -22,6 +22,12 @@ const CY = TOP + R;
 const DEG_PER_UNIT = 180 / (Math.PI * R * 0.72);
 const DRAG_THRESHOLD = 5;
 const FLY_MS = 700;
+/** Приближение (11г): щипок двумя пальцами или кнопки «+ / −». Колесо мыши листает страницу (чат 10). */
+const ZOOM_MIN = 1;
+const ZOOM_MAX = 2.5;
+const ZOOM_STEP = 1.5;
+const ZOOM_MS = 280;
+const clampZoom = (k: number) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, k));
 const TIP_W = 280;
 const GRATICULE = geoGraticule10();
 
@@ -42,7 +48,8 @@ type Props = {
  * Карта «Горизонт» (чаты 5д, 5е). Пути регионов рендерит React один раз; при повороте `d`, точки и метка
  * обновляются напрямую через refs не чаще раза за кадр (requestAnimationFrame). React-состояние — только выбор/наведение.
  * Во время перетаскивания дуги и точки скрыты (плавно возвращаются после отпускания), hover и transition отключены.
- * Мышью — тянуть в любую сторону; пальцем — по горизонтали (вертикальный жест — прокрутка страницы).
+ * Мышью и пальцем — тянуть в любую сторону (11г: на кадре touch-action: none, страницу листают за поля и панель регионов).
+ * Приближение 1×–2,5× — щипком или кнопками; точка приближения — центр видимой части кадра.
  */
 export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHover, onPick }: Props) {
   const boxRef = useRef<HTMLDivElement>(null);
@@ -60,6 +67,11 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
   const fly = useRef(0);
   const box = useRef({ scale: 1, offX: 0, offY: 0, w: W });
   const drag = useRef<{ x: number; y: number; view: View; moved: boolean; target: string | null } | null>(null);
+  const zoom = useRef(ZOOM_MIN);
+  const zoomAnim = useRef(0);
+  /** Пальцы на кадре (для щипка) и щипок: расстояние и масштаб в начале. */
+  const pointers = useRef(new Map<number, { x: number; y: number }>());
+  const pinch = useRef<{ dist0: number; k0: number } | null>(null);
   const shownRef = useRef(shown);
 
   /** Упрощённые контуры (половина точек) — рисуются только во время перетаскивания: кадр в ~2 раза дешевле. */
@@ -144,13 +156,19 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
   /** Один кадр: поворот проекции и пересчёт `d` всех контуров. */
   const draw = useCallback(() => {
     frame.current = 0;
-    projection.rotate([-view.current.lon, -view.current.lat]);
+    const k = zoom.current;
+    const { scale, offY } = box.current;
+    const anchorY = (H - offY / scale) / 2; // центр видимой части кадра (SVG прижат к низу)
+    projection
+      .scale(R * k)
+      .translate([CX, anchorY + (CY - anchorY) * k])
+      .rotate([-view.current.lon, -view.current.lat]);
     sphereRef.current?.setAttribute("d", path({ type: "Sphere" }) ?? "");
     gratRef.current?.setAttribute("d", path(GRATICULE) ?? "");
-    const rough = drag.current?.moved ? coarse.current : null;
+    const rough = drag.current?.moved || pinch.current ? coarse.current : null;
     landRef.current?.setAttribute("d", path(rough?.land ?? land) ?? "");
     (rough?.regions ?? regions).forEach((f, i) => regionRefs.current[i]?.setAttribute("d", path(f) ?? ""));
-    if (!drag.current?.moved) drawMarks();
+    if (!drag.current?.moved && !pinch.current) drawMarks();
     placeTip();
   }, [drawMarks, land, path, placeTip, projection, regions]);
 
@@ -203,11 +221,12 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
       const { width: w, height: h } = entry.contentRect;
       const scale = Math.max(w / W, h / H);
       box.current = { scale, offX: (w - W * scale) / 2, offY: h - H * scale, w };
+      if (zoom.current > ZOOM_MIN) requestDraw(); // точка приближения зависит от видимой части кадра
       placeTip();
     });
     ro.observe(el);
     return () => ro.disconnect();
-  }, [placeTip]);
+  }, [placeTip, requestDraw]);
 
   useEffect(
     () => () => {
@@ -223,15 +242,19 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
       flyTo(to) {
         cancelAnimationFrame(fly.current);
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          zoom.current = ZOOM_MIN;
           setView(to);
           return;
         }
+        cancelAnimationFrame(zoomAnim.current);
         const from = view.current;
+        const k0 = zoom.current; // цель подлёта считается для 1× — по пути возвращаемся к нему
         const dLon = ((to.lon - from.lon + 540) % 360) - 180; // короткой дорогой
         const start = performance.now();
         const step = (now: number) => {
           const t = Math.min(1, (now - start) / FLY_MS);
           const e = 1 - Math.pow(1 - t, 3);
+          zoom.current = k0 + (ZOOM_MIN - k0) * e;
           setView({ lon: from.lon + dLon * e, lat: from.lat + (to.lat - from.lat) * e });
           if (t < 1) fly.current = requestAnimationFrame(step);
         };
@@ -243,8 +266,47 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
     };
   }, [apiRef, setView]);
 
+  /** Плавно к масштабу k (кнопки «+ / −»). */
+  const zoomTo = (k: number) => {
+    cancelAnimationFrame(zoomAnim.current);
+    const from = zoom.current;
+    const to = clampZoom(k);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      zoom.current = to;
+      requestDraw();
+      return;
+    }
+    const start = performance.now();
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / ZOOM_MS);
+      zoom.current = from + (to - from) * (1 - Math.pow(1 - t, 3));
+      draw();
+      if (t < 1) zoomAnim.current = requestAnimationFrame(step);
+    };
+    zoomAnim.current = requestAnimationFrame(step);
+  };
+
+  const startPinch = () => {
+    const [a, b] = [...pointers.current.values()];
+    pinch.current = { dist0: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), k0: zoom.current };
+    drag.current = null;
+    cancelAnimationFrame(fly.current);
+    cancelAnimationFrame(zoomAnim.current);
+    boxRef.current?.setAttribute("data-dragging", "");
+    onHover(null);
+  };
+
   const onPointerDown = (e: PointerEvent<SVGSVGElement>) => {
     if (e.button !== 0) return;
+    if (e.pointerType !== "mouse") {
+      pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pointers.current.size === 2) {
+        e.currentTarget.setPointerCapture(e.pointerId);
+        startPinch();
+        return;
+      }
+      if (pinch.current) return;
+    }
     drag.current = {
       x: e.clientX,
       y: e.clientY,
@@ -254,6 +316,16 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
     };
   };
   const onPointerMove = (e: PointerEvent<SVGSVGElement>) => {
+    if (pointers.current.has(e.pointerId)) pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    const p = pinch.current;
+    if (p) {
+      const pts = [...pointers.current.values()];
+      if (pts.length < 2) return;
+      const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+      zoom.current = clampZoom((p.k0 * dist) / p.dist0);
+      requestDraw();
+      return;
+    }
     const d = drag.current;
     if (!d) {
       if (e.pointerType === "mouse") onHover((e.target as SVGElement).dataset.name ?? null);
@@ -270,10 +342,21 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
       cancelAnimationFrame(fly.current);
       onHover(null);
     }
-    const lat = e.pointerType === "mouse" ? d.view.lat + dy * DEG_PER_UNIT : d.view.lat;
-    setView({ lon: d.view.lon - dx * DEG_PER_UNIT, lat: Math.min(latMax, Math.max(latMin, lat)) });
+    const deg = DEG_PER_UNIT / zoom.current; // приближенный шар крутится медленнее — под пальцем
+    const lat = d.view.lat + dy * deg;
+    setView({ lon: d.view.lon - dx * deg, lat: Math.min(latMax, Math.max(latMin, lat)) });
   };
-  const endDrag = (pick: boolean) => {
+  const endDrag = (e: PointerEvent<SVGSVGElement>, pick: boolean) => {
+    pointers.current.delete(e.pointerId);
+    if (pinch.current) {
+      if (pointers.current.size < 2) {
+        pinch.current = null;
+        pointers.current.clear(); // оставшийся палец не продолжает поворот — только новое касание
+        boxRef.current?.removeAttribute("data-dragging");
+        requestDraw();
+      }
+      return;
+    }
     const d = drag.current;
     drag.current = null;
     if (d?.moved) {
@@ -294,8 +377,8 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
         aria-hidden="true"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
-        onPointerUp={() => endDrag(true)}
-        onPointerCancel={() => endDrag(false)}
+        onPointerUp={(e) => endDrag(e, true)}
+        onPointerCancel={(e) => endDrag(e, false)}
         onPointerLeave={(e) => e.pointerType === "mouse" && !drag.current && onHover(null)}
       >
         <path ref={sphereRef} className={s.sphere} />
@@ -356,8 +439,19 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
         </div>
       )}
 
+      <div className={s.zoom}>
+        <button type="button" className={s.zoomBtn} onClick={() => zoomTo(zoom.current * ZOOM_STEP)}>
+          <Plus size={18} strokeWidth={1.75} aria-hidden="true" />
+          <span className="visually-hidden">Приблизить карту</span>
+        </button>
+        <button type="button" className={s.zoomBtn} onClick={() => zoomTo(zoom.current / ZOOM_STEP)}>
+          <Minus size={18} strokeWidth={1.75} aria-hidden="true" />
+          <span className="visually-hidden">Отдалить карту</span>
+        </button>
+      </div>
+
       <p className={cx("t-small", s.hint)}>
-        <MoveHorizontal size={16} strokeWidth={1.75} aria-hidden="true" />
+        <Move size={16} strokeWidth={1.75} aria-hidden="true" />
         Потяните, чтобы повернуть
       </p>
     </div>
