@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, type PointerEvent, type RefObject } from "react";
-import { geoDistance, geoGraticule10, geoInterpolate, geoOrthographic, geoPath } from "d3-geo";
+import { geoDistance, geoGraticule10, geoInterpolate, geoOrthographic, geoPath, type GeoProjection } from "d3-geo";
 import { feature } from "topojson-client";
 import { presimplify, quantile, simplify } from "topojson-simplify";
 import type { Feature, Geometry } from "geojson";
@@ -53,6 +53,7 @@ type Props = {
  */
 export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHover, onPick }: Props) {
   const boxRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
   const sphereRef = useRef<SVGPathElement>(null);
   const gratRef = useRef<SVGPathElement>(null);
   const landRef = useRef<SVGPathElement>(null);
@@ -228,6 +229,21 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
     return () => ro.disconnect();
   }, [placeTip, requestDraw]);
 
+  // Телеграм (и другие webview со «свайпом вниз — закрыть»): touch-action: none им мало —
+  // жест по карте явно забираем себе, иначе потянул шар вниз — окно сворачивается (11г).
+  // Pointer-события (поворот, щипок, выбор региона по pointerup) при этом работают.
+  useEffect(() => {
+    const el = svgRef.current;
+    if (!el) return;
+    const stop = (e: TouchEvent) => e.cancelable && e.preventDefault();
+    el.addEventListener("touchstart", stop, { passive: false });
+    el.addEventListener("touchmove", stop, { passive: false });
+    return () => {
+      el.removeEventListener("touchstart", stop);
+      el.removeEventListener("touchmove", stop);
+    };
+  }, []);
+
   useEffect(
     () => () => {
       cancelAnimationFrame(frame.current);
@@ -371,6 +387,7 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
   return (
     <div ref={boxRef} className={s.globe}>
       <svg
+        ref={svgRef}
         className={s.map}
         viewBox={`0 0 ${W} ${H}`}
         preserveAspectRatio="xMidYMax slice"
@@ -439,40 +456,42 @@ export function GlobeMap({ data, zones, initialView, apiRef, shown, zone, onHove
         </div>
       )}
 
-      <div className={s.zoom}>
-        <button type="button" className={s.zoomBtn} onClick={() => zoomTo(zoom.current * ZOOM_STEP)}>
-          <Plus size={18} strokeWidth={1.75} aria-hidden="true" />
-          <span className="visually-hidden">Приблизить карту</span>
-        </button>
-        <button type="button" className={s.zoomBtn} onClick={() => zoomTo(zoom.current / ZOOM_STEP)}>
-          <Minus size={18} strokeWidth={1.75} aria-hidden="true" />
-          <span className="visually-hidden">Отдалить карту</span>
-        </button>
+      <div className={s.tools}>
+        <p className={cx("t-small", s.hint)}>
+          <Move size={14} strokeWidth={1.75} aria-hidden="true" />
+          Потяните, чтобы повернуть
+        </p>
+        <div className={s.zoom}>
+          <button type="button" className={s.zoomBtn} onClick={() => zoomTo(zoom.current / ZOOM_STEP)}>
+            <Minus size={16} strokeWidth={1.75} aria-hidden="true" />
+            <span className="visually-hidden">Отдалить карту</span>
+          </button>
+          <button type="button" className={s.zoomBtn} onClick={() => zoomTo(zoom.current * ZOOM_STEP)}>
+            <Plus size={16} strokeWidth={1.75} aria-hidden="true" />
+            <span className="visually-hidden">Приблизить карту</span>
+          </button>
+        </div>
       </div>
-
-      <p className={cx("t-small", s.hint)}>
-        <Move size={16} strokeWidth={1.75} aria-hidden="true" />
-        Потяните, чтобы повернуть
-      </p>
     </div>
   );
 }
 
 /** Дуга склад → город: большой круг, приподнятый над шаром (чем дальше город, тем выше). */
 function arcPath(
-  projection: (p: [number, number]) => [number, number] | null,
+  projection: GeoProjection,
   from: [number, number],
   to: [number, number],
 ): string {
   const interp = geoInterpolate(from, to);
   const h0 = 0.006 + Math.hypot(to[0] - from[0], to[1] - from[1]) * 0.0004;
   const pts: string[] = [];
+  const [ox, oy] = projection.translate(); // центр шара: при приближении он сдвигается (11г)
   for (let i = 0; i <= 32; i++) {
     const t = i / 32;
     const p = projection(interp(t) as [number, number]);
     if (!p) continue;
     const k = 1 + h0 * Math.sin(Math.PI * t);
-    pts.push(`${(CX + (p[0] - CX) * k).toFixed(1)},${(CY + (p[1] - CY) * k).toFixed(1)}`);
+    pts.push(`${(ox + (p[0] - ox) * k).toFixed(1)},${(oy + (p[1] - oy) * k).toFixed(1)}`);
   }
   return `M${pts.join("L")}`;
 }
