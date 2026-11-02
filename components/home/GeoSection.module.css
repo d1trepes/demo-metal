@@ -266,6 +266,7 @@
   color: var(--color-text-muted);
   white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 .hint svg {
   flex-shrink: 0;
@@ -498,6 +499,7 @@
   }
   .mapBox {
     aspect-ratio: 4 / 5;
+    width: 100%; /* явная ширина: иначе Safari переносит max-height через aspect-ratio на ширину и кадр сужается */
     max-height: var(--globe-max-h-mobile); /* кадр не выше ~58 % окна: страницу листают за поля (11г) */
     margin-top: var(--space-4);
   }
