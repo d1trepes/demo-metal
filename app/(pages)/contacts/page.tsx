@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CopyRequisites } from "@/components/contacts/CopyRequisites";
+import { preconnect } from "react-dom";
 import { YandexMap } from "@/components/contacts/YandexMap";
 import { QuoteForm } from "@/components/home/QuoteForm";
 import { Col, Container, Grid } from "@/components/layout/Grid";
@@ -36,7 +37,17 @@ const drivers = [
 ];
 
 /** Контакты (паспорт §4): крупные контакты, карта проезда, водителям, реквизиты, форма. */
+/** 11в: хосты Яндекс-виджета — соединение заранее, чтобы карта грузилась быстрее. */
+const MAP_HOSTS = [
+  "https://yandex.ru",
+  "https://yastatic.net",
+  "https://api-maps.yandex.ru",
+  "https://core-renderer-tiles.maps.yandex.net",
+  "https://static-maps.yandex.ru",
+];
+
 export default function ContactsPage() {
+  MAP_HOSTS.forEach((href) => preconnect(href));
   const requisitesText = [company.legalName, ...requisites.map((r) => `${r.label}: ${r.value}`)].join("\n");
 
   return (

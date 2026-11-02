@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import s from "./Contacts.module.css";
 
 /** Точка склада (адрес условный): восток Екатеринбурга, у Сибирского тракта. Долгота, широта. */
@@ -13,42 +13,57 @@ const SRC =
   `&pt=${POINT.lon}%2C${POINT.lat}%2Cpm2dbm&l=map`;
 
 /**
- * Карта проезда (чат 8б). Iframe грузится только при подходе к блоку (за 800 px),
- * до этого — серая заглушка того же размера; проявляется после загрузки.
+ * Статичная картинка той же карты (центр, зум, метка) — заглушка, пока грузится виджет (11в).
+ * Static API 1.x без ключа; не загрузилась — остаётся серый фон.
+ */
+const STATIC_SRC =
+  `https://static-maps.yandex.ru/1.x/?ll=${POINT.lon},${POINT.lat}&z=${ZOOM}` +
+  `&size=650,450&l=map&pt=${POINT.lon},${POINT.lat},pm2dbm&lang=ru_RU`;
+
+/**
+ * Карта проезда (чат 8б, 11в). Iframe начинает грузиться сразу после первой отрисовки
+ * (не ждёт подхода к блоку: на телефоне /contacts короткая), без loading="lazy".
+ * Под ним — статичная ч/б картинка той же карты; iframe проявляется поверх после onLoad.
  * Чат 10: пока не кликнули, поверх лежит прозрачный слой — колесо мыши прокручивает страницу,
  * а не зумит карту (иначе прокрутка «застревает»). Курсор ушёл — слой возвращается.
  * caption — уже после typo() на сервере
  * (типограф не тащим в клиентский бандл).
  */
 export function YandexMap({ caption }: { caption: string }) {
-  const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [active, setActive] = useState(false);
+  const [staticFailed, setStaticFailed] = useState(false);
 
+  // Сразу после первой отрисовки: кадр, потом простой браузера (не дольше 300 мс)
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (!("IntersectionObserver" in window)) {
-      setVisible(true);
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setVisible(true);
-          io.disconnect();
-        }
-      },
-      { rootMargin: "800px 0px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
+    let idle = 0;
+    const raf = requestAnimationFrame(() => {
+      const start = () => setVisible(true);
+      if (typeof window.requestIdleCallback === "function") idle = window.requestIdleCallback(start, { timeout: 300 });
+      else idle = globalThis.setTimeout(start, 0) as unknown as number;
+    });
+    return () => {
+      cancelAnimationFrame(raf);
+      if (typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idle);
+      globalThis.clearTimeout(idle);
+    };
   }, []);
 
   return (
     <figure className={s.map}>
-      <div ref={ref} className={s.mapFrame} onMouseLeave={() => setActive(false)}>
+      <div className={s.mapFrame} onMouseLeave={() => setActive(false)}>
+        {!staticFailed && (
+          <img
+            className={s.mapStatic}
+            src={STATIC_SRC}
+            alt=""
+            width={650}
+            height={450}
+            decoding="async"
+            onError={() => setStaticFailed(true)}
+          />
+        )}
         {visible && (
           <iframe
             className={s.mapIframe}

@@ -3,11 +3,13 @@
 import { useRef, useState } from "react";
 import { asset, srcSet } from "@/lib/asset";
 import { cx } from "@/lib/cx";
+import { usePreloadImages } from "@/lib/usePreloadImages";
 import type { Project } from "./projectsData";
 import s from "./ProjectsList.module.css";
 
 const NB = " ";
 const tons = (n: number) => n.toLocaleString("ru-RU").replace(/\s/g, NB);
+const DESKTOP = "(min-width: 1025px)";
 const HOVER_DELAY = 120; // мс, как у панелей: строки не мигают при пролёте курсора
 
 /**
@@ -16,18 +18,34 @@ const HOVER_DELAY = 120; // мс, как у панелей: строки не м
  * Тексты приходят уже после типографа (ProjectsSection).
  */
 export function ProjectsList({ projects }: { projects: Project[] }) {
-  const [active, setActive] = useState(0);
+  // null — все строки свёрнуты (только ≤ 1024 px); липкая колонка десктопа показывает последнюю выбранную
+  const [active, setActive] = useState<number | null>(0);
+  const [shown, setShown] = useState(0);
   const timer = useRef<number | undefined>(undefined);
-  const current = projects[active];
+  const layoutRef = useRef<HTMLDivElement>(null);
+  const current = projects[shown];
+  // 11в: фото скрытых строк — заранее, при подходе блока к экрану
+  usePreloadImages(layoutRef);
 
   const select = (index: number, delay = 0) => {
     window.clearTimeout(timer.current);
-    if (delay) timer.current = window.setTimeout(() => setActive(index), delay);
-    else setActive(index);
+    const apply = () => {
+      setActive(index);
+      setShown(index);
+    };
+    if (delay) timer.current = window.setTimeout(apply, delay);
+    else apply();
+  };
+  // 11в: на телефоне и планшете повторное нажатие на открытую строку её закрывает
+  const toggle = (index: number) => {
+    if (active === index && !window.matchMedia(DESKTOP).matches) {
+      window.clearTimeout(timer.current);
+      setActive(null);
+    } else select(index);
   };
 
   return (
-    <div className={s.layout}>
+    <div ref={layoutRef} className={s.layout}>
       <ul className={s.list} onMouseLeave={() => window.clearTimeout(timer.current)}>
         {projects.map((p, index) => {
           const isActive = index === active;
@@ -44,8 +62,11 @@ export function ProjectsList({ projects }: { projects: Project[] }) {
                 className={s.row}
                 aria-expanded={isActive}
                 aria-controls={`project-${p.slug}`}
-                onClick={() => select(index)}
-                onFocus={() => select(index)}
+                onClick={() => toggle(index)}
+                // фокус с клавиатуры выбирает строку; от нажатия пальцем — нет, иначе клик сразу закрыл бы её
+                onFocus={(event) => {
+                  if (event.currentTarget.matches(":focus-visible")) select(index);
+                }}
               >
                 <span className={s.where}>
                   {p.year} · {p.city}
@@ -69,6 +90,7 @@ export function ProjectsList({ projects }: { projects: Project[] }) {
                   width={1312}
                   height={816}
                   loading="lazy"
+                  data-preload-media="(max-width: 1024px)"
                   decoding="async"
                 />
                 <Review project={p} />
@@ -84,14 +106,15 @@ export function ProjectsList({ projects }: { projects: Project[] }) {
           {projects.map((p, index) => (
             <img
               key={p.slug}
-              className={cx(index === active && s.shown)}
+              className={cx(index === shown && s.shown)}
               src={asset(`/objects/${p.image}.webp`)}
               srcSet={srcSet(`/objects/${p.image}.webp`, 1312)}
               sizes="560px"
-              alt={index === active ? p.name : ""}
+              alt={index === shown ? p.name : ""}
               width={1312}
               height={816}
               loading="lazy"
+              data-preload-media={DESKTOP}
               decoding="async"
             />
           ))}

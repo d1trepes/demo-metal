@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { asset, srcSet } from "@/lib/asset";
 import { cx } from "@/lib/cx";
+import { usePreloadImages } from "@/lib/usePreloadImages";
 import type { ConstructionType } from "./constructionTypes";
 import s from "./ConstructionPanels.module.css";
 
@@ -22,6 +23,9 @@ const HOVER_DELAY = 120; // мс: порог, чтобы панели не дё�
 export function ConstructionPanels({ items: constructionTypes }: { items: ConstructionType[] }) {
   const [active, setActive] = useState<number | null>(0);
   const hoverTimer = useRef<number | undefined>(undefined);
+  const listRef = useRef<HTMLUListElement>(null);
+  // 11в: картинки всех панелей — заранее, при подходе блока к экрану, а не по раскрытию
+  usePreloadImages(listRef);
 
   const open = (index: number) => {
     window.clearTimeout(hoverTimer.current);
@@ -41,6 +45,7 @@ export function ConstructionPanels({ items: constructionTypes }: { items: Constr
 
   return (
     <ul
+      ref={listRef}
       className={s.panels}
       onMouseLeave={() => window.clearTimeout(hoverTimer.current)}
     >
